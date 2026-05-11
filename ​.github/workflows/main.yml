@@ -1,0 +1,52 @@
+name: Cyber Oracle Gold Engine
+on:
+  schedule:
+    - cron: '0 0,6,12,18 * * *'
+  workflow_dispatch:
+jobs:
+  cyber-analysis:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run Engine
+        env:
+          WORKER_URL: "BURAYA_WORKER_LINKINI_YAPISTIR"
+          FOOTBALL_API_KEY: "adb70505da0ba105d9dcb0c0e4ee89db"
+        run: |
+          node -e "
+          const fs = require('fs');
+          async function run() {
+            try {
+              const res = await fetch('https://v3.football.api-sports.io/fixtures?date=' + new Date().toISOString().split('T')[0], {
+                headers: { 'x-apisports-key': process.env.FOOTBALL_API_KEY }
+              });
+              const data = await res.json();
+              const results = [];
+              if (data.response) {
+                for (const m of data.response.slice(0, 10)) {
+                  const w = await fetch(process.env.WORKER_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ homeTeam: m.teams.home.name, awayTeam: m.teams.away.name, homeAvg: 1.5, awayAvg: 1.2 })
+                  });
+                  const r = await w.json();
+                  if (r.success) results.push(r);
+                }
+              }
+              if (!fs.existsSync('data')) fs.mkdirSync('data');
+              fs.writeFileSync('data/analysis.json', JSON.stringify(results, null, 2));
+            } catch (e) { console.error(e); process.exit(1); }
+          }
+          run();
+          "
+      - name: Commit
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "CyberBot"
+          git add data/analysis.json
+          git commit -m "Update Analysis" || echo "No changes"
+          git push
