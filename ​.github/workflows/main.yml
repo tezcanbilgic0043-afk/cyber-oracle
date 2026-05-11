@@ -50,3 +50,4 @@ jobs:
           git add data/analysis.json
           git commit -m "Update Analysis" || echo "No changes"
           git push
+          
