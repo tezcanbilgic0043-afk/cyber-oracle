@@ -38,7 +38,7 @@ jobs:
                     });
                     const r = await w.json();
                     if (r.success) results.push({
-                      teams: match.teams.home.name + ' vs ' + match.teams.away.name,
+                      match: match.teams.home.name + ' vs ' + match.teams.away.name,
                       prediction: r.prediction,
                       confidence: r.confidence
                     });
