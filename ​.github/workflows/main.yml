@@ -28,7 +28,7 @@ jobs:
               });
               const data = await res.json();
               const results = [];
-              if (data.response && data.response.length > 0) {
+              if (data.response) {
                 for (const match of data.response.slice(0, 15)) {
                   try {
                     const w = await fetch(process.env.WORKER_URL, { 
