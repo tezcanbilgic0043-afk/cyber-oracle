@@ -1,4 +1,5 @@
 name: Cyber Oracle Gold Engine
+
 on:
   workflow_dispatch:
   schedule:
@@ -16,28 +17,38 @@ jobs:
           node-version: '20'
       - name: Execute Analysis
         env:
-          WORKER_URL: "SENIN_WORKER_LINKIN_BURAYA"
+          WORKER_URL: "https://steep-night-fc54.tezcanbilgic0043.workers.dev"
           FOOTBALL_API_KEY: "adb70505da0ba105d9dcb0c0e4ee89db"
         run: |
           node -e "
           async function start() {
-            const res = await fetch('https://v3.football.api-sports.io/fixtures?date=' + new Date().toISOString().split('T')[0], {
-              headers: { 'x-apisports-key': process.env.FOOTBALL_API_KEY }
-            });
-            const data = await res.json();
-            const results = [];
-            for (const match of (data.response || []).slice(0, 10)) {
-              const w = await fetch(process.env.WORKER_URL, { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ home: match.teams.home.name, away: match.teams.away.name }) 
+            try {
+              const res = await fetch('https://v3.football.api-sports.io/fixtures?date=' + new Date().toISOString().split('T')[0], {
+                headers: { 'x-apisports-key': process.env.FOOTBALL_API_KEY }
               });
-              const r = await w.json();
-              if (r.success) results.push(r);
-            }
-            const fs = require('fs');
-            if (!fs.existsSync('data')) fs.mkdirSync('data');
-            fs.writeFileSync('data/analysis.json', JSON.stringify(results, null, 2));
+              const data = await res.json();
+              const results = [];
+              if (data.response && data.response.length > 0) {
+                for (const match of data.response.slice(0, 15)) {
+                  try {
+                    const w = await fetch(process.env.WORKER_URL, { 
+                      method: 'POST', 
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify({ home: match.teams.home.name, away: match.teams.away.name }) 
+                    });
+                    const r = await w.json();
+                    if (r.success) results.push({
+                      teams: match.teams.home.name + ' vs ' + match.teams.away.name,
+                      prediction: r.prediction,
+                      confidence: r.confidence
+                    });
+                  } catch (err) { console.log('Match error'); }
+                }
+              }
+              const fs = require('fs');
+              if (!fs.existsSync('data')) fs.mkdirSync('data');
+              fs.writeFileSync('data/analysis.json', JSON.stringify(results, null, 2));
+            } catch (e) { console.log(e); }
           }
           start();
           "
