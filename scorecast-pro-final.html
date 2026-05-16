@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Cyber Oracle Gold</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cyber Oracle">
+<meta name="theme-color" content="#050810">
+<meta name="mobile-web-app-capable" content="yes">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#070a14;--bg2:#0c1020;--card:#10151f;--card2:#161d2e;
+  --border:#1a2440;--border2:#253060;
+  --blue:#3d8eff;--orange:#ff9500;--gold:#ffd60a;
+  --red:#ff3b5c;--green:#30d158;--purple:#bf5af2;--cyan:#32d5ff;--pink:#ff375f;
+  --text:#eef2ff;--muted:#5a6a9a;--dim:#2a3555;--r:13px;
+}
+body.light{--bg:#f2f5ff;--bg2:#e8eeff;--card:#fff;--card2:#f5f8ff;--border:#d0d8f5;--border2:#b8c8ee;--text:#111830;--muted:#5060a0;--dim:#b0c0e0;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;transition:background .3s,color .3s;}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+body.light #stars{opacity:0;}
+.hdr{position:relative;z-index:50;background:rgba(7,10,20,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);flex-shrink:0;}
+body.light .hdr{background:rgba(242,245,255,.96);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;}
+.logo{display:flex;align-items:center;gap:9px;}
+.hdr-btns{display:flex;gap:6px;}
+.hico{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:.15s;}
+.hico:active{transform:scale(.87);}
+.date-bar{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding:6px 14px 8px;}
+.date-bar::-webkit-scrollbar{display:none;}
+.dc{flex:0 0 auto;padding:7px 14px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;text-align:center;border:1.5px solid transparent;transition:.15s;}
+.dc.active{background:linear-gradient(135deg,rgba(255,214,10,.18),rgba(0,213,255,.08));border-color:var(--gold)!important;color:var(--gold);box-shadow:0 0 12px rgba(255,214,10,.3);}
+.dc:not(.active){background:rgba(255,255,255,.07);color:var(--text);border-color:rgba(255,255,255,.12);}
+.dc .ds{font-size:8px;display:block;opacity:.7;margin-top:1px;}
+.ai-banner{margin:0 14px 8px;background:linear-gradient(135deg,rgba(61,142,255,.12),rgba(191,90,242,.08));border:1px solid rgba(61,142,255,.25);border-radius:var(--r);padding:9px 12px;display:flex;align-items:center;justify-content:space-between;z-index:2;position:relative;}
+.ai-trust{background:linear-gradient(90deg,var(--orange),var(--pink));color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:18px;}
+.filter-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 14px 8px;z-index:2;position:relative;}
+.filter-row::-webkit-scrollbar{display:none;}
+.ftab{flex:0 0 auto;padding:5px 12px;border-radius:18px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.ftab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.ftab.hg{border-color:var(--green);color:var(--green);}
+.ftab.hg.active{background:var(--green);color:#000;}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px;position:relative;z-index:2;}
+.scroll-area::-webkit-scrollbar{display:none;}
+.lg-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 6px;}
+.lg-name{font-size:12px;font-weight:800;color:var(--gold);}
+.lg-cnt{background:var(--blue);color:#fff;font-size:9px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px;}
+.mc{margin:0 10px 5px;background:var(--card);border:1px solid rgba(0,229,255,.25);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.15s;}
+.mc:active{transform:scale(.985);}
+.mc.live{border-color:rgba(255,45,120,.55);box-shadow:0 0 10px rgba(255,45,120,.2);}
+.mc.hg{border-left:3px solid #39ff14;border-color:rgba(57,255,20,.45);}
+.mc.open{border-color:rgba(255,214,10,.5);box-shadow:0 0 12px rgba(255,214,10,.18);}
+.mc-top{display:flex;align-items:center;padding:9px 12px;gap:8px;}
+.mc-time{flex-shrink:0;text-align:center;min-width:40px;}
+.mc-t{font-size:12px;font-weight:900;color:#00e5ff;}
+.mc-t.live{color:#ff2d78;}
+.mc-dot{width:6px;height:6px;border-radius:50%;background:#ff2d78;margin:2px auto 0;animation:pls 1s infinite;}
+@keyframes pls{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(1.5);}}
+.mc-hg-lbl{font-size:7px;font-weight:800;color:var(--green);margin-top:2px;}
+.mc-teams{flex:1;min-width:0;}
+.mc-tr{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:2px 0;}
+.mc-tn{font-size:13px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mc-sc{font-size:15px;font-weight:900;min-width:18px;text-align:center;}
+.mc-sc.live{color:#ff2d78;}
+/* ODDS STRIP */
+.odds-strip{display:flex;gap:3px;padding:4px 12px 8px;}
+.odds-strip-item{flex:1;background:rgba(255,214,10,.07);border:1px solid rgba(255,214,10,.2);border-radius:7px;padding:5px 3px;text-align:center;}
+.odds-strip-item.best{border-color:rgba(48,209,88,.5);background:rgba(48,209,88,.1);}
+.odds-strip-lbl{font-size:8px;color:var(--muted);font-weight:700;display:block;}
+.odds-strip-val{font-size:13px;font-weight:900;color:var(--gold);display:block;}
+.odds-strip-item.best .odds-strip-val{color:var(--green);}
+.odds-loading{padding:0 12px 8px;font-size:10px;color:var(--muted);}
+.pp{display:none;border-top:1px solid var(--border);background:rgba(0,0,0,.1);}
+.mc.open .pp{display:block;}
+.pp-in{padding:10px 12px 12px;}
+.ld{display:flex;align-items:center;gap:8px;padding:10px 0;color:var(--blue);font-size:12px;font-weight:600;}
+.sp{width:14px;height:14px;border:2px solid rgba(61,142,255,.2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.conf-w{margin-bottom:10px;}
+.conf-l{display:flex;justify-content:space-between;margin-bottom:3px;}
+.conf-t{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;}
+.conf-p{font-size:12px;font-weight:800;color:var(--orange);}
+.conf-b{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.conf-f{height:100%;border-radius:3px;transition:.6s;}
+.p3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px;}
+.pb{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:7px;text-align:center;}
+.pb.win{border-color:var(--blue);background:rgba(61,142,255,.1);}
+.pbl{font-size:8px;color:var(--muted);font-weight:600;margin-bottom:3px;}
+.pbv{font-size:14px;font-weight:800;}
+.p2{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px;}
+.p2b{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 9px;display:flex;align-items:center;justify-content:space-between;}
+.p2l{font-size:10px;font-weight:600;color:var(--muted);}
+.p2v{font-size:11px;font-weight:800;}
+.p2v.y{color:var(--green);}
+.p2v.n{color:var(--red);}
+.odds-detail{background:rgba(255,214,10,.04);border:1px solid rgba(255,214,10,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.odds-detail-t{font-size:9px;font-weight:800;color:var(--gold);letter-spacing:1px;margin-bottom:8px;}
+.odds-row{display:flex;gap:4px;margin-bottom:4px;}
+.odd-box{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:6px 4px;text-align:center;}
+.odd-box.rec{border-color:var(--green);background:rgba(48,209,88,.08);}
+.odd-lbl{font-size:8px;color:var(--muted);font-weight:600;display:block;}
+.odd-val{font-size:13px;font-weight:800;color:var(--gold);display:block;}
+.odd-rec{font-size:7px;color:var(--green);display:block;margin-top:1px;}
+.lv-c{background:rgba(255,59,92,.06);border:1px solid rgba(255,59,92,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.lv-t{font-size:9px;font-weight:800;color:var(--red);letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.lv-t::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--red);animation:pls 1s infinite;}
+.lv-sc{font-size:24px;font-weight:900;color:var(--red);text-align:center;letter-spacing:4px;margin:4px 0;}
+.lv-row{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
+.ng-c{background:linear-gradient(135deg,rgba(191,90,242,.1),rgba(61,142,255,.05));border:1px solid rgba(191,90,242,.25);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.ng-t{font-size:9px;font-weight:800;color:var(--purple);letter-spacing:1px;margin-bottom:6px;}
+.ng-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
+.ng-i{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:6px;}
+.ng-n{font-size:16px;font-weight:800;color:var(--purple);}
+.ng-l{font-size:8px;color:var(--muted);}
+.stat-section{background:rgba(50,213,255,.05);border:1px solid rgba(50,213,255,.15);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.stat-t{font-size:9px;font-weight:800;color:var(--cyan);letter-spacing:1px;margin-bottom:8px;}
+.stat-bar-wrap{margin-bottom:6px;}
+.stat-bar-labels{display:flex;justify-content:space-between;font-size:9px;margin-bottom:2px;}
+.stat-bar-lbl{font-weight:800;}
+.stat-bar-name{font-size:8px;color:var(--muted);text-align:center;flex:1;}
+.stat-bar-track{display:flex;height:5px;border-radius:3px;overflow:hidden;}
+.stat-bar-home{background:var(--blue);border-radius:3px 0 0 3px;transition:.6s;}
+.stat-bar-away{background:var(--red);border-radius:0 3px 3px 0;margin-left:auto;transition:.6s;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;margin-top:8px;}
+.stat-mini{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:5px;}
+.stat-mini-v{font-size:13px;font-weight:800;}
+.stat-mini-l{font-size:8px;color:var(--muted);}
+.korner-section{background:rgba(48,209,88,.05);border:1px solid rgba(48,209,88,.15);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.korner-t{font-size:9px;font-weight:800;color:var(--green);letter-spacing:1px;margin-bottom:6px;}
+.korner-g{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;}
+.korner-i{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:6px;}
+.korner-n{font-size:14px;font-weight:800;color:var(--green);}
+.korner-l{font-size:8px;color:var(--muted);}
+.ai-b{background:rgba(61,142,255,.05);border:1px solid rgba(61,142,255,.15);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.ai-bt{font-size:9px;font-weight:800;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ai-bx{font-size:11px;line-height:1.65;color:var(--muted);}
+.alert-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.chip{font-size:9px;font-weight:800;padding:3px 8px;border-radius:14px;}
+.chip-green{background:rgba(48,209,88,.15);color:var(--green);border:1px solid rgba(48,209,88,.3);}
+.chip-blue{background:rgba(61,142,255,.15);color:var(--blue);border:1px solid rgba(61,142,255,.3);}
+.chip-orange{background:rgba(255,149,0,.15);color:var(--orange);border:1px solid rgba(255,149,0,.3);}
+.chip-red{background:rgba(255,59,92,.15);color:var(--red);border:1px solid rgba(255,59,92,.3);}
+.chip-purple{background:rgba(191,90,242,.15);color:var(--purple);border:1px solid rgba(191,90,242,.3);}
+.bnav{position:relative;z-index:50;background:rgba(7,10,20,.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;align-items:center;padding:6px 0 max(6px,env(safe-area-inset-bottom));flex-shrink:0;}
+body.light .bnav{background:rgba(242,245,255,.96);}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0;}
+.ni:active{transform:scale(.87);}
+.ni-i{font-size:17px;}
+.ni-l{font-size:8px;font-weight:600;color:var(--muted);}
+.ni.active .ni-l{color:var(--blue);}
+.panel{display:none;flex:1;flex-direction:column;overflow:hidden;position:relative;z-index:2;}
+.panel.active{display:flex;}
+.live-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.live-wrap::-webkit-scrollbar{display:none;}
+.live-mc{background:var(--card);border:1px solid rgba(255,59,92,.3);border-radius:var(--r);margin-bottom:8px;overflow:hidden;cursor:pointer;}
+.live-mc-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;}
+.live-mc-sc{font-size:20px;font-weight:900;color:var(--red);letter-spacing:3px;}
+.live-mc-min{font-size:11px;color:var(--red);font-weight:700;}
+.live-mc-lg{font-size:10px;color:var(--muted);padding:0 12px 4px;}
+.live-mc-teams{font-size:12px;padding:0 12px 8px;}
+.live-alert-row{display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px;}
+.live-pp{display:none;border-top:1px solid var(--border);}
+.live-mc.open .live-pp{display:block;}
+.coupon-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.coupon-wrap::-webkit-scrollbar{display:none;}
+.cp-card{border-radius:var(--r);overflow:hidden;margin-bottom:10px;border:1px solid var(--border);}
+.cp-card.banko{border-color:rgba(255,214,10,.4);background:linear-gradient(135deg,rgba(255,214,10,.07),var(--card));}
+.cp-card.banko1{border-color:rgba(255,214,10,.5);background:linear-gradient(135deg,rgba(255,214,10,.1),var(--card));}
+.cp-card.banko2{border-color:rgba(255,170,0,.5);background:linear-gradient(135deg,rgba(255,170,0,.1),var(--card));}
+.cp-card.banko3{border-color:rgba(255,140,0,.5);background:linear-gradient(135deg,rgba(255,140,0,.1),var(--card));}
+.cp-card.dusuk{border-color:rgba(48,209,88,.4);background:linear-gradient(135deg,rgba(48,209,88,.07),var(--card));}
+.cp-card.orta{border-color:rgba(61,142,255,.4);background:linear-gradient(135deg,rgba(61,142,255,.07),var(--card));}
+.cp-card.yuksek{border-color:rgba(255,59,92,.4);background:linear-gradient(135deg,rgba(255,59,92,.07),var(--card));}
+.cp-head{display:flex;align-items:center;justify-content:space-between;padding:11px 12px 7px;}
+.cp-title{font-size:13px;font-weight:800;}
+.cp-odds{font-size:18px;font-weight:900;color:var(--gold);}
+.cp-odds-lbl{font-size:8px;color:var(--muted);}
+.cp-item{padding:7px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.cp-num{font-size:9px;font-weight:800;color:var(--blue);background:rgba(61,142,255,.1);border-radius:4px;padding:2px 5px;flex-shrink:0;}
+.cp-info{flex:1;min-width:0;}
+.cp-match{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cp-bet{font-size:9px;color:var(--green);}
+.cp-odd{font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0;}
+.cp-foot{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);}
+.st-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.st-wrap::-webkit-scrollbar{display:none;}
+.st-tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px;}
+.st-tabs::-webkit-scrollbar{display:none;}
+.st-tab{flex:0 0 auto;padding:5px 11px;border-radius:18px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.st-tab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.st-table{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.st-hdr{display:grid;grid-template-columns:20px 1fr 22px 22px 22px 38px 26px;gap:2px;padding:7px 10px;background:var(--card2);font-size:8px;font-weight:700;color:var(--muted);}
+.st-row{display:grid;grid-template-columns:20px 1fr 22px 22px 22px 38px 26px;gap:2px;padding:7px 10px;border-top:1px solid var(--border);font-size:11px;font-weight:600;align-items:center;}
+.st-pos{font-size:9px;color:var(--muted);}
+.st-pos.g{color:#ffd60a;}.st-pos.s{color:#c0c0c0;}.st-pos.b{color:#cd7f32;}
+.st-team{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.st-pts{font-weight:800;color:var(--blue);}
+.st-n{color:var(--muted);text-align:center;}
+.set-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.set-wrap::-webkit-scrollbar{display:none;}
+.set-sec{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px;}
+.set-i{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;}
+.set-i:last-child{border-bottom:none;}
+.set-ico{font-size:16px;width:22px;text-align:center;}
+.set-lbl{flex:1;font-size:14px;font-weight:500;}
+.set-val{font-size:11px;color:var(--muted);}
+.toggle{width:42px;height:23px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:.3s;flex-shrink:0;}
+.toggle.on{background:var(--blue);}
+.toggle::after{content:'';position:absolute;width:19px;height:19px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.3s;}
+.toggle.on::after{left:21px;}
+.sov{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(5px);flex-direction:column;}
+.sov.open{display:flex;}
+.sov-box{background:var(--card);border-bottom:1px solid var(--border);padding:11px 13px;}
+.sov-inp{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 13px;color:var(--text);font-size:14px;outline:none;font-family:'Inter';}
+.sov-res{flex:1;overflow-y:auto;padding:9px 13px;}
+.sov-res::-webkit-scrollbar{display:none;}
+.sr-item{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:10px 11px;margin-bottom:6px;cursor:pointer;}
+.modal{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.78);backdrop-filter:blur(4px);align-items:flex-end;}
+.modal.open{display:flex;}
+.mbox{background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:16px;width:100%;max-height:78vh;overflow-y:auto;}
+.mbox::-webkit-scrollbar{display:none;}
+.mi{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.mi:last-child{border-bottom:none;}
+.mi-nm{flex:1;font-size:13px;font-weight:600;}
+.toast-c{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none;display:none;}
+.toast{background:var(--card2);border:1px solid var(--border2);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:600;white-space:nowrap;animation:tIn .3s ease;display:flex;align-items:center;gap:6px;}
+.toast.ok{border-color:rgba(48,209,88,.4);color:var(--green);}
+.toast.err{border-color:rgba(255,59,92,.4);color:var(--red);}
+.toast.warn{border-color:rgba(255,214,10,.4);color:var(--gold);}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.sec-hdr{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;padding:10px 13px 5px;}
+.surp-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.surp-wrap::-webkit-scrollbar{display:none;}
+.surp-card{background:var(--card);border:1px solid rgba(255,149,0,.3);border-radius:var(--r);margin-bottom:8px;overflow:hidden;cursor:pointer;}
+.surp-card.open .surp-pp{display:block;}
+.surp-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;}
+.surp-teams{flex:1;}
+.surp-team-row{display:flex;align-items:center;gap:6px;padding:2px 0;}
+.surp-logo{width:18px;height:18px;border-radius:3px;object-fit:contain;}
+.surp-tn{font-size:13px;font-weight:600;}
+.surp-pct{font-size:22px;font-weight:900;color:var(--orange);text-align:right;}
+.surp-pct-lbl{font-size:8px;color:var(--muted);text-align:right;}
+.surp-h2h{display:flex;gap:4px;padding:0 12px 8px;flex-wrap:wrap;}
+.surp-h2h-item{font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;}
+.surp-h2h-item.w21{background:rgba(191,90,242,.15);color:var(--purple);}
+.surp-h2h-item.normal{background:rgba(255,255,255,.05);color:var(--muted);}
+.surp-pp{display:none;border-top:1px solid var(--border);padding:10px 12px;}
+.surp-gen-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(255,149,0,.15),rgba(191,90,242,.1));border:1px solid rgba(255,149,0,.3);border-radius:var(--r);padding:14px;margin-bottom:12px;cursor:pointer;font-size:13px;font-weight:700;color:var(--orange);}
+.time-filter{display:flex;gap:5px;padding:0 14px 8px;overflow-x:auto;scrollbar-width:none;}
+.time-filter::-webkit-scrollbar{display:none;}
+.tf-btn{flex:0 0 auto;padding:4px 12px;border-radius:16px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.tf-btn.active{background:var(--cyan);color:#000;border-color:var(--cyan);}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+
+<!-- KEŞFET -->
+<div id="p-kesfet" class="panel active">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div class="logo">
+        <img src="data:image/png;base64,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" style="width:56px;height:56px;object-fit:cover;border-radius:10px;flex-shrink:0;box-shadow:0 0 18px rgba(255,214,10,.7);">
+        <div>
+          <div style="font-family:'Orbitron',monospace;font-size:13px;font-weight:900;background:linear-gradient(90deg,#ffd60a,#00d4ff,#ff2d78);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;">CYBER ORACLE</div>
+          <div style="font-size:8px;font-weight:700;color:#ffaa00;letter-spacing:1.5px;-webkit-text-fill-color:#ffaa00;">GOLD · AI PREDICTION</div>
+        </div>
+      </div>
+      <div class="hdr-btns">
+        <div class="hico" onclick="showSortModal()">⇅</div>
+        <div class="hico" onclick="openSearch()">🔍</div>
+        <div class="hico" id="theme-btn" onclick="toggleTheme()">🌙</div>
+        <div class="hico" onclick="showLeagueModal()">🎛</div>
+        <div class="hico" onclick="switchPanel('ayarlar',null)">⚙️</div>
+      </div>
+    </div>
+    <div class="date-bar" id="date-bar"></div>
+    <div style="padding:0 14px 8px;">
+      <div class="ai-banner">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:16px">🧠</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;">Yapay Zeka Destekli Tahminler</div>
+            <div style="font-size:10px;color:var(--muted)" id="src-status">Yükleniyor...</div>
+          </div>
+        </div>
+        <div class="ai-trust" id="trust-pct">🔥 %82 Güven</div>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="ftab active" onclick="setFilter('all',this)">Tümü</div>
+      <div class="ftab hg" onclick="setFilter('hg',this)">🟢 Yüksek Güven</div>
+      <div class="ftab" onclick="setFilter('scheduled',this)">⏰ Yakında</div>
+      <div class="ftab" onclick="setFilter('fav',this)">⭐ Favoriler</div>
+      <div class="ftab" onclick="setFilter('finished',this)">✅ Bitti</div>
+    </div>
+    <div class="time-filter" id="time-filter" style="display:none;">
+      <div class="tf-btn" onclick="setTimeFilter(1,this)">1H</div>
+      <div class="tf-btn" onclick="setTimeFilter(3,this)">3H</div>
+      <div class="tf-btn" onclick="setTimeFilter(5,this)">5H</div>
+      <div class="tf-btn active" onclick="setTimeFilter(24,this)">Tümü</div>
+    </div>
+  </div>
+  <div class="scroll-area" id="sc-today">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;">
+      <div class="sp" style="width:22px;height:22px;border-width:3px;"></div>
+      <div style="font-size:13px;color:var(--muted);">Maçlar yükleniyor...</div>
+    </div>
+  </div>
+</div>
+
+<!-- CANLI -->
+<div id="p-xg" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;display:flex;align-items:center;gap:7px;"><span style="color:var(--red)">●</span> Canlı Maçlar</div>
+      <div style="display:flex;gap:6px;">
+        <div class="hico" onclick="loadLive()" style="font-size:11px;">🔄</div>
+        <div class="hico" id="auto-btn" onclick="toggleAuto()" style="font-size:10px;font-weight:700;color:var(--muted);">AUTO</div>
+      </div>
+    </div>
+  </div>
+  <div class="live-wrap" id="xg-list">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;">
+      <div style="font-size:36px;opacity:.3">⚡</div>
+      <div style="font-size:13px;color:var(--muted);">🔄 ile güncelle</div>
+    </div>
+  </div>
+</div>
+
+<!-- KUPON -->
+<div id="p-kupon" class="panel">
+  <div class="hdr" style="padding:10px 14px 6px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="font-size:15px;font-weight:800;">🎯 Kuponlar</div>
+      <div class="hico" onclick="genCoupons()" id="btn-gen" style="font-size:14px;">✨</div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:4px;">
+      <div id="tab-yeni" onclick="showCpTab('yeni',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--blue);color:#fff;background:var(--blue);text-align:center;">✨ Yeni</div>
+      <div id="tab-gecmis" onclick="showCpTab('gecmis',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;text-align:center;">📋 Geçmiş</div>
+      <div id="tab-istatistik" onclick="showCpTab('istatistik',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;text-align:center;">📊 İstatistik</div>
+    </div>
+  </div>
+  <div class="coupon-wrap" id="coupon-wrap">
+    <div id="cp-yeni"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:220px;gap:12px;"><div style="font-size:36px;opacity:.3">🎯</div><div style="font-size:13px;color:var(--muted);">✨ ile kupon oluştur</div></div></div>
+    <div id="cp-gecmis" style="display:none;"><div id="cp-gecmis-list"></div></div>
+    <div id="cp-istatistik" style="display:none;"><div id="cp-stat-content"></div></div>
+  </div>
+</div>
+
+<!-- PUAN TABLOSU -->
+<div id="p-puan" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;">
+    <div style="font-size:15px;font-weight:800;">📊 Puan Tablosu</div>
+  </div>
+  <div class="st-wrap">
+    <div class="st-tabs" id="st-tabs"></div>
+    <div id="st-content"><div style="text-align:center;padding:40px;color:var(--muted);">Lig seç</div></div>
+  </div>
+</div>
+
+<!-- SÜRPRİZ -->
+<div id="p-surpriz" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;">🔀 Sürpriz Maçlar</div>
+      <div class="hico" onclick="loadSurpriz()">🔄</div>
+    </div>
+  </div>
+  <div class="surp-wrap" id="surp-wrap">
+    <div class="surp-gen-btn" onclick="loadSurpriz()"><span style="font-size:20px;">🔀</span><span>Sürpriz Maçları Analiz Et</span></div>
+    <div id="surp-list"><div style="text-align:center;padding:40px;color:var(--muted);font-size:13px;">🔄 ile analiz başlat</div></div>
+  </div>
+</div>
+
+<!-- AYARLAR -->
+<div id="p-ayarlar" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;"><div style="font-size:15px;font-weight:800;">⚙️ Ayarlar</div></div>
+  <div class="set-wrap">
+    <div style="background:linear-gradient(135deg,rgba(61,142,255,.1),rgba(191,90,242,.08));border:1px solid rgba(61,142,255,.2);border-radius:var(--r);padding:13px;margin-bottom:10px;text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:15px;font-weight:900;background:linear-gradient(90deg,#ffd60a,#00d4ff,#ff2d78);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CYBER ORACLE GOLD</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:3px;">v3.0 · Yapay Zeka Destekli Futbol Analizi</div>
+    </div>
+    <div class="set-sec">
+      <div class="set-i"><div class="set-ico">🌙</div><div class="set-lbl">Karanlık Tema</div><div class="toggle on" id="theme-toggle" onclick="toggleTheme()"></div></div>
+      <div class="set-i"><div class="set-ico">🔔</div><div class="set-lbl">Canlı Gol Bildirimi</div><div class="toggle on" id="notif-toggle" onclick="toggleNotif()"></div></div>
+      <div class="set-i"><div class="set-ico">⚡</div><div class="set-lbl">Tehlike Bildirimi</div><div class="toggle on" id="danger-toggle" onclick="toggleDanger()"></div></div>
+    </div>
+    <div class="set-sec">
+      <div class="set-i"><div class="set-ico">📡</div><div class="set-lbl">Veri Kaynağı</div><div class="set-val">api-sports.io</div></div>
+      <div class="set-i"><div class="set-ico">🧠</div><div class="set-lbl">AI Motor</div><div class="set-val">GPT-4o-mini</div></div>
+      <div class="set-i"><div class="set-ico">☁️</div><div class="set-lbl">Worker</div><div class="set-val">Cloudflare</div></div>
+      <div class="set-i"><div class="set-ico">🎰</div><div class="set-lbl">Odds API</div><div class="set-val">the-odds-api.com</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <div class="ni active" data-nav="kesfet" onclick="switchPanel('kesfet',this)"><div class="ni-i">🏆</div><div class="ni-l" style="color:var(--blue)">Keşfet</div></div>
+  <div class="ni" data-nav="xg" onclick="switchPanel('xg',this)"><div class="ni-i">⚡</div><div class="ni-l">Radar</div></div>
+  <div class="ni" data-nav="kupon" onclick="switchPanel('kupon',this)"><div class="ni-i">🎯</div><div class="ni-l">Kupon</div></div>
+  <div class="ni" data-nav="puan" onclick="switchPanel('puan',this)"><div class="ni-i">📊</div><div class="ni-l">Puan</div></div>
+  <div class="ni" data-nav="surpriz" onclick="switchPanel('surpriz',this)"><div class="ni-i">🔀</div><div class="ni-l">Sürpriz</div></div>
+</nav>
+
+<!-- SEARCH -->
+<div class="sov" id="sov">
+  <div class="sov-box">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <input class="sov-inp" id="sov-inp" placeholder="🔍  Takım ara..." oninput="doSearch(this.value)">
+      <div style="color:var(--muted);font-size:13px;cursor:pointer;font-weight:600;" onclick="closeSearch()">İptal</div>
+    </div>
+  </div>
+  <div class="sov-res" id="sov-res"><div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">Takım adı yaz</div></div>
+</div>
+
+<!-- LEAGUE MODAL -->
+<div class="modal" id="lg-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbox">
+    <div style="font-size:14px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;">Lig Filtresi <span style="font-size:18px;cursor:pointer;color:var(--muted);" onclick="document.getElementById('lg-modal').classList.remove('open')">✕</span></div>
+    <input placeholder="🔍 Lig ara..." oninput="filterLgList(this.value)" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;color:var(--text);font-size:13px;outline:none;margin-bottom:11px;font-family:'Inter';">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;">
+      <div style="color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;" onclick="selectAllLg()">✓ Tümünü Seç</div>
+      <div style="font-size:10px;color:var(--muted)" id="sel-cnt">0 lig seçildi</div>
+    </div>
+    <div id="lg-list"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+      <button onclick="clearLg()" style="padding:10px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;background:var(--card2);color:var(--text);">Temizle</button>
+      <button onclick="applyLg()" style="padding:10px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;background:var(--green);color:#000;">Uygula</button>
+    </div>
+  </div>
+</div>
+
+<!-- SORT MODAL -->
+<div class="modal" id="sort-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbox">
+    <div style="font-size:14px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;">Sıralama <span style="font-size:18px;cursor:pointer;color:var(--muted);" onclick="document.getElementById('sort-modal').classList.remove('open')">✕</span></div>
+    <div class="mi" onclick="sortBy('league');document.getElementById('sort-modal').classList.remove('open')"><span>🎛</span><div class="mi-nm">Liglere Göre</div></div>
+    <div class="mi" onclick="sortBy('time_asc');document.getElementById('sort-modal').classList.remove('open')"><span>🕐</span><div class="mi-nm">Yakın Maçlar</div></div>
+    <div class="mi" onclick="sortBy('time_desc');document.getElementById('sort-modal').classList.remove('open')"><span>🕔</span><div class="mi-nm">Uzak Maçlar</div></div>
+  </div>
+</div>
+
+<div class="toast-c" id="toast-c"></div>
+
+<script>
+// ══════════════════════════════════════════
+// CONFIG - GÜNCELLENMİŞ KEYLER
+// ══════════════════════════════════════════
+const PROXY        = 'https://steep-night-fc54.tezcanbilgic0043.workers.dev';
+const APISPORTS_KEY= 'adb70505da0ba105d9dcb0c0e4ee89db'; // YENİ
+const ODDS_KEY     = '076c7ccc5588ccd0b734098a3d0fa64e8f7c0448a4ba4c0f94c79989161b1894'; // YENİ
+const API_BASE     = 'https://v3.football.api-sports.io';
+
+const HG_TEAMS=new Set([
+  'Ajax','PSV','PSV Eindhoven','Feyenoord','AZ','AZ Alkmaar','FC Twente','Twente','FC Utrecht','Utrecht',
+  'Go Ahead Eagles','Willem II','RKC Waalwijk','Groningen','FC Groningen','NEC','NEC Nijmegen','Sparta Rotterdam','NAC Breda',
+  'Bodø/Glimt','Bodo/Glimt','Brann','SK Brann','Molde','Viking','Rosenborg','Fredrikstad','Tromsø','Stabæk','Lillestrøm',
+  'FC Midtjylland','Midtjylland','FC Copenhagen','Copenhagen','Brøndby','Silkeborg','Viborg','Nordsjælland','AGF','Randers',
+  'Young Boys','BSC Young Boys','Basel','FC Basel','Lausanne','Lausanne-Sport','Servette','FC Zürich','Zürich','Lugano','Luzern','Winterthur','Sion',
+  'Bayern Munich','Bayern München','Bayern','Bayer Leverkusen','Leverkusen','Borussia Dortmund','Dortmund',
+  'RB Leipzig','Leipzig','Eintracht Frankfurt','Frankfurt','Hoffenheim','SC Freiburg','Freiburg','Werder Bremen','Bremen','FC Köln','Borussia Mönchengladbach','Union Berlin','Stuttgart','Wolfsburg',
+  'Liverpool','Arsenal','Manchester City','Man City','Chelsea','Tottenham','Aston Villa','Newcastle','Brighton','Brentford','West Ham','Fulham','Crystal Palace','Everton','Nottingham Forest','Leicester','Manchester United',
+  'Barcelona','Real Madrid','Atletico Madrid','Atlético Madrid','Athletic Club','Athletic Bilbao','Villarreal','Real Betis','Betis','Sevilla','Valencia','Real Sociedad','Osasuna','Celta Vigo','Girona',
+  'PSG','Paris Saint-Germain','Paris SG','Monaco','AS Monaco','Lyon','Olympique Lyonnais','Marseille','Lens','Lille','Nice','Rennes','Montpellier','Strasbourg',
+  'Inter','Inter Milan','Internazionale','Atalanta','AC Milan','Milan','Napoli','Juventus','Roma','AS Roma','Lazio','Fiorentina','Bologna','Torino',
+  'Club Brugge','Anderlecht','RSC Anderlecht','Gent','Union SG','Genk',
+  'Benfica','SL Benfica','Porto','FC Porto','Sporting CP','Sporting','Braga','SC Braga',
+  'Galatasaray','Fenerbahçe','Fenerbahce','Beşiktaş','Besiktas','Trabzonspor','Başakşehir','Samsunspor',
+  'Red Bull Salzburg','Salzburg','RB Salzburg','Sturm Graz','Rapid Wien','Austria Wien',
+  'Celtic','Rangers','Hearts','Hibernian',
+  'Olympiakos','Panathinaikos','AEK Athens','PAOK',
+  'Slavia Praha','Slavia Prague','Sparta Praha','Sparta Prague','Viktoria Plzeň',
+  'Malmö FF','Malmo','BK Häcken','AIK','Djurgårdens','Hammarby','Elfsborg',
+  'HJK Helsinki','KuPS','Dinamo Zagreb','Hajduk Split','Red Star','Partizan',
+  'LA Galaxy','LAFC','Inter Miami','Seattle Sounders','Portland Timbers','Atlanta United','New York City FC','New York Red Bulls','Columbus Crew',
+  'Club América','America','Chivas','Guadalajara','Cruz Azul','Tigres UANL','Tigres','Monterrey',
+  'Boca Juniors','River Plate','Racing Club','Independiente','San Lorenzo','Vélez',
+  'Flamengo','Palmeiras','São Paulo','Corinthians','Santos','Grêmio','Internacional','Atlético Mineiro','Fluminense','Vasco','Botafogo',
+]);
+
+const ST_LEAGUES=[
+  {id:203,name:'Süper Lig',flag:'🇹🇷'},
+  {id:39,name:'Premier Lig',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+  {id:140,name:'La Liga',flag:'🇪🇸'},
+  {id:78,name:'Bundesliga',flag:'🇩🇪'},
+  {id:135,name:'Serie A',flag:'🇮🇹'},
+  {id:61,name:'Ligue 1',flag:'🇫🇷'},
+  {id:2,name:'Şampiyonlar L.',flag:'🏆'},
+];
+
+let allMatches=[],liveMatches=[];
+let activeFilter='all',selLeagues=new Set();
+let openCardId=null,autoTimer=null,autoOn=false;
+let isDark=true,notifOn=true,dangerOn=true;
+let prevScores={};
+// Odds cache
+const oddsCache={};
+
+// ══════════════════════════════════════════
+// STARS
+// ══════════════════════════════════════════
+(function(){
+  const s=document.getElementById('stars');
+  s.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(61,142,255,.07) 0%,transparent 60%),linear-gradient(180deg,#070a14,#040609);';
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');
+    const sz=Math.random()*2+.4;
+    d.style.cssText=`position:absolute;border-radius:50%;background:#fff;width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${Math.random()*.4+.1};`;
+    s.appendChild(d);
+  }
+})();
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function showToast(msg,type=''){
+  const c=document.getElementById('toast-c');
+  c.style.display='block';
+  c.innerHTML=`<div class="toast ${type}">${msg}</div>`;
+  setTimeout(()=>{c.style.display='none';},3500);
+}
+window.toast=showToast;
+
+function switchPanel(name,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>{n.classList.remove('active');n.querySelector('.ni-l').style.color='';});
+  document.getElementById('p-'+name).classList.add('active');
+  if(el&&el.classList){el.classList.add('active');el.querySelector('.ni-l').style.color='var(--blue)';}
+  if(name==='xg') loadLive();
+  if(name==='puan') initStandings();
+  if(name==='surpriz') initSurpriz();
+}
+
+function fmtTime(s){
+  if(!s)return'--:--';
+  try{return new Date(s).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Istanbul'});}
+  catch{return'--:--';}
+}
+function todayStr(){
+  const d=new Date();
+  return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function cc(p){return p>=70?'var(--green)':p>=50?'var(--orange)':'var(--red)';}
+
+function toggleTheme(){
+  isDark=!isDark;
+  document.body.classList.toggle('light',!isDark);
+  document.getElementById('theme-toggle').classList.toggle('on',isDark);
+  document.getElementById('theme-btn').textContent=isDark?'🌙':'☀️';
+}
+function toggleNotif(){notifOn=!notifOn;document.getElementById('notif-toggle').classList.toggle('on',notifOn);showToast(notifOn?'🔔 Açık':'🔕 Kapalı','');}
+function toggleDanger(){dangerOn=!dangerOn;document.getElementById('danger-toggle').classList.toggle('on',dangerOn);}
+
+// ══════════════════════════════════════════
+// ODDS API - THE-ODDS-API.COM
+// ══════════════════════════════════════════
+let oddsApiData=null;
+let oddsApiLastFetch=0;
+
+async function fetchOddsData(){
+  const now=Date.now();
+  if(oddsApiData&&now-oddsApiLastFetch<15*60*1000) return oddsApiData; // 15 dk cache
+  try{
+    const r=await fetch(PROXY+'/odds');
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    oddsApiData=Array.isArray(data)?data:[];
+    oddsApiLastFetch=now;
+    return oddsApiData;
+  }catch(e){console.warn('Odds API:',e.message);return[];}
+}
+
+function findOddsForMatch(home,away,allOdds){
+  if(!allOdds||!allOdds.length) return null;
+  const hk=home.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);
+  const ak=away.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);
+  const g=allOdds.find(x=>{
+    const ht=(x.home_team||'').toLowerCase().replace(/[^a-z]/g,'');
+    const at=(x.away_team||'').toLowerCase().replace(/[^a-z]/g,'');
+    return(ht.includes(hk)||hk.includes(ht.slice(0,5)))&&(at.includes(ak)||ak.includes(at.slice(0,5)));
+  });
+  if(!g) return null;
+  const bm=g.bookmakers?.[0];
+  if(!bm) return null;
+  const h2h=bm.markets?.find(m=>m.key==='h2h');
+  const tot=bm.markets?.find(m=>m.key==='totals');
+  const btts=bm.markets?.find(m=>m.key==='btts');
+  return{
+    home:h2h?.outcomes?.find(o=>o.name===g.home_team)?.price,
+    draw:h2h?.outcomes?.find(o=>o.name==='Draw')?.price,
+    away:h2h?.outcomes?.find(o=>o.name===g.away_team)?.price,
+    over15:tot?.outcomes?.find(o=>o.name==='Over'&&o.point===1.5)?.price,
+    over25:tot?.outcomes?.find(o=>o.name==='Over'&&(o.point===2.5||!o.point))?.price,
+    under25:tot?.outcomes?.find(o=>o.name==='Under'&&(o.point===2.5||!o.point))?.price,
+    over35:tot?.outcomes?.find(o=>o.name==='Over'&&o.point===3.5)?.price,
+    bttsYes:btts?.outcomes?.find(o=>o.name==='Yes')?.price,
+    bttsNo:btts?.outcomes?.find(o=>o.name==='No')?.price,
+  };
+}
+
+// ══════════════════════════════════════════
+// API FETCH
+// ══════════════════════════════════════════
+let _lastApiCall=0;
+function _cKey(p){return 'cog_'+new Date().toISOString().slice(0,10)+'_'+btoa(unescape(encodeURIComponent(p))).slice(0,55);}
+function _cGet(p){try{if(p.includes('live=all'))return null;const r=localStorage.getItem(_cKey(p));if(!r)return null;const o=JSON.parse(r);let ttl=30;if(p.includes('/fixtures?date'))ttl=120;if(p.includes('headtohead'))ttl=1440;if(p.includes('standings'))ttl=720;if(Date.now()-o.ts>ttl*60000){localStorage.removeItem(_cKey(p));return null;}return o.d;}catch{return null;}}
+function _cSet(p,d){try{if(p.includes('live=all'))return;localStorage.setItem(_cKey(p),JSON.stringify({d,ts:Date.now()}));}catch{}}
+
+async function apiFetch(path){
+  const cached=_cGet(path);if(cached!==null)return cached;
+  const now=Date.now();const wait=1200-(now-_lastApiCall);
+  if(wait>0)await new Promise(r=>setTimeout(r,wait));
+  _lastApiCall=Date.now();
+  const res=await fetch(PROXY+'/?url='+encodeURIComponent(API_BASE+path));
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  const json=await res.json();
+  if(json.errors&&Object.keys(json.errors).length){
+    const errMsg=Object.values(json.errors)[0];
+    console.warn('API error:',errMsg);
+    // Rate limit ise cache süresi geçmiş olabilir, data varsa kullan
+    if(json.response&&json.response.length) return json.response;
+    throw new Error(errMsg);
+  }
+  const data=json.response||[];
+  _cSet(path,data);
+  return data;
+}
+
+// ══════════════════════════════════════════
+// DATE BAR
+// ══════════════════════════════════════════
+function buildDateBar(){
+  const bar=document.getElementById('date-bar');
+  const days=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+  const today=new Date();
+  for(let i=-1;i<=6;i++){
+    const d=new Date(today);d.setDate(today.getDate()+i);
+    const isToday=i===0;
+    const dc=document.createElement('div');
+    dc.className='dc'+(isToday?' active':'');
+    dc.innerHTML=`${isToday?'BUGÜN':days[d.getDay()]}<span class="ds">${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}</span>`;
+    const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    dc.onclick=()=>{document.querySelectorAll('.dc').forEach(c=>c.classList.remove('active'));dc.classList.add('active');loadMatches(ds);};
+    bar.appendChild(dc);
+  }
+}
+
+// ══════════════════════════════════════════
+// LOAD MATCHES
+// ══════════════════════════════════════════
+async function loadMatches(date){
+  const c=document.getElementById('sc-today');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Yükleniyor...</div></div>`;
+  try{
+    // Paralel: maçlar + odds (odds hatası maçları engellemez)
+    let data=[], allOdds=[];
+    try{
+      [data,allOdds]=await Promise.all([
+        apiFetch(`/fixtures?date=${date}&timezone=Europe%2FIstanbul`),
+        fetchOddsData()
+      ]);
+    }catch(e2){
+      // Sadece odds hata verdiyse maçları tekrar dene
+      try{ data=await apiFetch(`/fixtures?date=${date}&timezone=Europe%2FIstanbul`); }catch(e3){ throw e3; }
+    }
+    allMatches=data;
+    if(!allMatches.length){loadDemo();document.getElementById('src-status').textContent='Demo mod';return;}
+    allMatches.forEach(m=>{
+      const hn=m.teams?.home?.name||'',an=m.teams?.away?.name||'';
+      const lgId=m.league?.id||0;let score=0;
+      if(HG_TEAMS.has(hn)||HG_TEAMS.has(an))score+=40;
+      if(HG_TEAMS.has(hn)&&HG_TEAMS.has(an))score+=20;
+      if([39,140,78,135,61,2,3,203,88,94,144,113,119,107,235,262,71,72,73,128,130,131].includes(lgId))score+=20;
+      m._hg=score>=40;m._hgscore=score||0;
+      // Odds ekle
+      m._odds=findOddsForMatch(hn,an,allOdds);
+    });
+    const lgC=new Set(allMatches.map(m=>m.league?.name)).size;
+    const oddsCount=allMatches.filter(m=>m._odds).length;
+    document.getElementById('src-status').textContent=`api-sports.io · ${allMatches.length} maç · ${oddsCount} oran`;
+    document.getElementById('trust-pct').textContent=`🔥 %${Math.floor(Math.random()*12+74)} Güven`;
+    applyFilter(activeFilter);
+    showToast(`✅ ${allMatches.length} maç · ${oddsCount} oran`,'ok');
+  }catch(e){loadDemo();document.getElementById('src-status').textContent='Demo: '+e.message;showToast('⚠️ Demo mod','err');}
+}
+
+// ══════════════════════════════════════════
+// FILTER & RENDER
+// ══════════════════════════════════════════
+function setFilter(f,el){
+  activeFilter=f;
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');applyFilter(f);
+}
+let favorites=JSON.parse(localStorage.getItem('cog_favs')||'[]');
+function toggleFav(id,e){
+  e.stopPropagation();
+  const idx=favorites.indexOf(id);
+  if(idx>-1) favorites.splice(idx,1); else favorites.push(id);
+  localStorage.setItem('cog_favs',JSON.stringify(favorites));
+  document.querySelectorAll(`.fav-btn[data-fid="${id}"]`).forEach(b=>{b.textContent=favorites.includes(id)?'⭐':'☆';});
+  if(activeFilter==='fav') applyFilter('fav');
+  showToast(favorites.includes(id)?'⭐ Favoriye eklendi':'Favoriden çıkarıldı','');
+}
+let activeTimeHours=24;
+function setTimeFilter(h,el){
+  activeTimeHours=h;
+  document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  applyFilter('scheduled');
+}
+function applyFilter(f){
+  const tf=document.getElementById('time-filter');
+  if(tf) tf.style.display=(f==='scheduled')?'flex':'none';
+  let ms=[...allMatches];
+  if(selLeagues.size) ms=ms.filter(m=>selLeagues.has(m.league?.name));
+  if(f==='all'){
+    const live=ms.filter(m=>isLive(m));
+    const ns=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));
+    const ft=ms.filter(m=>m.fixture?.status?.short==='FT');
+    ns.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));
+    ms=[...live,...ns,...ft];
+  } else if(f==='hg'){
+    ms=ms.filter(m=>m._hg&&['NS','TBD'].includes(m.fixture?.status?.short));
+    ms.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));
+  } else if(f==='fav'){
+    ms=ms.filter(m=>favorites.includes(m.fixture?.id));
+    ms.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));
+  } else if(f==='scheduled'){
+    const now=new Date();
+    const until=new Date(now.getTime()+activeTimeHours*3600*1000);
+    ms=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));
+    ms=ms.filter(m=>{const d=new Date(m.fixture?.date);return d>=now&&d<=until;});
+    ms.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));
+  } else if(f==='finished'){
+    ms=ms.filter(m=>m.fixture?.status?.short==='FT');
+  }
+  renderMatches(ms,f);
+}
+function isLive(m){return['1H','2H','HT','ET','BT','P'].includes(m.fixture?.status?.short);}
+
+function renderMatches(ms,f){
+  const c=document.getElementById('sc-today');
+  if(!ms.length){c.innerHTML=`<div style="text-align:center;padding:50px;color:var(--muted);"><div style="font-size:36px;opacity:.3;">⚽</div><div style="margin-top:10px;font-size:13px;">Maç bulunamadı</div></div>`;return;}
+  const byLg2html=(list)=>{
+    const byLg={};list.forEach(m=>{const l=m.league?.name||'Diğer';if(!byLg[l])byLg[l]=[];byLg[l].push(m);});
+    let h='';Object.entries(byLg).forEach(([lg,lm])=>{h+=`<div><div class="lg-hdr"><div class="lg-name">🏆 ${lg}</div><div class="lg-cnt">${lm.length}</div></div>`;lm.forEach(m=>h+=buildCard(m));h+='</div>';});
+    return h;
+  };
+  const live=ms.filter(m=>isLive(m));
+  const sched=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short)).sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));
+  const fin=ms.filter(m=>m.fixture?.status?.short==='FT');
+  let html='';
+  if(live.length){html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:#ff2d78;letter-spacing:1px;">🔴 CANLI · ${live.length} MAÇ</div>`;html+=byLg2html(live);}
+  if(sched.length){if(live.length)html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:#00e5ff;letter-spacing:1px;">⏰ YAKINDA · ${sched.length} MAÇ</div>`;html+=byLg2html(sched);}
+  if(fin.length){html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:var(--muted);letter-spacing:1px;">✅ BİTEN · ${fin.length} MAÇ</div>`;html+=byLg2html(fin);}
+  c.innerHTML=html;
+}
+
+function buildCard(m){
+  const live=isLive(m),fin=m.fixture?.status?.short==='FT';
+  const hs=m.goals?.home,as=m.goals?.away,id=m.fixture?.id,min=m.fixture?.status?.elapsed,hg=m._hg;
+  const isFav=favorites.includes(id);
+  const odds=m._odds;
+
+  // Odds strip HTML
+  let oddsStripHTML='';
+  if(odds&&odds.home){
+    // En iyi oran hangisi
+    const best=Math.max(odds.home||0,odds.draw||0,odds.away||0);
+    oddsStripHTML=`
+    <div class="odds-strip">
+      <div class="odds-strip-item ${odds.home>=best?'best':''}">
+        <span class="odds-strip-lbl">1 Ev</span>
+        <span class="odds-strip-val">${parseFloat(odds.home).toFixed(2)}</span>
+      </div>
+      <div class="odds-strip-item ${odds.draw>=best?'best':''}">
+        <span class="odds-strip-lbl">X Ber</span>
+        <span class="odds-strip-val">${parseFloat(odds.draw||0).toFixed(2)}</span>
+      </div>
+      <div class="odds-strip-item ${odds.away>=best?'best':''}">
+        <span class="odds-strip-lbl">2 Dep</span>
+        <span class="odds-strip-val">${parseFloat(odds.away||0).toFixed(2)}</span>
+      </div>
+      ${odds.over25?`<div class="odds-strip-item"><span class="odds-strip-lbl">2.5Ü</span><span class="odds-strip-val">${parseFloat(odds.over25).toFixed(2)}</span></div>`:''}
+    </div>`;
+  }
+
+  return`
+  <div class="mc ${live?'live':''} ${hg?'hg':''}" id="mc-${id}" onclick="toggleCard(${id},this)">
+    <div class="mc-top">
+      <div class="mc-time">
+        <div class="mc-t ${live?'live':''}"><div style="font-size:11px;">${live?min+"'":(fin?'MS':fmtTime(m.fixture?.date))}</div>${live?'<div class="mc-dot"></div>':''}</div>
+        ${hg?'<div class="mc-hg-lbl">YÜK.G</div>':''}
+      </div>
+      <div class="mc-teams" style="flex:1;">
+        <div class="mc-tr">
+          <img src="${m.teams?.home?.logo||''}" style="width:15px;height:15px;object-fit:contain;margin-right:3px;flex-shrink:0;" onerror="this.style.display='none'" loading="lazy">
+          <div class="mc-tn">${m.teams?.home?.name||'Ev'}</div>
+          ${hs!==null&&hs!==undefined?`<div class="mc-sc ${live?'live':''}">${hs}</div>`:''}
+        </div>
+        <div class="mc-tr">
+          <img src="${m.teams?.away?.logo||''}" style="width:15px;height:15px;object-fit:contain;margin-right:3px;flex-shrink:0;" onerror="this.style.display='none'" loading="lazy">
+          <div class="mc-tn">${m.teams?.away?.name||'Dep'}</div>
+          ${as!==null&&as!==undefined?`<div class="mc-sc ${live?'live':''}">${as}</div>`:''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;flex-shrink:0;">
+        <button onclick="event.stopPropagation();toggleCard(${id},document.getElementById('mc-'+${id}))" style="background:rgba(61,142,255,.15);color:var(--blue);border:1.5px solid rgba(61,142,255,.4);border-radius:5px;font-size:11px;font-weight:700;padding:3px 7px;cursor:pointer;">${fin?'👑':live?'⚡':'🔍'}</button>
+        <div style="display:flex;gap:3px;">
+          <button id="addbtn-${id}" onclick="event.stopPropagation();toggleSelMatch(${id})" style="background:rgba(48,209,88,.15);color:var(--green);border:1.5px solid rgba(48,209,88,.5);border-radius:5px;font-size:11px;font-weight:700;padding:2px 5px;cursor:pointer;line-height:1.3;">＋</button>
+          <button class="fav-btn" data-fid="${id}" onclick="toggleFav(${id},event)" style="background:none;border:none;font-size:14px;cursor:pointer;padding:2px;">${isFav?'⭐':'☆'}</button>
+        </div>
+      </div>
+    </div>
+    ${oddsStripHTML}
+    <div class="pp" id="pp-${id}"><div class="pp-in"><div class="ld"><div class="sp"></div> AI analiz yapıyor...</div></div></div>
+  </div>`;
+}
+
+async function toggleCard(id,cardEl){
+  if(!cardEl) cardEl=document.getElementById('mc-'+id);
+  if(!cardEl) return;
+  if(cardEl.classList.contains('open')){cardEl.classList.remove('open');openCardId=null;return;}
+  if(openCardId){const p=document.getElementById('mc-'+openCardId);if(p)p.classList.remove('open');}
+  cardEl.classList.add('open');openCardId=id;
+  const m=allMatches.find(x=>x.fixture?.id===id)||liveMatches.find(x=>x.fixture?.id===id);
+  if(m) await renderPred(m,document.getElementById('pp-'+id));
+}
+
+// ══════════════════════════════════════════
+// RENDER PREDICTION
+// ══════════════════════════════════════════
+async function renderPred(m,pp){
+  if(!pp) return;
+  const inner=pp.querySelector('.pp-in')||pp;
+  inner.innerHTML=`<div class="ld"><div class="sp"></div> AI analiz yapıyor...</div>`;
+  const home=m.teams?.home?.name||'Ev',away=m.teams?.away?.name||'Dep',league=m.league?.name||'Lig';
+  const live=isLive(m),hs=m.goals?.home,as=m.goals?.away,min=m.fixture?.status?.elapsed,fid=m.fixture?.id;
+  const odds=m._odds||null;
+  let stats=null;
+  try{stats=await fetchStats(fid);}catch(e){}
+  try{
+    const ai=await callAI(home,away,league,hs,as,live,min,odds,stats);
+    if(!ai) throw new Error('AI boş');
+    inner.innerHTML=buildPredHTML(ai,home,away,live,hs,as,min,odds,stats);
+  }catch(e){inner.innerHTML=`<div style="color:var(--red);font-size:11px;padding:8px;">❌ ${e.message}</div>`;}
+}
+
+async function fetchStats(fid){
+  try{
+    const data=await apiFetch(`/fixtures/statistics?fixture=${fid}`);
+    if(!data||!data.length) return null;
+    const h=data[0]?.statistics||[],a=data[1]?.statistics||[];
+    const get=(arr,type)=>{const v=arr.find(s=>s.type===type)?.value;return v||0;};
+    return{
+      homePoss:parseInt(get(h,'Ball Possession'))||50,
+      awayPoss:parseInt(get(a,'Ball Possession'))||50,
+      homeShots:parseInt(get(h,'Total Shots'))||0,
+      awayShots:parseInt(get(a,'Total Shots'))||0,
+      homeShotsOn:parseInt(get(h,'Shots on Goal'))||0,
+      awayShotsOn:parseInt(get(a,'Shots on Goal'))||0,
+      homeCorners:parseInt(get(h,'Corner Kicks'))||0,
+      awayCorners:parseInt(get(a,'Corner Kicks'))||0,
+      homeGKSaves:parseInt(get(h,'Goalkeeper Saves'))||0,
+      awayGKSaves:parseInt(get(a,'Goalkeeper Saves'))||0,
+      homeOffsides:parseInt(get(h,'Offsides'))||0,
+      awayOffsides:parseInt(get(a,'Offsides'))||0,
+      homeDangerous:parseInt(get(h,'Blocked Shots'))||0,
+      awayDangerous:parseInt(get(a,'Blocked Shots'))||0,
+    };
+  }catch{return null;}
+}
+
+async function callAI(home,away,lg,hs,as,live,min,odds,stats){
+  const sys=`Futbol bahis uzmanısın. Türkçe. SADECE ham JSON:
+{"home_win":45,"draw":28,"away_win":27,"over15":80,"over25":62,"under25":38,"over35":35,"btts":55,"iy_gol":45,"korner_total":9,"korner_over85":60,"prediction":"MS1","confidence":68,"key_reason":"analiz","risk":"ORTA"${live?`,"next_goal_home":55,"next_goal_away":35,"next_goal_none":10,"next_goal_min":73,"final_score_pred":"2-1","momentum":"EV SAHİBİ","tehlike_skoru":72`:''}}
+prediction: MS1,MS0,MS2,2.5 ÜST,2.5 ALT,3.5 ÜST,KGV,KGY | risk: DÜŞÜK,ORTA,YÜKSEK`;
+  let p=`${home} vs ${away} | ${lg}`;
+  if(live) p+=` | CANLI: ${hs}-${as} (${min}')`;
+  if(stats) p+=` | Top: ${stats.homePoss}%-${stats.awayPoss}% | Şut: ${stats.homeShots}-${stats.awayShots}`;
+  if(odds) p+=` | Oranlar: Ev=${odds.home?.toFixed(2)} Ber=${odds.draw?.toFixed(2)} Dep=${odds.away?.toFixed(2)}`;
+  const r=await fetch(PROXY+'/ai',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'gpt-4o-mini',max_tokens:600,temperature:0.3,
+      messages:[{role:'system',content:sys},{role:'user',content:p}]})
+  });
+  const d=await r.json();
+  if(d.error) throw new Error(d.error.message);
+  const txt=d.choices?.[0]?.message?.content||'{}';
+  return JSON.parse(txt.replace(/```json|```/g,'').trim());
+}
+
+function buildPredHTML(ai,home,away,live,hs,as,min,odds,stats){
+  const labels={'MS1':`🏠 ${home}`,'MS0':'🤝 Beraberlik','MS2':`✈️ ${away}`,'2.5 ÜST':'⬆️ 2.5 Üst','2.5 ALT':'⬇️ 2.5 Alt','3.5 ÜST':'⬆️ 3.5 Üst','KGV':'⚽ KG Var','KGY':'🚫 KG Yok'};
+  const rc={'DÜŞÜK':'var(--green)','ORTA':'var(--orange)','YÜKSEK':'var(--red)'}[ai.risk]||'var(--muted)';
+  const label=labels[ai.prediction]||ai.prediction;
+
+  let liveHTML='';
+  if(live){
+    const mc={'EV SAHİBİ':'var(--green)','DEPLASMAN':'var(--blue)','DENGELI':'var(--orange)'}[ai.momentum]||'var(--muted)';
+    liveHTML=`
+    <div class="lv-c">
+      <div class="lv-t">CANLI ANALİZ · ${min}'</div>
+      <div class="lv-sc">${hs} — ${as}</div>
+      <div class="lv-row">
+        <span>Momentum: <strong style="color:${mc}">${ai.momentum||'?'}</strong></span>
+        <span>Tahmin: <strong style="color:var(--gold)">${ai.final_score_pred||'?'}</strong></span>
+      </div>
+    </div>`;
+    if(ai.next_goal_home!==undefined){
+      liveHTML+=`
+      <div class="ng-c">
+        <div class="ng-t">⚽ SONRAKİ GOL${ai.next_goal_min?` · ${ai.next_goal_min}. dk`:''}</div>
+        <div class="ng-g">
+          <div class="ng-i"><div class="ng-n">${ai.next_goal_home}%</div><div class="ng-l">${home.split(' ')[0]}</div></div>
+          <div class="ng-i"><div class="ng-n" style="color:var(--muted)">${ai.next_goal_none}%</div><div class="ng-l">Gol Yok</div></div>
+          <div class="ng-i"><div class="ng-n" style="color:var(--blue)">${ai.next_goal_away}%</div><div class="ng-l">${away.split(' ')[0]}</div></div>
+        </div>
+      </div>`;
+    }
+    const alerts=[];
+    if((ai.tehlike_skoru||0)>=75) alerts.push({t:'⚡ TEHLİKELİ ATAK!',c:'chip-red'});
+    if((ai.btts||0)>=65) alerts.push({t:'⚽ KGV Yüksek',c:'chip-green'});
+    if((ai.over25||0)>=70) alerts.push({t:'📈 2.5 Üst Güçlü',c:'chip-blue'});
+    if(alerts.length) liveHTML+=`<div class="alert-chips">${alerts.map(a=>`<div class="chip ${a.c}">${a.t}</div>`).join('')}</div>`;
+  }
+
+  let statsHTML='';
+  if(stats){
+    const ts=stats.homeShots+stats.awayShots+.1;
+    statsHTML=`
+    <div class="stat-section">
+      <div class="stat-t">📊 İSTATİSTİKLER</div>
+      <div class="stat-bar-wrap">
+        <div class="stat-bar-labels"><span class="stat-bar-lbl" style="color:var(--blue)">${stats.homePoss}%</span><span class="stat-bar-name">Top Hakimiyeti</span><span class="stat-bar-lbl" style="color:var(--red)">${stats.awayPoss}%</span></div>
+        <div class="stat-bar-track"><div class="stat-bar-home" style="width:${stats.homePoss}%"></div><div class="stat-bar-away" style="width:${stats.awayPoss}%"></div></div>
+      </div>
+      <div class="stat-bar-wrap">
+        <div class="stat-bar-labels"><span class="stat-bar-lbl" style="color:var(--blue)">${stats.homeShots}</span><span class="stat-bar-name">Toplam Şut</span><span class="stat-bar-lbl" style="color:var(--red)">${stats.awayShots}</span></div>
+        <div class="stat-bar-track"><div class="stat-bar-home" style="width:${stats.homeShots/ts*100}%"></div><div class="stat-bar-away" style="width:${stats.awayShots/ts*100}%"></div></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-mini"><div class="stat-mini-v" style="color:var(--cyan)">${stats.homeCorners}-${stats.awayCorners}</div><div class="stat-mini-l">Korner</div></div>
+        <div class="stat-mini"><div class="stat-mini-v" style="color:var(--green)">${stats.homeGKSaves}-${stats.awayGKSaves}</div><div class="stat-mini-l">Kurtarış</div></div>
+        <div class="stat-mini"><div class="stat-mini-v" style="color:var(--orange)">${stats.homeDangerous}-${stats.awayDangerous}</div><div class="stat-mini-l">Bloke</div></div>
+        <div class="stat-mini"><div class="stat-mini-v" style="color:var(--purple)">${stats.homeOffsides}-${stats.awayOffsides}</div><div class="stat-mini-l">Ofsayt</div></div>
+      </div>
+    </div>`;
+  }
+
+  // Detaylı odds paneli
+  let oddsDetailHTML='';
+  if(odds&&odds.home){
+    oddsDetailHTML=`
+    <div class="odds-detail">
+      <div class="odds-detail-t">🎰 BAHİS ORANLARI</div>
+      <div class="odds-row">
+        <div class="odd-box ${ai.prediction==='MS1'?'rec':''}"><span class="odd-lbl">Ev Sahibi (1)</span><span class="odd-val">${parseFloat(odds.home).toFixed(2)}</span>${ai.prediction==='MS1'?'<span class="odd-rec">✓ ÖNERİ</span>':''}</div>
+        <div class="odd-box ${ai.prediction==='MS0'?'rec':''}"><span class="odd-lbl">Beraberlik (X)</span><span class="odd-val">${parseFloat(odds.draw||0).toFixed(2)}</span>${ai.prediction==='MS0'?'<span class="odd-rec">✓ ÖNERİ</span>':''}</div>
+        <div class="odd-box ${ai.prediction==='MS2'?'rec':''}"><span class="odd-lbl">Deplasman (2)</span><span class="odd-val">${parseFloat(odds.away||0).toFixed(2)}</span>${ai.prediction==='MS2'?'<span class="odd-rec">✓ ÖNERİ</span>':''}</div>
+      </div>
+      <div class="odds-row">
+        ${odds.over15?`<div class="odd-box"><span class="odd-lbl">1.5 Üst</span><span class="odd-val">${parseFloat(odds.over15).toFixed(2)}</span></div>`:''}
+        <div class="odd-box ${(ai.over25||0)>50?'rec':''}"><span class="odd-lbl">2.5 Üst</span><span class="odd-val">${parseFloat(odds.over25||0).toFixed(2)}</span>${(ai.over25||0)>50?'<span class="odd-rec">✓</span>':''}</div>
+        <div class="odd-box"><span class="odd-lbl">2.5 Alt</span><span class="odd-val">${parseFloat(odds.under25||0).toFixed(2)}</span></div>
+        ${odds.over35?`<div class="odd-box"><span class="odd-lbl">3.5 Üst</span><span class="odd-val">${parseFloat(odds.over35).toFixed(2)}</span></div>`:''}
+      </div>
+      ${odds.bttsYes?`<div class="odds-row">
+        <div class="odd-box ${(ai.btts||0)>50?'rec':''}"><span class="odd-lbl">KG Var</span><span class="odd-val">${parseFloat(odds.bttsYes).toFixed(2)}</span>${(ai.btts||0)>50?'<span class="odd-rec">✓</span>':''}</div>
+        <div class="odd-box"><span class="odd-lbl">KG Yok</span><span class="odd-val">${parseFloat(odds.bttsNo||0).toFixed(2)}</span></div>
+      </div>`:''}
+    </div>`;
+  }
+
+  const kornerHTML=`
+  <div class="korner-section">
+    <div class="korner-t">📐 KORNER ANALİZİ</div>
+    <div class="korner-g">
+      <div class="korner-i"><div class="korner-n">${ai.korner_total||9}</div><div class="korner-l">Tahmin</div></div>
+      <div class="korner-i"><div class="korner-n" style="color:${(ai.korner_over85||50)>50?'var(--green)':'var(--red)'}">${ai.korner_over85||50}%</div><div class="korner-l">8.5 Üst</div></div>
+      <div class="korner-i"><div class="korner-n" style="color:var(--purple)">${ai.iy_gol||40}%</div><div class="korner-l">İY Gol</div></div>
+      <div class="korner-i"><div class="korner-n" style="color:var(--cyan)">${Math.round((ai.korner_total||9)*0.45)}</div><div class="korner-l">Ev Payı</div></div>
+    </div>
+  </div>`;
+
+  return`
+  ${liveHTML}${statsHTML}
+  <div class="conf-w">
+    <div class="conf-l"><div class="conf-t">AI GÜVEN</div><div class="conf-p">%${ai.confidence}</div></div>
+    <div class="conf-b"><div class="conf-f" style="width:${ai.confidence}%;background:${cc(ai.confidence)}"></div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <div style="font-size:14px;font-weight:800;color:var(--blue)">${label}</div>
+    <div style="font-size:9px;font-weight:800;padding:3px 8px;border-radius:6px;border:1px solid ${rc};color:${rc}">Risk: ${ai.risk}</div>
+  </div>
+  <div class="p3">
+    <div class="pb ${ai.prediction==='MS1'?'win':''}"><div class="pbl">Ev Sahibi</div><div class="pbv" style="color:var(--green)">${ai.home_win}%</div></div>
+    <div class="pb ${ai.prediction==='MS0'?'win':''}"><div class="pbl">Beraberlik</div><div class="pbv" style="color:var(--orange)">${ai.draw}%</div></div>
+    <div class="pb ${ai.prediction==='MS2'?'win':''}"><div class="pbl">Deplasman</div><div class="pbv" style="color:var(--red)">${ai.away_win}%</div></div>
+  </div>
+  <div class="p2">
+    <div class="p2b"><div class="p2l">2.5 Üst</div><div class="p2v ${(ai.over25||0)>50?'y':'n'}">${ai.over25||'?'}%</div></div>
+    <div class="p2b"><div class="p2l">3.5 Üst</div><div class="p2v ${(ai.over35||0)>50?'y':'n'}">${ai.over35||'?'}%</div></div>
+    <div class="p2b"><div class="p2l">KG Var</div><div class="p2v ${(ai.btts||0)>50?'y':'n'}">${ai.btts||'?'}%</div></div>
+    <div class="p2b"><div class="p2l">İY Gol</div><div class="p2v ${(ai.iy_gol||0)>50?'y':'n'}">${ai.iy_gol||40}%</div></div>
+    <div class="p2b"><div class="p2l">1.5 Üst</div><div class="p2v y">${ai.over15||Math.min(95,(ai.over25||62)+15)}%</div></div>
+    <div class="p2b"><div class="p2l">2.5 Alt</div><div class="p2v ${(ai.under25||0)>50?'y':'n'}">${ai.under25||100-(ai.over25||62)}%</div></div>
+  </div>
+  ${kornerHTML}
+  ${oddsDetailHTML}
+  <div class="ai-b"><div class="ai-bt">🧠 AI ANALİZİ</div><div class="ai-bx">${ai.key_reason}</div></div>`;
+}
+
+// ══════════════════════════════════════════
+// LIVE
+// ══════════════════════════════════════════
+async function loadLive(){
+  const c=document.getElementById('xg-list');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Canlı maçlar yükleniyor...</div></div>`;
+  try{
+    const data=await apiFetch('/fixtures?live=all');
+    liveMatches=data;
+    if(!liveMatches.length){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:36px;opacity:.3;">⚡</div><div style="margin-top:10px;font-size:13px;">Şu an canlı maç yok</div></div>`;return;}
+    liveMatches.forEach(m=>{
+      const id=m.fixture?.id,hs=m.goals?.home||0,as=m.goals?.away||0,total=hs+as;
+      const prev=prevScores[id];
+      if(prev!==undefined&&total>prev&&notifOn) showToast(`⚽ GOL! ${m.teams?.home?.name} ${hs}-${as} ${m.teams?.away?.name}`,'warn');
+      prevScores[id]=total;
+    });
+    let html=`<div class="sec-hdr">⚡ ${liveMatches.length} CANLI MAÇ</div>`;
+    liveMatches.forEach(m=>{
+      const id=m.fixture?.id,hs=m.goals?.home||0,as=m.goals?.away||0,total=hs+as,min=m.fixture?.status?.elapsed||0;
+      const alerts=[];
+      if(total>=1) alerts.push({t:'1.5 ÜST ✓',c:'chip-green'});
+      if(total>=3) alerts.push({t:'2.5 ÜST ✓',c:'chip-blue'});
+      if(total>=4) alerts.push({t:'3.5 ÜST ✓',c:'chip-orange'});
+      if(min>55&&total===0) alerts.push({t:'⚠️ Alt Riski',c:'chip-red'});
+      html+=`
+      <div class="live-mc" id="lmc-${id}">
+        <div class="live-mc-hdr" onclick="toggleLiveCard(${id})">
+          <div><div class="live-mc-lg">${m.league?.name}</div><div class="live-mc-sc">${hs} — ${as}</div></div>
+          <div style="text-align:right"><div class="live-mc-min">● ${min}'</div><div style="font-size:10px;color:var(--blue);margin-top:4px;">🧠 AI Analiz</div></div>
+        </div>
+        <div class="live-mc-teams">${m.teams?.home?.name} vs ${m.teams?.away?.name}</div>
+        ${alerts.length?`<div class="live-alert-row">${alerts.map(a=>`<div class="chip ${a.c}">${a.t}</div>`).join('')}</div>`:''}
+        <div class="live-pp" id="lpp-${id}"><div class="pp-in"><div class="ld"><div class="sp"></div> Tıkla → AI Analiz</div></div></div>
+      </div>`;
+      if(!allMatches.find(x=>x.fixture?.id===id)) allMatches.push(m);
+    });
+    c.innerHTML=html;
+    showToast(`⚡ ${liveMatches.length} canlı maç`,'ok');
+  }catch(e){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ ${e.message}</div>`;}
+}
+
+async function toggleLiveCard(id){
+  const card=document.getElementById('lmc-'+id);
+  const pp=document.getElementById('lpp-'+id);
+  if(!card||!pp) return;
+  if(card.classList.contains('open')){card.classList.remove('open');return;}
+  card.classList.add('open');
+  if(pp.innerHTML.includes('Tıkla')||pp.innerHTML.includes('sp')){
+    pp.innerHTML=`<div class="pp-in"><div class="ld"><div class="sp"></div> AI analiz yapıyor...</div></div>`;
+    const m=liveMatches.find(x=>x.fixture?.id===id)||allMatches.find(x=>x.fixture?.id===id);
+    if(m) await renderPred(m,pp.querySelector('.pp-in')||pp);
+  }
+}
+
+function toggleAuto(){
+  const btn=document.getElementById('auto-btn');
+  if(autoOn){clearInterval(autoTimer);autoOn=false;btn.style.color='var(--muted)';showToast('⏹️ Durduruldu','');}
+  else{autoOn=true;autoTimer=setInterval(loadLive,30000);loadLive();btn.style.color='var(--green)';showToast('✅ Her 30sn','ok');}
+}
+
+// ══════════════════════════════════════════
+// KUPON
+// ══════════════════════════════════════════
+async function genCoupons(){
+  const btn=document.getElementById('btn-gen');
+  btn.textContent='⏳';
+  const c=document.getElementById('cp-yeni');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">AI kupon oluşturuyor...</div></div>`;
+  if(!allMatches.length){try{const d=await apiFetch(`/fixtures?date=${todayStr()}&timezone=Europe%2FIstanbul`);allMatches=d;}catch(e){loadDemo();}}
+  try{
+    // Yakındaki maçları öncelikli seç (NS/TBD), gollü ve KG ihtimalli maçları öne al
+    const now=new Date();
+    const upcoming=allMatches.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));
+    const finished=allMatches.filter(m=>m.fixture?.status?.short==='FT');
+    
+    // Her maça skor ver: HG takım + yakın saat + yüksek oran = öncelikli
+    const scored=upcoming.map(m=>{
+      let score=0;
+      const hn=m.teams?.home?.name||'', an=m.teams?.away?.name||'';
+      const odds=m._odds;
+      const matchTime=new Date(m.fixture?.date);
+      const hoursAway=(matchTime-now)/3600000;
+      // Yakın maçlar önce
+      if(hoursAway>=0&&hoursAway<=3) score+=40;
+      else if(hoursAway>=0&&hoursAway<=6) score+=25;
+      else if(hoursAway>=0&&hoursAway<=12) score+=10;
+      // HG takımlar
+      if(m._hg) score+=30;
+      if(HG_TEAMS.has(hn)&&HG_TEAMS.has(an)) score+=20; // her iki takım güçlü = gollü olabilir
+      // Odds analizi - orta oranlar daha iyi bahis
+      if(odds){
+        const ha=parseFloat(odds.home||0), xa=parseFloat(odds.draw||0), aa=parseFloat(odds.away||0);
+        const o25=parseFloat(odds.over25||0), btts=parseFloat(odds.bttsYes||0);
+        if(o25>0&&o25<1.90) score+=25; // 2.5 üst çok bekleniyor
+        if(btts>0&&btts<1.85) score+=20; // KGV güçlü
+        if(ha>1.40&&ha<2.20) score+=15; // ev favorisi ama makul oran
+      }
+      m._cpScore=score;
+      return m;
+    }).sort((a,b)=>b._cpScore-a._cpScore);
+    
+    // Top 30 maç seç
+    const selected=[...scored.slice(0,30)];
+    const list=selected.map(m=>{
+      const odds=m._odds;
+      const ha=odds?parseFloat(odds.home||0).toFixed(2):'-';
+      const xa=odds?parseFloat(odds.draw||0).toFixed(2):'-';
+      const aa=odds?parseFloat(odds.away||0).toFixed(2):'-';
+      const o25=odds&&odds.over25?'2.5Ü:'+parseFloat(odds.over25).toFixed(2):'';
+      const btts=odds&&odds.bttsYes?'KGV:'+parseFloat(odds.bttsYes).toFixed(2):'';
+      const matchTime=new Date(m.fixture?.date);
+      const hoursAway=Math.round((matchTime-now)/3600000);
+      const timeStr=hoursAway>=0?hoursAway+'sa sonra':fmtTime(m.fixture?.date);
+      return m.teams?.home?.name+' vs '+m.teams?.away?.name+' ('+m.league?.name+') '+timeStr+(m._hg?' ⭐':'')+' 1:'+ha+' X:'+xa+' 2:'+aa+(o25?' '+o25:'')+(btts?' '+btts:'');
+    }).join('\n');
+    const r=await fetch(PROXY+'/ai',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'gpt-4o-mini',max_tokens:2500,temperature:0.3,
+        messages:[
+          {role:'system',content:`Sen deneyimli futbol bahis analistisisin. ⭐=güçlü tanınan takım. Türkçe. SADECE ham JSON (markdown yok):
+{"coupons":[
+{"type":"banko1","title":"🏆 BANKO 1","risk":"DÜŞÜK","confidence":92,"total_odds":4.80,"info":"En güvenli 3 seçim","selections":[{"match":"A vs B","bet":"MS1","odds":1.55,"reason":"güçlü ev"},{"match":"C vs D","bet":"2.5 ALT","odds":1.60,"reason":"defansif"},{"match":"E vs F","bet":"KGV","odds":1.75,"reason":"gollü maç"}]},
+{"type":"banko2","title":"🏆 BANKO 2","risk":"DÜŞÜK","confidence":89,"total_odds":5.20,"info":"Farklı 3 seçim","selections":[{"match":"...","bet":"...","odds":1.65,"reason":"..."},{"match":"...","bet":"...","odds":1.70,"reason":"..."},{"match":"...","bet":"...","odds":1.80,"reason":"..."}]},
+{"type":"banko3","title":"🏆 BANKO 3","risk":"DÜŞÜK","confidence":86,"total_odds":6.10,"info":"Alternatif 3 seçim","selections":[{"match":"...","bet":"...","odds":1.75,"reason":"..."},{"match":"...","bet":"...","odds":1.85,"reason":"..."},{"match":"...","bet":"...","odds":1.90,"reason":"..."}]},
+{"type":"dusuk","title":"🟢 DÜŞÜK RİSK","risk":"DÜŞÜK","confidence":76,"total_odds":14.00,"info":"4 maç","selections":[{"match":"...","bet":"...","odds":1.80,"reason":"..."},{"match":"...","bet":"...","odds":1.90,"reason":"..."},{"match":"...","bet":"...","odds":2.00,"reason":"..."},{"match":"...","bet":"...","odds":2.10,"reason":"..."}]},
+{"type":"orta","title":"🔵 ORTA RİSK","risk":"ORTA","confidence":64,"total_odds":24.00,"info":"4 maç","selections":[{"match":"...","bet":"...","odds":2.20,"reason":"..."},{"match":"...","bet":"...","odds":2.40,"reason":"..."},{"match":"...","bet":"...","odds":2.10,"reason":"..."},{"match":"...","bet":"...","odds":2.50,"reason":"..."}]},
+{"type":"yuksek","title":"🔴 YÜKSEK RİSK","risk":"YÜKSEK","confidence":48,"total_odds":55.00,"info":"4 maç","selections":[{"match":"...","bet":"...","odds":3.20,"reason":"..."},{"match":"...","bet":"...","odds":3.50,"reason":"..."},{"match":"...","bet":"...","odds":2.90,"reason":"..."},{"match":"...","bet":"...","odds":4.00,"reason":"..."}]}
+]}
+BANKO 1/2/3: TAM 3 seçim, sadece ⭐ güçlü takım maçlarından, oranlar 1.50-2.00. Her bankoda farklı maçlar.
+DÜŞÜK/ORTA/YÜKSEK: TAM 4 seçim. Gerçek oranları kullan.`},
+          {role:'user',content:`Yakındaki maçlar (⭐=güçlü takım, saat bilgisi=maça yakınlık, KGV=karşılıklı gol var, 2.5Ü=2.5 üst oranı):\n${list||'Demo maçlar'}\n\nKURALLAR:\n- BANKO 1/2/3: Sadece ⭐ güçlü takımlardan, yakın saatli maçlardan seç, KGV veya 2.5Ü önerileri öncelikli\n- DÜŞÜK: KGV yüksek ihtimalli maçlar, 2.5 üst\n- ORTA: Gollü geçecek maçlar, MS tahminleri\n- YÜKSEK: Sürpriz potansiyelli yüksek oranlar\n3 BANKO (3er seçim) + DÜŞÜK+ORTA+YÜKSEK (4er seçim) = 6 kupon oluştur.`}
+        ]})
+    });
+    const d=await r.json();
+    const txt=d.choices?.[0]?.message?.content||'{}';
+    const parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    const coupons=parsed.coupons||[];
+    if(!coupons.length) throw new Error('Kupon üretilemedi');
+    const saveId='cp_'+Date.now();
+    const now2=new Date();
+    const saveData={
+      id:saveId,
+      date:now2.toLocaleDateString('tr-TR'),
+      time:now2.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),
+      coupons:coupons,
+      results:{},
+      result:'pending'
+    };
+    // Geçmişe kaydet
+    let savedOk=false;
+    try{
+      const hist=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');
+      hist.unshift(saveData);
+      const trimmed=hist.slice(0,50);
+      localStorage.setItem('cog_coupon_history',JSON.stringify(trimmed));
+      savedOk=true;
+    }catch(e){console.error('Kaydetme hatası:',e);}
+    let cpHtml='<div style="font-size:10px;color:var(--muted);padding:4px 2px 8px;">📅 '+saveData.date+' '+saveData.time+' · '+(savedOk?'✅ Kaydedildi':'⚠️ Kaydedilemedi')+'</div>';
+    coupons.forEach(function(cp){cpHtml+=buildCoupon(cp,saveId);});
+    c.innerHTML=cpHtml;
+    showToast('🎯 '+coupons.length+' kupon hazır!'+(savedOk?' Geçmişe kaydedildi.':''),'ok');
+  }catch(e){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ ${e.message}</div>`;showToast('❌ '+e.message,'err');}
+  btn.textContent='✨';
+}
+
+function buildCoupon(cp,saveId=''){
+  const isBanko=cp.type&&cp.type.startsWith('banko');
+  const colors={banko1:'var(--gold)',banko2:'#ffaa00',banko3:'#ff8c00',banko:'var(--gold)',dusuk:'var(--green)',orta:'var(--blue)',yuksek:'var(--red)'};
+  const color=colors[cp.type]||'var(--blue)';
+  const items=(cp.selections||[]).map((s,i)=>`
+    <div class="cp-item">
+      <div class="cp-num">${i+1}</div>
+      <div class="cp-info"><div class="cp-match">${s.match}</div><div class="cp-bet">${s.bet} · ${s.reason||''}</div></div>
+      <div class="cp-odd">${parseFloat(s.odds||0).toFixed(2)}</div>
+    </div>`).join('');
+  return`
+  <div class="cp-card ${cp.type}" style="${isBanko?`border:2px solid ${color};box-shadow:0 0 14px rgba(255,214,10,.15);`:''}">
+    <div class="cp-head">
+      <div>
+        <div class="cp-title" style="color:${color}">${cp.title||'KUPON'}</div>
+        ${cp.info?`<div style="font-size:9px;color:var(--muted);margin-top:2px;">${cp.info}</div>`:''}
+      </div>
+      <div style="text-align:right">
+        <div class="cp-odds" style="color:${color}">x${parseFloat(cp.total_odds||0).toFixed(2)}</div>
+        <div class="cp-odds-lbl">TOPLAM ORAN</div>
+        ${isBanko?`<div style="font-size:8px;font-weight:800;color:${color};margin-top:2px;">🔒 ${cp.selections?.length||3} SEÇİM</div>`:''}
+      </div>
+    </div>
+    ${items}
+    <div class="cp-foot"><span style="color:${color}">Risk: ${cp.risk}</span><span>%${cp.confidence} Güven</span></div>
+    ${saveId?`<div style="display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--border);">
+      <button onclick="setCpResult('${saveId}','${cp.type}','win')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(48,209,88,.15);color:var(--green);">✅ Kazandı</button>
+      <button onclick="setCpResult('${saveId}','${cp.type}','lose')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(255,59,92,.15);color:var(--red);">❌ Kaybetti</button>
+    </div>`:''}
+  </div>`;}
+
+function renderCpHistory(){
+  const c=document.getElementById('cp-gecmis-list');
+  const h=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');
+  if(!h.length){
+    c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);">
+      <div style="font-size:36px;opacity:.3;">📋</div>
+      <div style="margin-top:10px;font-size:13px;">Henüz kayıt yok</div>
+      <div style="font-size:10px;margin-top:5px;color:var(--dim);">Kupon oluşturduktan sonra burada görünür</div>
+    </div>`;
+    return;
+  }
+  // Özet istatistik
+  let totalW=0,totalL=0,totalP=0;
+  h.forEach(item=>{
+    const res=item.results||{};
+    (item.coupons||[]).forEach(cp=>{
+      const r=res[cp.type];
+      if(r==='win') totalW++;
+      else if(r==='lose') totalL++;
+      else totalP++;
+    });
+  });
+  const totalAll=totalW+totalL+totalP;
+  const wr=totalW+totalL>0?Math.round(totalW/(totalW+totalL)*100):0;
+
+  let html=`<div style="display:flex;gap:6px;margin-bottom:10px;">
+    <div style="flex:1;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;">
+      <div style="font-size:16px;font-weight:900;color:var(--green);">${totalW}</div><div style="font-size:8px;color:var(--muted);">KAZANDI</div>
+    </div>
+    <div style="flex:1;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;">
+      <div style="font-size:16px;font-weight:900;color:var(--red);">${totalL}</div><div style="font-size:8px;color:var(--muted);">KAYBETTİ</div>
+    </div>
+    <div style="flex:1;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;">
+      <div style="font-size:16px;font-weight:900;color:var(--gold);">${totalP}</div><div style="font-size:8px;color:var(--muted);">BEKLİYOR</div>
+    </div>
+    <div style="flex:1;text-align:center;background:var(--card);border:1px solid rgba(48,209,88,.3);border-radius:10px;padding:8px;">
+      <div style="font-size:16px;font-weight:900;color:var(--green);">%${wr}</div><div style="font-size:8px;color:var(--muted);">BAŞARI</div>
+    </div>
+  </div>`;
+
+  // Her kupon grubu
+  html+=h.map((item,idx)=>{
+    const res=item.results||{};
+    const coupons=item.coupons||[];
+    const allDone=coupons.every(cp=>res[cp.type]);
+    const anyWin=coupons.some(cp=>res[cp.type]==='win');
+    const anyLose=coupons.some(cp=>res[cp.type]==='lose');
+    const headerColor=allDone?(anyWin&&!anyLose?'rgba(48,209,88,.15)':anyLose?'rgba(255,59,92,.08)':'rgba(255,214,10,.08)'):'rgba(255,255,255,.03)';
+
+    const chips=coupons.map(cp=>{
+      const r=res[cp.type];
+      const rColor=r==='win'?'var(--green)':r==='lose'?'var(--red)':'var(--gold)';
+      const rBg=r==='win'?'rgba(48,209,88,.15)':r==='lose'?'rgba(255,59,92,.15)':'rgba(255,214,10,.1)';
+      const rIcon=r==='win'?'✅':r==='lose'?'❌':'⏳';
+      return`<div style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:8px;background:${rBg};color:${rColor};">${rIcon} ${cp.title||cp.type}</div>`;
+    }).join('');
+
+    const couponCards=coupons.map(cp=>{
+      const r=res[cp.type];
+      const colors={banko1:'var(--gold)',banko2:'#ffaa00',banko3:'#ff8c00',banko:'var(--gold)',dusuk:'var(--green)',orta:'var(--blue)',yuksek:'var(--red)'};
+      const color=colors[cp.type]||'var(--blue)';
+      const isBanko=cp.type&&cp.type.startsWith('banko');
+      const resultBar=r?`<div style="padding:6px 12px;background:${r==='win'?'rgba(48,209,88,.15)':'rgba(255,59,92,.15)'};border-top:1px solid var(--border);font-size:11px;font-weight:800;color:${r==='win'?'var(--green)':'var(--red)'};text-align:center;">${r==='win'?'✅ BU KUPON KAZANDI':'❌ BU KUPON KAYBETTİ'}</div>`:'';
+      const items=(cp.selections||[]).map((s,i)=>`
+        <div class="cp-item">
+          <div class="cp-num">${i+1}</div>
+          <div class="cp-info"><div class="cp-match">${s.match}</div><div class="cp-bet">${s.bet} · ${s.reason||''}</div></div>
+          <div class="cp-odd">${parseFloat(s.odds||0).toFixed(2)}</div>
+        </div>`).join('');
+      // Sonuç butonları sadece bekleyenler için
+      const btns=!r?`<div style="display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--border);">
+        <button onclick="setCpResult('${item.id}','${cp.type}','win')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(48,209,88,.15);color:var(--green);">✅ Kazandı</button>
+        <button onclick="setCpResult('${item.id}','${cp.type}','lose');renderCpHistory();" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(255,59,92,.15);color:var(--red);">❌ Kaybetti</button>
+      </div>`:'';
+      return`<div class="cp-card ${cp.type}" style="margin-bottom:6px;${isBanko?`border:2px solid ${color};`:''}">
+        <div class="cp-head">
+          <div><div class="cp-title" style="color:${color}">${cp.title||'KUPON'}</div>${cp.info?`<div style="font-size:9px;color:var(--muted);">${cp.info}</div>`:''}</div>
+          <div style="text-align:right"><div class="cp-odds" style="color:${color}">x${parseFloat(cp.total_odds||0).toFixed(2)}</div><div class="cp-odds-lbl">ORAN</div></div>
+        </div>
+        ${items}
+        <div class="cp-foot"><span style="color:${color}">Risk: ${cp.risk}</span><span>%${cp.confidence} Güven</span></div>
+        ${resultBar}
+        ${btns}
+      </div>`;
+    }).join('');
+
+    return`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;">
+      <div style="background:${headerColor};display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border);">
+        <div>
+          <div style="font-size:11px;font-weight:800;">📅 ${item.date} · ${item.time}</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">${coupons.length} kupon</div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px;max-width:60%;justify-content:flex-end;">${chips}</div>
+      </div>
+      <div style="padding:8px 10px;">${couponCards}</div>
+      ${!allDone?`<div style="padding:6px 12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);">Sonuçları işaretlemek için kupona tıkla ↑</div>`:''}
+    </div>`;
+  }).join('');
+
+  c.innerHTML=html;
+}
+
+function showCpTab(tab,el){
+  ['yeni','gecmis','istatistik'].forEach(t=>{
+    const d=document.getElementById('cp-'+t);
+    if(d) d.style.display=t===tab?'block':'none';
+    const b=document.getElementById('tab-'+t);
+    if(b){
+      b.style.background=t===tab?'var(--blue)':'transparent';
+      b.style.color=t===tab?'#fff':'var(--muted)';
+      b.style.borderColor=t===tab?'var(--blue)':'var(--border)';
+    }
+  });
+  if(tab==='gecmis') renderCpHistory();
+  if(tab==='istatistik') renderCpStats();
+}
+
+function setCpResult(saveId,cpType,result){
+  try{
+    const h=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');
+    const item=h.find(x=>x.id===saveId);
+    if(item){
+      if(!item.results)item.results={};
+      item.results[cpType]=result;
+      localStorage.setItem('cog_coupon_history',JSON.stringify(h));
+    }
+    showToast(result==='win'?'✅ Kazandı!':'❌ Kaybetti','ok');
+    // Geçmiş sekmesi açıksa yenile
+    setTimeout(()=>{
+      const gecmis=document.getElementById('cp-gecmis');
+      if(gecmis&&gecmis.style.display!=='none') renderCpHistory();
+    },100);
+  }catch(e){console.error(e);}
+}
+
+function renderCpStats(){
+  const c=document.getElementById('cp-stat-content');
+  const h=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');
+  if(!h.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:36px;opacity:.3">📊</div><div style="margin-top:10px;font-size:13px;">Henüz istatistik yok</div><div style="font-size:10px;margin-top:5px;color:var(--dim);">Kupon oluştur ve sonuçları işaretle</div></div>';return;}
+  const typeStats={};
+  let totalW=0,totalL=0,totalP=0;
+  h.forEach(item=>{
+    (item.coupons||[]).forEach(cp=>{
+      const r=item.results?.[cp.type];
+      const key=cp.type||'diger';
+      if(!typeStats[key]) typeStats[key]={title:cp.title||key,w:0,l:0,p:0,totalOdds:0,count:0};
+      typeStats[key].count++;
+      typeStats[key].totalOdds+=parseFloat(cp.total_odds||0);
+      if(r==='win'){typeStats[key].w++;totalW++;}
+      else if(r==='lose'){typeStats[key].l++;totalL++;}
+      else{typeStats[key].p++;totalP++;}
+    });
+  });
+  const totalAll=totalW+totalL+totalP;
+  const wr=totalW+totalL>0?Math.round(totalW/(totalW+totalL)*100):0;
+  const wrc=wr>=60?'var(--green)':wr>=40?'var(--orange)':'var(--red)';
+  const verdict=wr>=65?'🔥 Mükemmel performans!':wr>=50?'✅ Karlı seyir':wr>=40?'⚠️ Dengeli':'❌ Verim düşük';
+  const typeColors={banko1:'var(--gold)',banko2:'#ffaa00',banko3:'#ff8c00',banko:'var(--gold)',dusuk:'var(--green)',orta:'var(--blue)',yuksek:'var(--red)'};
+  const typeEmojis={banko1:'🏆',banko2:'🏆',banko3:'🏆',banko:'🏆',dusuk:'🟢',orta:'🔵',yuksek:'🔴'};
+  const typeOrder=['banko1','banko2','banko3','dusuk','orta','yuksek'];
+  const orderedTypes=[...typeOrder.filter(t=>typeStats[t]),...Object.keys(typeStats).filter(t=>!typeOrder.includes(t))];
+  let typeRows='';
+  orderedTypes.forEach((key,idx)=>{
+    const s=typeStats[key];
+    const tw=s.w+s.l>0?Math.round(s.w/(s.w+s.l)*100):0;
+    const twrc=tw>=60?'var(--green)':tw>=40?'var(--orange)':'var(--red)';
+    const avgOdds=s.count>0?(s.totalOdds/s.count).toFixed(2):'-';
+    const color=typeColors[key]||'var(--blue)';
+    const emoji=typeEmojis[key]||'📋';
+    typeRows+=`<div style="padding:10px 12px;${idx>0?'border-top:1px solid var(--border)':''}"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;"><div style="font-size:12px;font-weight:800;color:${color};">${emoji} ${s.title}</div><div style="font-size:14px;font-weight:900;color:${twrc};">%${tw}</div></div><div style="display:flex;gap:8px;font-size:10px;margin-bottom:4px;"><span style="color:var(--green);">✅ ${s.w}</span><span style="color:var(--red);">❌ ${s.l}</span><span style="color:var(--gold);">⏳ ${s.p}</span><span style="color:var(--muted);">Ort: x${avgOdds}</span></div><div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="height:100%;width:${tw}%;background:${twrc};border-radius:2px;"></div></div></div>`;
+  });
+  let bestType=null,bestWr=0;
+  orderedTypes.forEach(k=>{const s=typeStats[k];const tw=s.w+s.l>0?Math.round(s.w/(s.w+s.l)*100):0;if(tw>bestWr&&s.w+s.l>=2){bestWr=tw;bestType={...s,key:k};}});
+  const aiVerdict=wr>=65?'Uygulamanın tahminleri başarılı! BANKO kuponlarına güvenebilirsin.':wr>=50?'Karlı performans. Düşük riskli kuponlara odaklan.':wr>=40?'Dengeli performans. Daha seçici ol.':'Şu an düşük verim. Daha fazla veri gerekiyor.';
+  c.innerHTML=`<div style="background:linear-gradient(135deg,rgba(61,142,255,.1),rgba(191,90,242,.05));border:1px solid rgba(61,142,255,.2);border-radius:var(--r);padding:12px;margin-bottom:10px;text-align:center;"><div style="font-size:28px;font-weight:900;color:${wrc};">%${wr}</div><div style="font-size:11px;font-weight:700;color:${wrc};">${verdict}</div><div style="font-size:9px;color:var(--muted);margin-top:4px;">${totalW} Kazandı · ${totalL} Kaybetti · ${totalP} Bekliyor</div><div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:8px;"><div style="height:100%;width:${wr}%;background:${wrc};border-radius:3px;"></div></div></div><div style="display:flex;gap:6px;margin-bottom:10px;"><div style="flex:1;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--blue);">${totalAll}</div><div style="font-size:8px;color:var(--muted);">TOPLAM</div></div><div style="flex:1;text-align:center;background:var(--card);border:1px solid rgba(48,209,88,.3);border-radius:10px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--green);">${totalW}</div><div style="font-size:8px;color:var(--muted);">KAZANDI</div></div><div style="flex:1;text-align:center;background:var(--card);border:1px solid rgba(255,59,92,.3);border-radius:10px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--red);">${totalL}</div><div style="font-size:8px;color:var(--muted);">KAYBETTİ</div></div><div style="flex:1;text-align:center;background:var(--card);border:1px solid rgba(255,214,10,.3);border-radius:10px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--gold);">${totalP}</div><div style="font-size:8px;color:var(--muted);">BEKLİYOR</div></div></div><div style="font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">📊 Kupon Tipi Analizi</div><div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px;">${typeRows}</div><div style="background:rgba(61,142,255,.05);border:1px solid rgba(61,142,255,.15);border-radius:var(--r);padding:12px;"><div style="font-size:10px;font-weight:800;color:var(--blue);letter-spacing:1px;margin-bottom:6px;">🧠 AI DEĞERLENDİRMESİ</div><div style="font-size:11px;color:var(--muted);line-height:1.6;">${aiVerdict}</div>${bestType?`<div style="margin-top:8px;background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.3);border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;color:var(--green);">🏆 En başarılı: ${bestType.title} (%${bestWr})</div>`:''}</div><div style="font-size:9px;color:var(--dim);text-align:center;padding:8px;">${h.length} kupon grubundan ${totalAll} tahmin analiz edildi</div>`;
+}
+
+let stInit=false;
+function initStandings(){
+  if(stInit) return;stInit=true;
+  const tabs=document.getElementById('st-tabs');
+  ST_LEAGUES.forEach((lg,i)=>{
+    const d=document.createElement('div');
+    d.className='st-tab'+(i===0?' active':'');
+    d.textContent=lg.flag+' '+lg.name;
+    d.onclick=()=>{document.querySelectorAll('.st-tab').forEach(t=>t.classList.remove('active'));d.classList.add('active');loadStandings(lg.id);};
+    tabs.appendChild(d);
+  });
+  loadStandings(ST_LEAGUES[0].id);
+}
+
+async function loadStandings(lgId){
+  const c=document.getElementById('st-content');
+  c.innerHTML=`<div style="text-align:center;padding:30px;"><div class="sp" style="width:20px;height:20px;border-width:3px;margin:0 auto;"></div></div>`;
+  try{
+    const data=await apiFetch(`/standings?league=${lgId}&season=2024`);
+    const st=data[0]?.league?.standings?.[0]||[];
+    if(!st.length) throw new Error('Veri yok');
+    c.innerHTML=`
+    <div class="st-table">
+      <div class="st-hdr"><div>#</div><div>Takım</div><div>O</div><div>G</div><div>M</div><div>A:Y</div><div>P</div></div>
+      ${st.map((s,i)=>{
+        const rank=s.rank||(i+1),pc=rank===1?'g':rank===2?'s':rank===3?'b':'';
+        const gf=s.all?.goals?.for||0,ga=s.all?.goals?.against||0;
+        return`<div class="st-row"><div class="st-pos ${pc}">${rank}</div><div class="st-team">${s.team?.name||'?'}</div><div class="st-n">${s.all?.played||'-'}</div><div class="st-n">${s.all?.win||'-'}</div><div class="st-n">${s.all?.lose||'-'}</div><div class="st-n" style="font-size:10px;">${gf}:${ga}</div><div class="st-pts">${s.points||'-'}</div></div>`;
+      }).join('')}
+    </div>`;
+  }catch(e){c.innerHTML=`<div style="text-align:center;padding:30px;color:var(--red);font-size:12px;">❌ ${e.message}</div>`;}
+}
+
+// ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// SÜRPRİZ - Sürpriz takım analizi
+// ══════════════════════════════════════════
+const SURP_TEAMS_AWAY=new Set(['Real Madrid','Barcelona','Bayern Munich','Bayern München','Bayern','Liverpool','Manchester City','Man City','PSG','Paris Saint-Germain','Inter','Inter Milan','Atalanta','Bayer Leverkusen','Leverkusen','Borussia Dortmund','Dortmund','Arsenal','Chelsea','Napoli','AC Milan','Milan','Atletico Madrid','Atlético Madrid','Ajax','Feyenoord','PSV','PSV Eindhoven','Benfica','Porto','FC Porto','Sporting CP','Celtic','Rangers','Red Bull Salzburg','Salzburg','Young Boys','Galatasaray','Fenerbahçe','Fenerbahce','Club Brugge','Anderlecht','Bodo/Glimt','Bodø/Glimt','Molde','FC Midtjylland','Midtjylland','Slavia Praha','Slavia Prague','Dinamo Zagreb','Flamengo','Palmeiras','Boca Juniors','River Plate']);
+const SURP_TEAMS_HOME_LOSE=new Set(['Everton','Crystal Palace','Leicester','Nottingham Forest','Fulham','Brentford','Celta Vigo','Osasuna','Getafe','Hellas Verona','Empoli','Augsburg','Bochum','Waalwijk','RKC Waalwijk','Go Ahead Eagles','Tromsø','Stabæk','Silkeborg','Viborg','Randers']);
+let surprizLoaded=false;
+function initSurpriz(){if(!surprizLoaded)loadSurpriz();}
+
+async function loadSurpriz(){
+  surprizLoaded=true;
+  const list=document.getElementById('surp-list');
+  list.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Sürpriz maçlar analiz ediliyor...</div></div>';
+  try{
+    if(!allMatches.length){const d=await apiFetch('/fixtures?date='+todayStr()+'&timezone=Europe%2FIstanbul');allMatches=d;}
+    const upcoming=allMatches.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));
+    if(!upcoming.length){list.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);">Bugün yakında maç bulunamadı</div>';return;}
+    const results=[];
+    upcoming.forEach(m=>{
+      const hn=m.teams?.home?.name||'';
+      const an=m.teams?.away?.name||'';
+      const odds=m._odds;
+      let surpScore=0,surpType='',surpReason=[];
+      if(SURP_TEAMS_AWAY.has(an)){surpScore+=50;surpType='2/1';surpReason.push(an+' deplasmanda güçlü');}
+      if(SURP_TEAMS_HOME_LOSE.has(hn)){surpScore+=30;surpType=surpType||'2/1';surpReason.push(hn+' ev avantajını kullanamıyor');}
+      if(odds&&odds.away&&odds.home){
+        if(parseFloat(odds.away)<parseFloat(odds.home)){surpScore+=35;surpType='2/1';surpReason.push('Dep oran ('+parseFloat(odds.away).toFixed(2)+') < Ev oran ('+parseFloat(odds.home).toFixed(2)+')');}
+        if(parseFloat(odds.home)>2.5&&parseFloat(odds.away)<2.0){surpScore+=20;surpReason.push('Ev oranı yüksek, dep favori');}
+      }
+      if(HG_TEAMS.has(an)&&!HG_TEAMS.has(hn)){surpScore+=20;surpReason.push(an+' tanınan güçlü takım');}
+      if(surpScore>=20) results.push({match:m,surpScore,surpType,surpReason,odds});
+    });
+    results.sort((a,b)=>b.surpScore-a.surpScore);
+    if(!results.length){list.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);"><div style="font-size:36px;opacity:.3">🔀</div><div style="margin-top:10px;font-size:13px;">Bugün belirgin sürpriz potansiyelli maç yok</div></div>';return;}
+    // AI analiz
+    const mNames=results.slice(0,8).map(r=>{
+      return r.match.teams?.home?.name+' vs '+r.match.teams?.away?.name+' ('+r.match.league?.name+') puan:'+r.surpScore+(r.odds?.away?' dep:'+parseFloat(r.odds.away).toFixed(2):'');
+    }).join(', ');
+    let aiAnalysis={analyses:[]};
+    try{
+      const aiR=await fetch(PROXY+'/ai',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'gpt-4o-mini',max_tokens:800,temperature:0.3,
+          messages:[
+            {role:'system',content:'Futbol sürpriz analisti. Türkçe. SADECE ham JSON: {"analyses":[{"match":"Ev vs Dep","surp_type":"2/1","confidence":65,"reason":"kısa sebep","bet":"bahis önerisi","risk":"ORTA"}]}'},
+            {role:'user',content:'Bu maçlarda sürpriz analizi yap: '+mNames}
+          ]})});
+      const aiD=await aiR.json();
+      const txt=aiD.choices?.[0]?.message?.content||'{}';
+      aiAnalysis=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    }catch(e){console.warn('AI surp:',e.message);}
+
+    let html='<div style="background:linear-gradient(135deg,rgba(255,149,0,.1),rgba(191,90,242,.05));border:1px solid rgba(255,149,0,.3);border-radius:var(--r);padding:10px 12px;margin-bottom:10px;"><div style="font-size:10px;font-weight:800;color:var(--orange);letter-spacing:1px;">🔀 '+results.length+' SÜRPRİZ ADAYI BULUNDU</div><div style="font-size:9px;color:var(--muted);margin-top:3px;">Güçlü deplasman takımları · Oran analizi · Tarihsel veri</div></div>';
+    results.slice(0,8).forEach((r,i)=>{
+      const m=r.match;
+      const ai=aiAnalysis.analyses?.[i]||{};
+      const odds=r.odds;
+      const sc=r.surpScore>=70?'var(--green)':r.surpScore>=50?'var(--orange)':'var(--muted)';
+      const rc={'DÜŞÜK':'var(--green)','ORTA':'var(--orange)','YÜKSEK':'var(--red)'}[ai.risk]||'var(--muted)';
+      html+='<div class="surp-card" id="sc-'+m.fixture?.id+'">';
+      html+='<div class="surp-head" onclick="this.closest(\'.surp-card\').classList.toggle(\'open\')">';
+      html+='<div class="surp-teams">';
+      html+='<div style="font-size:9px;color:var(--muted);margin-bottom:4px;">'+( m.league?.name||'')+' · '+fmtTime(m.fixture?.date)+'</div>';
+      html+='<div class="surp-team-row"><img class="surp-logo" src="'+(m.teams?.home?.logo||'')+'" onerror="this.style.display=\'none\'" loading="lazy"><span class="surp-tn">'+m.teams?.home?.name+'</span></div>';
+      html+='<div class="surp-team-row"><img class="surp-logo" src="'+(m.teams?.away?.logo||'')+'" onerror="this.style.display=\'none\'" loading="lazy"><span class="surp-tn">'+m.teams?.away?.name+'</span></div>';
+      html+='<div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap;">'+r.surpReason.map(function(rr){return '<div style="font-size:8px;font-weight:700;padding:2px 6px;border-radius:8px;background:rgba(255,149,0,.12);color:var(--orange);">'+rr+'</div>';}).join('')+'</div>';
+      html+='</div>';
+      html+='<div style="text-align:right;flex-shrink:0;"><div style="font-size:9px;font-weight:800;color:'+sc+';background:rgba(255,149,0,.1);border-radius:8px;padding:3px 8px;margin-bottom:4px;">'+(r.surpType||'SÜRPRİZ')+'</div><div style="font-size:20px;font-weight:900;color:'+sc+';">'+r.surpScore+'</div><div style="font-size:8px;color:var(--muted);">PUAN</div></div>';
+      html+='</div>';
+      if(odds&&odds.home){
+        html+='<div style="display:flex;gap:4px;padding:0 12px 8px;">';
+        html+='<div style="flex:1;text-align:center;background:rgba(61,142,255,.08);border:1px solid rgba(61,142,255,.2);border-radius:6px;padding:5px;"><div style="font-size:8px;color:var(--muted);">Ev (1)</div><div style="font-size:13px;font-weight:800;color:var(--blue);">'+parseFloat(odds.home||0).toFixed(2)+'</div></div>';
+        html+='<div style="flex:1;text-align:center;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:5px;"><div style="font-size:8px;color:var(--muted);">Ber (X)</div><div style="font-size:13px;font-weight:800;color:var(--muted);">'+parseFloat(odds.draw||0).toFixed(2)+'</div></div>';
+        html+='<div style="flex:1;text-align:center;background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.3);border-radius:6px;padding:5px;"><div style="font-size:8px;color:var(--muted);">Dep (2)</div><div style="font-size:13px;font-weight:800;color:var(--orange);">'+parseFloat(odds.away||0).toFixed(2)+'</div></div>';
+        if(odds.over25) html+='<div style="flex:1;text-align:center;background:rgba(48,209,88,.06);border:1px solid rgba(48,209,88,.2);border-radius:6px;padding:5px;"><div style="font-size:8px;color:var(--muted);">2.5Ü</div><div style="font-size:13px;font-weight:800;color:var(--green);">'+parseFloat(odds.over25).toFixed(2)+'</div></div>';
+        html+='</div>';
+      }
+      html+='<div class="surp-pp">';
+      if(ai.reason) html+='<div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:6px;">🧠 '+ai.reason+'</div>';
+      if(ai.bet) html+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><div style="font-size:11px;font-weight:800;background:rgba(255,149,0,.12);border:1px solid rgba(255,149,0,.3);border-radius:6px;padding:5px 10px;color:var(--orange);">💡 '+ai.bet+'</div>'+(ai.risk?'<div style="font-size:9px;font-weight:800;color:'+rc+';border:1px solid '+rc+';border-radius:6px;padding:3px 8px;">Risk: '+ai.risk+'</div>':'')+'</div>';
+      html+='<button onclick="toggleSelMatch('+m.fixture?.id+');event.stopPropagation();" style="width:100%;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:1.5px solid rgba(48,209,88,.5);cursor:pointer;background:rgba(48,209,88,.1);color:var(--green);">＋ Kupona Ekle</button>';
+      html+='</div></div>';
+    });
+    list.innerHTML=html;
+    showToast('🔀 '+results.length+' sürpriz aday bulundu','ok');
+  }catch(e){
+    list.innerHTML='<div style="text-align:center;padding:30px;color:var(--red);font-size:12px;">❌ '+e.message+'</div>';
+    console.error(e);
+  }
+}
+
+function openSearch(){document.getElementById('sov').classList.add('open');setTimeout(()=>document.getElementById('sov-inp').focus(),100);}
+function closeSearch(){document.getElementById('sov').classList.remove('open');}
+function doSearch(q){
+  const c=document.getElementById('sov-res');
+  if(!q){c.innerHTML=`<div style="text-align:center;padding:30px;color:var(--muted);">Takım adı yaz</div>`;return;}
+  const found=allMatches.filter(m=>m.teams?.home?.name?.toLowerCase().includes(q.toLowerCase())||m.teams?.away?.name?.toLowerCase().includes(q.toLowerCase()));
+  if(!found.length){c.innerHTML=`<div style="text-align:center;padding:20px;color:var(--muted);">"${q}" bulunamadı</div>`;return;}
+  c.innerHTML='';
+  found.forEach(m=>{
+    const d=document.createElement('div');d.className='sr-item';
+    d.innerHTML=`<div style="font-size:9px;color:var(--muted);">${m.league?.name||''}</div><div style="display:flex;justify-content:space-between;"><div style="font-size:13px;font-weight:700;">${m.teams?.home?.name} vs ${m.teams?.away?.name}</div><div style="font-size:11px;font-weight:700;color:var(--blue);">${fmtTime(m.fixture?.date)}</div></div>`;
+    d.onclick=()=>{closeSearch();switchPanel('kesfet',document.querySelector('[data-nav=kesfet]'));setTimeout(()=>{const card=document.getElementById('mc-'+m.fixture?.id);if(card)card.scrollIntoView({behavior:'smooth',block:'center'});},300);};
+    c.appendChild(d);
+  });
+}
+
+// LEAGUE MODAL
+let tempLg=new Set();
+function showLeagueModal(){tempLg=new Set(selLeagues);renderLgList([...new Set(allMatches.map(m=>m.league?.name))].filter(Boolean).sort());document.getElementById('lg-modal').classList.add('open');}
+function filterLgList(q){renderLgList([...new Set(allMatches.map(m=>m.league?.name))].filter(l=>l?.toLowerCase().includes(q.toLowerCase())).sort());}
+function renderLgList(list){
+  const c=document.getElementById('lg-list');
+  c.innerHTML=list.map(l=>`<div class="mi" onclick="toggleLg(${JSON.stringify(l)},this)"><div class="mi-nm">${l}</div>${tempLg.has(l)?'<span style="color:var(--blue);">✓</span>':''}</div>`).join('');
+  document.getElementById('sel-cnt').textContent=`${tempLg.size} lig seçildi`;
+}
+function toggleLg(n,el){if(tempLg.has(n)){tempLg.delete(n);}else{tempLg.add(n);}renderLgList([...new Set(allMatches.map(m=>m.league?.name))].filter(Boolean).sort());}
+function selectAllLg(){[...new Set(allMatches.map(m=>m.league?.name))].filter(Boolean).forEach(l=>tempLg.add(l));renderLgList([...new Set(allMatches.map(m=>m.league?.name))].filter(Boolean));}
+function clearLg(){tempLg.clear();renderLgList([...new Set(allMatches.map(m=>m.league?.name))].filter(Boolean));}
+function applyLg(){selLeagues=new Set(tempLg);document.getElementById('lg-modal').classList.remove('open');applyFilter(activeFilter);showToast(`🎛 ${selLeagues.size||'Tüm'} lig`,'ok');}
+
+function showSortModal(){document.getElementById('sort-modal').classList.add('open');}
+function sortBy(m){
+  if(m==='time_asc') allMatches.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));
+  else if(m==='time_desc') allMatches.sort((a,b)=>new Date(b.fixture?.date)-new Date(a.fixture?.date));
+  applyFilter(activeFilter);showToast('✅ Sıralandı','ok');
+}
+
+// KUPON SEÇME
+let selMatches=new Set();
+function toggleSelMatch(id){
+  if(selMatches.has(id)){selMatches.delete(id);}else{selMatches.add(id);}
+  const btn=document.getElementById('addbtn-'+id);
+  if(btn){btn.style.background=selMatches.has(id)?'rgba(48,209,88,.9)':'rgba(48,209,88,.15)';btn.style.color=selMatches.has(id)?'#000':'var(--green)';btn.textContent=selMatches.has(id)?'✓':'＋';}
+  renderSelBar();
+}
+function renderSelBar(){
+  const ex=document.getElementById('sel-bar');if(ex)ex.remove();
+  if(!selMatches.size)return;
+  const bar=document.createElement('div');
+  bar.id='sel-bar';
+  bar.style.cssText='position:fixed;bottom:70px;left:10px;right:10px;z-index:999;background:rgba(48,209,88,.15);border:1px solid rgba(48,209,88,.4);border-radius:10px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;';
+  bar.innerHTML=`<div style="font-size:12px;font-weight:700;color:var(--green);">✅ ${selMatches.size} maç seçildi</div><button onclick="genSelectedCoupons()" style="font-size:11px;font-weight:800;background:var(--green);color:#000;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;">🧠 Analiz Et</button>`;
+  document.body.appendChild(bar);
+}
+
+async function genSelectedCoupons(){
+  if(!selMatches.size){showToast('Önce maç seç!','err');return;}
+  switchPanel('kupon',document.querySelector('[data-nav="kupon"]'));
+  showCpTab('yeni',document.getElementById('tab-yeni'));
+  const c=document.getElementById('cp-yeni');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Seçili maçlar analiz ediliyor...</div></div>`;
+  const selected=allMatches.filter(m=>selMatches.has(m.fixture?.id));
+  if(!selected.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--red);">Maçlar bulunamadı</div>';return;}
+  try{
+    const reports=selected.map(m=>{
+      const odds=m._odds;
+      const oddsStr=odds&&odds.home?` | Oranlar: 1=${odds.home?.toFixed(2)} X=${odds.draw?.toFixed(2)} 2=${odds.away?.toFixed(2)} 2.5Ü=${odds.over25?.toFixed(2)||'-'}`:'';
+      return`${HG_TEAMS.has(m.teams?.home?.name)||HG_TEAMS.has(m.teams?.away?.name)?'⭐':''}${m.teams?.home?.name} vs ${m.teams?.away?.name} (${m.league?.name})${oddsStr}`;
+    });
+    const r=await fetch(PROXY+'/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:1500,temperature:0.3,messages:[
+      {role:'system',content:`Bahis uzmanı. Türkçe. SADECE ham JSON. 4 farklı risk kuponu:
+{"coupons":[{"type":"banko","title":"🏆 BANKO","risk":"DÜŞÜK","confidence":88,"total_odds":7.50,"selections":[{"match":"A vs B","bet":"MS1","odds":1.75,"reason":"kısa"},{"match":"C vs D","bet":"2.5 ALT","odds":1.65,"reason":"kısa"},{"match":"E vs F","bet":"KGV","odds":1.80,"reason":"kısa"},{"match":"G vs H","bet":"MS2","odds":2.10,"reason":"kısa"}]},{"type":"dusuk",...},{"type":"orta",...},{"type":"yuksek",...}]}`},
+      {role:'user',content:`Maçlar:\n${reports.join('\n')}\n\n4 kupon oluştur.`}
+    ]})});
+    const d=await r.json();
+    const txt=d.choices?.[0]?.message?.content||'{}';
+    const result=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    const coupons=result.coupons||[];
+    const saveId='cp_'+Date.now();
+    const saveData={id:saveId,date:new Date().toLocaleDateString('tr-TR'),time:new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),coupons,result:'pending'};
+    try{const h=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');h.unshift(saveData);localStorage.setItem('cog_coupon_history',JSON.stringify(h.slice(0,50)));}catch(e){}
+    let cpHtml=`<div style="font-size:10px;color:var(--muted);padding:4px 2px 8px;">📅 ${saveData.date} · ${selected.length} maç</div>`;
+    coupons.forEach(cp=>cpHtml+=buildCoupon(cp,saveId));
+    c.innerHTML=cpHtml;
+    showToast(`🎯 ${selected.length} maç → ${coupons.length} kupon!`,'ok');
+  }catch(e){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--red);">❌ ${e.message}</div>`;}
+}
+
+// DEMO
+function loadDemo(){
+  const dt=new Date().toISOString();
+  allMatches=[
+    {fixture:{id:9001,date:dt,status:{short:'NS',elapsed:null}},teams:{home:{name:'Galatasaray',logo:''},away:{name:'Fenerbahçe',logo:''}},goals:{home:null,away:null},league:{id:203,name:'Süper Lig'},_hg:true,_odds:{home:1.95,draw:3.20,away:3.80,over25:1.75,under25:2.05,bttsYes:1.85}},
+    {fixture:{id:9002,date:dt,status:{short:'1H',elapsed:34}},teams:{home:{name:'Real Madrid',logo:''},away:{name:'Barcelona',logo:''}},goals:{home:2,away:1},league:{id:140,name:'La Liga'},_hg:true,_odds:{home:1.85,draw:3.50,away:4.20,over25:1.65}},
+    {fixture:{id:9003,date:dt,status:{short:'NS',elapsed:null}},teams:{home:{name:'Arsenal',logo:''},away:{name:'Liverpool',logo:''}},goals:{home:null,away:null},league:{id:39,name:'Premier League'},_hg:true,_odds:{home:2.20,draw:3.40,away:3.10,over25:1.70}},
+    {fixture:{id:9004,date:dt,status:{short:'NS',elapsed:null}},teams:{home:{name:'Bayern',logo:''},away:{name:'Dortmund',logo:''}},goals:{home:null,away:null},league:{id:78,name:'Bundesliga'},_hg:true,_odds:{home:1.75,draw:3.80,away:4.50}},
+    {fixture:{id:9005,date:dt,status:{short:'FT',elapsed:90}},teams:{home:{name:'PSG',logo:''},away:{name:'Marseille',logo:''}},goals:{home:3,away:1},league:{id:61,name:'Ligue 1'},_hg:false,_odds:null},
+  ];
+  applyFilter(activeFilter);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+window.addEventListener('load',()=>{
+  try{const t='cog_'+new Date().toISOString().slice(0,10);Object.keys(localStorage).filter(k=>k.startsWith('cog_')&&!k.startsWith(t)&&!k.startsWith('cog_coupon')).forEach(k=>localStorage.removeItem(k));}catch(e){}
+  buildDateBar();
+  loadMatches(todayStr());
+  showToast('⚡ Cyber Oracle Gold v3.0','ok');
+});
+</script>
+</body>
+</html>
