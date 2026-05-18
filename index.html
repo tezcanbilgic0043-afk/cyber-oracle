@@ -727,7 +727,7 @@ function toggleNotif(){notifOn=!notifOn;document.getElementById('notif-toggle').
 function toggleDanger(){dangerOn=!dangerOn;document.getElementById('danger-toggle').classList.toggle('on',dangerOn);}
 
 // ══════════════════════════════════════════
-// ODDS API - THE-ODDS-API.COM
+// ODDS API - ODDS-API.IO + API-SPORTS FALLBACK
 // ══════════════════════════════════════════
 let oddsApiData=null,oddsApiLastFetch=0,oddsApiMap={};
 
@@ -735,138 +735,91 @@ async function fetchOddsData(){
   const now=Date.now();
   if(oddsApiData&&now-oddsApiLastFetch<15*60*1000) return oddsApiData;
   try{
-    // API Football odds - aynı key, güvenilir
-    const today=todayStr();
-    const r=await fetch(PROXY+'/?url='+encodeURIComponent('https://v3.football.api-sports.io/odds?date='+today+'&bookmaker=8&bet=1'));
+    const r=await fetch(PROXY+'/odds');
     if(!r.ok) throw new Error('HTTP '+r.status);
     const raw=await r.json();
-    if(raw.errors&&Object.keys(raw.errors).length){console.warn('Odds API errors:',raw.errors);return[];}
-    const resp=Array.isArray(raw.response)?raw.response:[];
-    // Fixture ID → odds map yap (hızlı lookup)
+    const resp=Array.isArray(raw.data)?raw.data:Array.isArray(raw)?raw:[];
     oddsApiData=resp;
     oddsApiMap={};
     resp.forEach(function(item){
-      if(item.fixture?.id) oddsApiMap[item.fixture.id]=item;
+      if(item.id) oddsApiMap[String(item.id)]=item;
+      if(item.fixture&&item.fixture.id) oddsApiMap[String(item.fixture.id)]=item;
     });
     oddsApiLastFetch=now;
-    console.log('Odds loaded:',resp.length,'matches');
+    console.log('Odds:',resp.length,'matches, source:',raw.source||'?');
     return oddsApiData;
-  }catch(e){console.warn('Odds API:',e.message);return[];}
+  }catch(e){console.warn('Odds:',e.message);return[];}
 }
 
 function extractOddsFromItem(item){
   if(!item) return null;
-  const bm=item.bookmakers?.[0];
-  if(!bm) return null;
-  function getBet(name){return bm.bets?.find(function(b){return b.name===name;});}
-  const mw=getBet('Match Winner');
-  const ou=getBet('Goals Over/Under');
-  const btts=getBet('Both Teams Score');
-  function getVal(bet,val){return bet?.values?.find(function(v){return v.value===val;})?.odd;}
-  return{
-    home:parseFloat(getVal(mw,'Home')||0)||null,
-    draw:parseFloat(getVal(mw,'Draw')||0)||null,
-    away:parseFloat(getVal(mw,'Away')||0)||null,
-    over25:parseFloat(getVal(ou,'Over 2.5')||0)||null,
-    under25:parseFloat(getVal(ou,'Under 2.5')||0)||null,
-    bttsYes:parseFloat(getVal(btts,'Yes')||0)||null,
-    bttsNo:parseFloat(getVal(btts,'No')||0)||null,
-  };
-}
-
-function findOddsForMatch(home,away,allOdds,fixtureId){
-  // Fixture ID ile direkt lookup (en hızlı)
-  if(fixtureId&&oddsApiMap&&oddsApiMap[fixtureId]){
-    return extractOddsFromItem(oddsApiMap[fixtureId]);
+  if(item.bookmakers&&!Array.isArray(item.bookmakers)){
+    for(const bm of Object.values(item.bookmakers)){
+      const ml=(bm||[]).find(function(m){return m.name==='ML'||m.name==='1X2'||m.name==='Match Winner';});
+      if(ml&&ml.odds&&ml.odds[0]){
+        const o=ml.odds[0];
+        const ou=(bm||[]).find(function(m){return m.name==='OU'||m.name==='Over/Under';});
+        const btts=(bm||[]).find(function(m){return m.name==='BTTS'||m.name==='Both Teams Score';});
+        function ouVal(line,dir){
+          if(!ou||!ou.odds) return null;
+          const f=ou.odds.find(function(x){return String(x.line||x.point||'')===String(line);});
+          return f?parseFloat(f[dir])||null:null;
+        }
+        return{
+          home:parseFloat(o.home)||null,
+          draw:parseFloat(o.draw)||null,
+          away:parseFloat(o.away)||null,
+          over25:ouVal(2.5,'over'),
+          under25:ouVal(2.5,'under'),
+          bttsYes:btts&&btts.odds&&btts.odds[0]?parseFloat(btts.odds[0].yes)||null:null,
+          bttsNo:btts&&btts.odds&&btts.odds[0]?parseFloat(btts.odds[0].no)||null:null
+        };
+      }
+    }
+    return null;
   }
-  if(!allOdds||!allOdds.length) return null;
-  const hk=home.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);
-  const ak=away.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);
-
-  // API Football odds format: {fixture:{id}, teams:{home:{name},away:{name}}, bookmakers:[{bets:[{name,values}]}]}
-  const first=allOdds[0]||{};
-  const isAPIFootball=first.fixture&&first.teams&&first.bookmakers;
-  const isOddsIO=!isAPIFootball&&first.bookmakers&&typeof first.home==='string';
-
-  if(isAPIFootball){
-    const g=allOdds.find(function(x){
-      const ht=(x.teams?.home?.name||'').toLowerCase().replace(/[^a-z]/g,'');
-      const at=(x.teams?.away?.name||'').toLowerCase().replace(/[^a-z]/g,'');
-      return(ht.includes(hk)||hk.includes(ht.slice(0,5)))&&(at.includes(ak)||ak.includes(at.slice(0,5)));
-    });
-    if(!g) return null;
-    const bm=g.bookmakers?.[0];
+  if(Array.isArray(item.bookmakers)){
+    const bm=item.bookmakers[0];
     if(!bm) return null;
-    function getBet(name){return bm.bets?.find(function(b){return b.name===name;});}
+    function getBet(name){return(bm.bets||[]).find(function(b){return b.name===name;});}
     const mw=getBet('Match Winner');
     const ou=getBet('Goals Over/Under');
     const btts=getBet('Both Teams Score');
-    function getVal(bet,val){return bet?.values?.find(function(v){return v.value===val;})?.odd;}
+    function getVal(bet,val){
+      if(!bet||!bet.values) return null;
+      return bet.values.find(function(v){return v.value===val;});
+    }
     return{
-      home:parseFloat(getVal(mw,'Home')||0)||null,
-      draw:parseFloat(getVal(mw,'Draw')||0)||null,
-      away:parseFloat(getVal(mw,'Away')||0)||null,
-      over25:parseFloat(getVal(ou,'Over 2.5')||0)||null,
-      under25:parseFloat(getVal(ou,'Under 2.5')||0)||null,
-      bttsYes:parseFloat(getVal(btts,'Yes')||0)||null,
-      bttsNo:parseFloat(getVal(btts,'No')||0)||null,
+      home:parseFloat((getVal(mw,'Home')||{odd:0}).odd)||null,
+      draw:parseFloat((getVal(mw,'Draw')||{odd:0}).odd)||null,
+      away:parseFloat((getVal(mw,'Away')||{odd:0}).odd)||null,
+      over25:parseFloat((getVal(ou,'Over 2.5')||{odd:0}).odd)||null,
+      under25:parseFloat((getVal(ou,'Under 2.5')||{odd:0}).odd)||null,
+      bttsYes:parseFloat((getVal(btts,'Yes')||{odd:0}).odd)||null,
+      bttsNo:parseFloat((getVal(btts,'No')||{odd:0}).odd)||null
     };
   }
-
-  if(isOddsIO){
-    // odds-api.io format: {id, home:"string", away:"string", bookmakers:{Bet365:[{name:"ML",odds:[{home,draw,away}]}]}}
-    const g=allOdds.find(function(x){
-      const ht=(x.home||'').toLowerCase().replace(/[^a-z]/g,'');
-      const at=(x.away||'').toLowerCase().replace(/[^a-z]/g,'');
-      return(ht.includes(hk)||hk.includes(ht.slice(0,5)))&&(at.includes(ak)||ak.includes(at.slice(0,5)));
-    });
-    if(!g||!g.bookmakers) return null;
-    // İlk bookmaker'ı al
-    const bkName=Object.keys(g.bookmakers)[0];
-    if(!bkName) return null;
-    const markets=g.bookmakers[bkName]||[];
-    const mlMkt=markets.find(function(m){return m.name==='ML'||m.name==='1X2'||m.name==='Match Winner';});
-    const ouMkt=markets.find(function(m){return m.name==='OU'||m.name==='O/U'||m.name==='Goals O/U'||m.name==='Over/Under';});
-    const bttsMkt=markets.find(function(m){return m.name==='BTTS'||m.name==='Both Teams Score';});
-    const mlOdds=mlMkt?.odds?.[0]||{};
-    const ouOdds=ouMkt?.odds||[];
-    const ou25=ouOdds.find(function(o){return String(o.line||o.point||'')===('2.5');});
-    return{
-      home:mlOdds.home?parseFloat(mlOdds.home):null,
-      draw:mlOdds.draw?parseFloat(mlOdds.draw):null,
-      away:mlOdds.away?parseFloat(mlOdds.away):null,
-      over25:ou25?.over?parseFloat(ou25.over):(ouOdds[0]?.over?parseFloat(ouOdds[0].over):null),
-      under25:ou25?.under?parseFloat(ou25.under):(ouOdds[0]?.under?parseFloat(ouOdds[0].under):null),
-      bttsYes:bttsMkt?.odds?.[0]?.yes?parseFloat(bttsMkt.odds[0].yes):null,
-      bttsNo:bttsMkt?.odds?.[0]?.no?parseFloat(bttsMkt.odds[0].no):null,
-    };
-  }
-
-  // the-odds-api.com formatı (varsayılan)
-  const g=allOdds.find(function(x){
-    const ht=(x.home_team||'').toLowerCase().replace(/[^a-z]/g,'');
-    const at=(x.away_team||'').toLowerCase().replace(/[^a-z]/g,'');
+}
+  function findOddsForMatch(home,away,allOdds,fixtureId){
+  if(fixtureId&&oddsApiMap[String(fixtureId)]) return extractOddsFromItem(oddsApiMap[String(fixtureId)]);
+  if(!allOdds||!allOdds.length) return null;
+  const hk=home.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);
+  const ak=away.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);
+  const m1=allOdds.find(function(x){
+    if(typeof x.home!=='string') return false;
+    const ht=x.home.toLowerCase().replace(/[^a-z]/g,'');
+    const at=x.away.toLowerCase().replace(/[^a-z]/g,'');
     return(ht.includes(hk)||hk.includes(ht.slice(0,5)))&&(at.includes(ak)||ak.includes(at.slice(0,5)));
   });
-  if(!g) return null;
-  const bm=g.bookmakers?.[0];
-  if(!bm) return null;
-  const h2h=bm.markets?.find(function(m){return m.key==='h2h';});
-  const tot=bm.markets?.find(function(m){return m.key==='totals';});
-  const btts=bm.markets?.find(function(m){return m.key==='btts';});
-  return{
-    home:h2h?.outcomes?.find(function(o){return o.name===g.home_team;})?.price,
-    draw:h2h?.outcomes?.find(function(o){return o.name==='Draw';})?.price,
-    away:h2h?.outcomes?.find(function(o){return o.name===g.away_team;})?.price,
-    over15:tot?.outcomes?.find(function(o){return o.name==='Over'&&o.point===1.5;})?.price,
-    over25:tot?.outcomes?.find(function(o){return o.name==='Over'&&(o.point===2.5||!o.point);})?.price,
-    under25:tot?.outcomes?.find(function(o){return o.name==='Under'&&(o.point===2.5||!o.point);})?.price,
-    over35:tot?.outcomes?.find(function(o){return o.name==='Over'&&o.point===3.5;})?.price,
-    bttsYes:btts?.outcomes?.find(function(o){return o.name==='Yes';})?.price,
-    bttsNo:btts?.outcomes?.find(function(o){return o.name==='No';})?.price,
-  };
-}
-
+  if(m1) return extractOddsFromItem(m1);
+  const m2=allOdds.find(function(x){
+    if(!x.teams) return false;
+    const ht=(x.teams.home&&x.teams.home.name?x.teams.home.name:'').toLowerCase().replace(/[^a-z]/g,'');
+    const at=(x.teams.away&&x.teams.away.name?x.teams.away.name:'').toLowerCase().replace(/[^a-z]/g,'');
+    return(ht.includes(hk)||hk.includes(ht.slice(0,5)))&&(at.includes(ak)||ak.includes(at.slice(0,5)));
+  });
+  return m2?extractOddsFromItem(m2):null;
+  }
 // ══════════════════════════════════════════
 // API FETCH
 // ══════════════════════════════════════════
