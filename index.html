@@ -1639,8 +1639,8 @@ function getSmartMatches(mode){
     // Gol skoru: 2.5Ü oranı + Poisson over25 ihtimali + btts
     const golScore=(o25>0?(100-o25*40):0)+(sim.over25>55?sim.over25-50:0)+(sim.btts>55?10:0);
 
-    const isFavori=favoriScore>=35;
-    const isGol=golScore>=30;
+    const isFavori=favoriScore>=20;
+    const isGol=golScore>=15;
 
     return {match:m, favoriScore, golScore, isFavori, isGol, sim, minSide, o25};
   });
