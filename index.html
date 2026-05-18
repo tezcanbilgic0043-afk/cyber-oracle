@@ -1639,8 +1639,8 @@ function getSmartMatches(mode){
     // Gol skoru: 2.5Ü oranı + Poisson over25 ihtimali + btts
     const golScore=(o25>0?(100-o25*40):0)+(sim.over25>55?sim.over25-50:0)+(sim.btts>55?10:0);
 
-    const isFavori=favoriScore>=20;
-    const isGol=golScore>=15;
+const isFavori=favoriScore>=25;
+const isGol=golScore>=20&&favoriScore<25;
 
     return {match:m, favoriScore, golScore, isFavori, isGol, sim, minSide, o25};
   });
@@ -1654,7 +1654,7 @@ function getSmartMatches(mode){
     result=scored.filter(function(s){return s.isGol;});
     result.sort(function(a,b){return b.golScore-a.golScore;});
   } else {
-    result=scored.filter(function(s){return s.isFavori&&s.isGol;});
+    result=scored.filter(function(s){return s.favoriScore>=20&&s.golScore>=20;});
     result.sort(function(a,b){return (b.favoriScore+b.golScore)-(a.favoriScore+a.golScore);});
   }
 
