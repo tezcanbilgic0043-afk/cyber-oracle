@@ -651,10 +651,10 @@ async function callOpenAI(prompt){
 }
 
 async function callGemini(prompt){
-  const r=await fetch(PROXY+'/gemini',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:AI_SYS+'\n\n'+prompt}]}],generationConfig:{temperature:0.3,maxOutputTokens:700}})});
-  const d=await r.json();if(d.error)throw new Error('Gemini: '+(d.error.message||JSON.stringify(d.error)));
-  return JSON.parse(cleanJSON(d.candidates?.[0]?.content?.parts?.[0]?.text||'{}'));
-}
+  const r=await fetch(PROXY+'/groq',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:AI_SYS},{role:'user',content:prompt}],max_tokens:700,temperature:0.5})});
+  const d=await r.json();if(d.error)throw new Error('Groq: '+d.error.message);
+  return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));
+    }
 
 async function callDualAI(home,away,lg,hs,as,live,min,odds,stats,hh,ah){
   const prompt=buildAIPrompt(home,away,lg,hs,as,live,min,odds,stats,hh,ah);
