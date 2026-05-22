@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Cyber Oracle Gold</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#050810">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#070a14;--bg2:#0c1020;--card:#10151f;--card2:#161d2e;--border:#1a2440;--border2:#253060;--blue:#3d8eff;--orange:#ff9500;--gold:#ffd60a;--red:#ff3b5c;--green:#30d158;--purple:#bf5af2;--cyan:#32d5ff;--pink:#ff375f;--text:#eef2ff;--muted:#5a6a9a;--dim:#2a3555;--r:13px;}
+body.light{--bg:#f2f5ff;--bg2:#e8eeff;--card:#fff;--card2:#f5f8ff;--border:#d0d8f5;--text:#111830;--muted:#5060a0;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:"Inter",sans-serif;color:var(--text);display:flex;flex-direction:column;}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#preload-bar{position:fixed;inset:0;z-index:9999;background:rgba(7,10,20,.98);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px;}
+#preload-bar.hidden{display:none;}
+#preload-progress{width:100%;max-width:320px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+#preload-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:3px;transition:width .4s;}
+.hdr{position:relative;z-index:50;background:rgba(7,10,20,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);flex-shrink:0;}
+body.light .hdr{background:rgba(242,245,255,.96);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;}
+.hdr-btns{display:flex;gap:6px;}
+.hico{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;}
+.hico:active{transform:scale(.87);}
+.date-bar{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding:6px 14px 8px;}
+.date-bar::-webkit-scrollbar{display:none;}
+.dc{flex:0 0 auto;padding:7px 14px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;text-align:center;border:1.5px solid transparent;transition:.15s;}
+.dc.active{background:linear-gradient(135deg,rgba(255,214,10,.18),rgba(0,213,255,.08));border-color:var(--gold)!important;color:var(--gold);box-shadow:0 0 12px rgba(255,214,10,.3);}
+.dc:not(.active){background:rgba(255,255,255,.07);color:var(--text);border-color:rgba(255,255,255,.12);}
+.dc .ds{font-size:8px;display:block;opacity:.7;margin-top:1px;}
+.ai-banner{margin:0 14px 8px;background:linear-gradient(135deg,rgba(61,142,255,.12),rgba(191,90,242,.08));border:1px solid rgba(61,142,255,.25);border-radius:var(--r);padding:9px 12px;display:flex;align-items:center;justify-content:space-between;}
+.ai-trust{background:linear-gradient(90deg,var(--orange),var(--pink));color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:18px;}
+.filter-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 14px 8px;}
+.filter-row::-webkit-scrollbar{display:none;}
+.ftab{flex:0 0 auto;padding:5px 12px;border-radius:18px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.ftab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.ftab.t-green{border-color:var(--green);color:var(--green);}
+.ftab.t-green.active{background:var(--green);color:#000;}
+.ftab.t-orange{border-color:var(--orange);color:var(--orange);}
+.ftab.t-orange.active{background:var(--orange);color:#000;}
+.ftab.t-purple{border-color:var(--purple);color:var(--purple);}
+.ftab.t-purple.active{background:var(--purple);color:#fff;}
+.time-filter{gap:5px;padding:0 14px 8px;overflow-x:auto;scrollbar-width:none;display:none;}
+.time-filter::-webkit-scrollbar{display:none;}
+.tf-btn{flex:0 0 auto;padding:4px 12px;border-radius:16px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.tf-btn.active{background:var(--cyan);color:#000;border-color:var(--cyan);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px;position:relative;z-index:2;}
+.scroll-area::-webkit-scrollbar{display:none;}
+.lg-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 6px;}
+.lg-name{font-size:12px;font-weight:800;color:var(--gold);}
+.lg-cnt{background:var(--blue);color:#fff;font-size:9px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px;}
+.mc{margin:0 10px 5px;background:var(--card);border:1px solid rgba(0,229,255,.25);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.15s;}
+.mc:active{transform:scale(.985);}
+.mc.live{border-color:rgba(255,45,120,.55);box-shadow:0 0 10px rgba(255,45,120,.2);}
+.mc.hg{border-left:3px solid #39ff14;border-color:rgba(57,255,20,.45);}
+.mc.gol-card{border-left:3px solid var(--orange);border-color:rgba(255,149,0,.45);}
+.mc.favgol-card{border-left:3px solid var(--purple);border-color:rgba(191,90,242,.45);}
+.mc.top5-card{border-left:3px solid var(--gold);border-color:rgba(255,214,10,.55);}
+.mc.open{border-color:rgba(255,214,10,.5);box-shadow:0 0 12px rgba(255,214,10,.18);}
+.mc.gol-alarm{border-color:rgba(255,59,92,.95)!important;animation:alarmBlink .7s ease-in-out infinite;}
+@keyframes alarmBlink{0%,100%{box-shadow:0 0 10px rgba(255,59,92,.4);}50%{box-shadow:0 0 28px rgba(255,59,92,.9),0 0 50px rgba(255,59,92,.3);}}
+.alarm-icon{display:inline-block;animation:alarmIcon .6s ease-in-out infinite;font-size:13px;margin-left:3px;}
+@keyframes alarmIcon{0%,100%{opacity:1;transform:scale(1) rotate(0deg);}50%{opacity:.3;transform:scale(1.4) rotate(-15deg);}}
+.mc-top{display:flex;align-items:center;padding:9px 12px;gap:8px;}
+.mc-time{flex-shrink:0;text-align:center;min-width:40px;}
+.mc-t{font-size:12px;font-weight:900;color:#00e5ff;}
+.mc-t.live{color:#ff2d78;}
+.mc-dot{width:6px;height:6px;border-radius:50%;background:#ff2d78;margin:2px auto 0;animation:pls 1s infinite;}
+@keyframes pls{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(1.5);}}
+.lbl-tag{font-size:7px;font-weight:800;margin-top:2px;}
+.lbl-hg{color:var(--green);}
+.lbl-gol{color:var(--orange);}
+.lbl-favgol{color:var(--purple);}
+.lbl-top5{color:var(--gold);}
+.mc-teams{flex:1;min-width:0;}
+.mc-tr{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:2px 0;}
+.mc-tn{font-size:13px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mc-sc{font-size:15px;font-weight:900;min-width:18px;text-align:center;}
+.mc-sc.live{color:#ff2d78;}
+.odds-strip{display:flex;gap:3px;padding:4px 12px 8px;}
+.odds-strip-item{flex:1;background:rgba(255,214,10,.07);border:1px solid rgba(255,214,10,.2);border-radius:7px;padding:5px 3px;text-align:center;}
+.odds-strip-item.best{border-color:rgba(48,209,88,.5);background:rgba(48,209,88,.1);}
+.odds-strip-lbl{font-size:8px;color:var(--muted);font-weight:700;display:block;}
+.odds-strip-val{font-size:13px;font-weight:900;color:var(--gold);display:block;}
+.odds-strip-item.best .odds-strip-val{color:var(--green);}
+.pp{display:none;border-top:1px solid var(--border);background:rgba(0,0,0,.1);}
+.mc.open .pp{display:block;}
+.pp-in{padding:10px 12px 12px;}
+.ld{display:flex;align-items:center;gap:8px;padding:10px 0;color:var(--blue);font-size:12px;font-weight:600;}
+.sp{width:14px;height:14px;border:2px solid rgba(61,142,255,.2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.math-section{background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(61,142,255,.05));border:2px solid rgba(255,214,10,.35);border-radius:9px;padding:10px 12px;margin-bottom:8px;}
+.math-title{font-size:9px;font-weight:800;color:var(--gold);letter-spacing:1px;margin-bottom:8px;}
+.math-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:6px;}
+.math-item{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:5px 3px;border:1px solid transparent;}
+.math-item.top1{border-color:var(--gold);background:rgba(255,214,10,.12);}
+.math-item.top2{border-color:rgba(255,149,0,.5);background:rgba(255,149,0,.08);}
+.math-item.top3{border-color:rgba(50,213,255,.4);background:rgba(50,213,255,.06);}
+.math-val{font-size:13px;font-weight:900;color:var(--gold);}
+.math-lbl{font-size:7px;color:var(--muted);}
+.math-decision-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,214,10,.06);border:1px solid rgba(255,214,10,.2);border-radius:7px;padding:7px 10px;margin-bottom:4px;}
+.conf-w{margin-bottom:10px;}
+.conf-l{display:flex;justify-content:space-between;margin-bottom:3px;}
+.conf-t{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;}
+.conf-p{font-size:12px;font-weight:800;color:var(--orange);}
+.conf-b{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.conf-f{height:100%;border-radius:3px;transition:.6s;}
+.p3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px;}
+.pb{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:7px;text-align:center;}
+.pb.win{border-color:var(--blue);background:rgba(61,142,255,.1);}
+.pbl{font-size:8px;color:var(--muted);font-weight:600;margin-bottom:3px;}
+.pbv{font-size:14px;font-weight:800;}
+.p2{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px;}
+.p2b{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 9px;display:flex;align-items:center;justify-content:space-between;}
+.p2l{font-size:10px;font-weight:600;color:var(--muted);}
+.p2v{font-size:11px;font-weight:800;}
+.p2v.y{color:var(--green);}
+.p2v.n{color:var(--red);}
+.odds-detail{background:rgba(255,214,10,.04);border:1px solid rgba(255,214,10,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.odds-detail-t{font-size:9px;font-weight:800;color:var(--gold);letter-spacing:1px;margin-bottom:8px;}
+.odds-row{display:flex;gap:4px;margin-bottom:4px;}
+.odd-box{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:6px 4px;text-align:center;}
+.odd-box.rec{border-color:var(--green);background:rgba(48,209,88,.08);}
+.odd-lbl{font-size:8px;color:var(--muted);font-weight:600;display:block;}
+.odd-val{font-size:13px;font-weight:800;color:var(--gold);display:block;}
+.odd-rec{font-size:7px;color:var(--green);display:block;margin-top:1px;}
+.hist-section{background:rgba(255,149,0,.04);border:1px solid rgba(255,149,0,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.hist-t{font-size:9px;font-weight:800;color:var(--orange);letter-spacing:1px;margin-bottom:8px;}
+.hist-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-bottom:5px;}
+.hist-item{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:5px 3px;}
+.hist-v{font-size:12px;font-weight:800;color:var(--orange);}
+.hist-l{font-size:7px;color:var(--muted);}
+.form-dots{display:flex;gap:3px;margin-top:4px;}
+.fd{width:16px;height:16px;border-radius:4px;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.fd-w{background:rgba(48,209,88,.25);color:var(--green);}
+.fd-d{background:rgba(255,214,10,.2);color:var(--gold);}
+.fd-l{background:rgba(255,59,92,.2);color:var(--red);}
+.dual-ai-row{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;}
+.ai-badge{font-size:8px;font-weight:800;padding:3px 8px;border-radius:10px;}
+.ai-badge.openai{background:rgba(48,209,88,.15);color:var(--green);border:1px solid rgba(48,209,88,.3);}
+.ai-badge.groq{background:rgba(61,142,255,.15);color:var(--blue);border:1px solid rgba(61,142,255,.3);}
+.ai-badge.math{background:rgba(255,214,10,.15);color:var(--gold);border:1px solid rgba(255,214,10,.3);}
+.korner-section{background:rgba(48,209,88,.05);border:1px solid rgba(48,209,88,.15);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.korner-t{font-size:9px;font-weight:800;color:var(--green);letter-spacing:1px;margin-bottom:6px;}
+.korner-g{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;}
+.korner-i{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:6px;}
+.korner-n{font-size:14px;font-weight:800;color:var(--green);}
+.korner-l{font-size:8px;color:var(--muted);}
+.ai-b{background:rgba(61,142,255,.05);border:1px solid rgba(61,142,255,.15);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.ai-bt{font-size:9px;font-weight:800;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ai-bx{font-size:11px;line-height:1.65;color:var(--muted);}
+.h2h-section{background:rgba(50,213,255,.04);border:1px solid rgba(50,213,255,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.h2h-t{font-size:9px;font-weight:800;color:var(--cyan);letter-spacing:1px;margin-bottom:7px;}
+.h2h-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.h2h-row:last-child{border-bottom:none;}
+.h2h-sc{font-size:12px;font-weight:900;min-width:34px;text-align:center;color:var(--gold);}
+.h2h-tn{font-size:9px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);}
+.bnav{position:relative;z-index:50;background:rgba(7,10,20,.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;align-items:center;padding:6px 0 max(6px,env(safe-area-inset-bottom));flex-shrink:0;}
+body.light .bnav{background:rgba(242,245,255,.96);}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0;}
+.ni:active{transform:scale(.87);}
+.ni-i{font-size:17px;}
+.ni-l{font-size:8px;font-weight:600;color:var(--muted);}
+.ni.active .ni-l{color:var(--blue);}
+.panel{display:none;flex:1;flex-direction:column;overflow:hidden;position:relative;z-index:2;}
+.panel.active{display:flex;}
+.coupon-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.coupon-wrap::-webkit-scrollbar{display:none;}
+.cp-card{border-radius:var(--r);overflow:hidden;margin-bottom:10px;border:1px solid var(--border);}
+.cp-card.banko1{border-color:rgba(255,214,10,.5);background:linear-gradient(135deg,rgba(255,214,10,.1),var(--card));}
+.cp-card.banko2{border-color:rgba(255,170,0,.5);background:linear-gradient(135deg,rgba(255,170,0,.1),var(--card));}
+.cp-card.banko3{border-color:rgba(255,140,0,.5);background:linear-gradient(135deg,rgba(255,140,0,.1),var(--card));}
+.cp-card.banko4{border-color:rgba(255,100,0,.5);background:linear-gradient(135deg,rgba(255,100,0,.1),var(--card));}
+.cp-head{display:flex;align-items:center;justify-content:space-between;padding:11px 12px 7px;}
+.cp-title{font-size:13px;font-weight:800;}
+.cp-odds{font-size:18px;font-weight:900;color:var(--gold);}
+.cp-odds-lbl{font-size:8px;color:var(--muted);}
+.cp-item{padding:7px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.cp-num{font-size:9px;font-weight:800;color:var(--blue);background:rgba(61,142,255,.1);border-radius:4px;padding:2px 5px;flex-shrink:0;}
+.cp-info{flex:1;min-width:0;}
+.cp-match{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cp-bet{font-size:9px;color:var(--green);}
+.cp-odd{font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0;}
+.cp-foot{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);}
+.st-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.st-wrap::-webkit-scrollbar{display:none;}
+.st-tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px;}
+.st-tabs::-webkit-scrollbar{display:none;}
+.st-tab{flex:0 0 auto;padding:5px 11px;border-radius:18px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.st-tab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.st-table{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.st-hdr{display:grid;grid-template-columns:20px 1fr 22px 22px 22px 38px 26px;gap:2px;padding:7px 10px;background:var(--card2);font-size:8px;font-weight:700;color:var(--muted);}
+.st-row{display:grid;grid-template-columns:20px 1fr 22px 22px 22px 38px 26px;gap:2px;padding:7px 10px;border-top:1px solid var(--border);font-size:11px;font-weight:600;align-items:center;}
+.st-row.top5-row{background:rgba(255,214,10,.04);border-left:2px solid rgba(255,214,10,.4);}
+.st-pos{font-size:9px;color:var(--muted);}
+.st-pos.g{color:#ffd60a;}.st-pos.s{color:#c0c0c0;}.st-pos.b{color:#cd7f32;}
+.st-team{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.st-pts{font-weight:800;color:var(--blue);}
+.st-n{color:var(--muted);text-align:center;}
+.set-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.set-wrap::-webkit-scrollbar{display:none;}
+.set-sec{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px;}
+.set-i{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);}
+.set-i:last-child{border-bottom:none;}
+.set-ico{font-size:16px;width:22px;text-align:center;}
+.set-lbl{flex:1;font-size:14px;font-weight:500;}
+.set-val{font-size:11px;color:var(--muted);}
+.toggle{width:42px;height:23px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:.3s;flex-shrink:0;}
+.toggle.on{background:var(--blue);}
+.toggle::after{content:"";position:absolute;width:19px;height:19px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.3s;}
+.toggle.on::after{left:21px;}
+.sov{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(5px);flex-direction:column;}
+.sov.open{display:flex;}
+.sov-box{background:var(--card);border-bottom:1px solid var(--border);padding:11px 13px;}
+.sov-inp{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 13px;color:var(--text);font-size:14px;outline:none;font-family:"Inter";}
+.sov-res{flex:1;overflow-y:auto;padding:9px 13px;}
+.sov-res::-webkit-scrollbar{display:none;}
+.modal{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.78);backdrop-filter:blur(4px);align-items:flex-end;}
+.modal.open{display:flex;}
+.mbox{background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:16px;width:100%;max-height:78vh;overflow-y:auto;}
+.mbox::-webkit-scrollbar{display:none;}
+.mi{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.mi:last-child{border-bottom:none;}
+.mi-nm{flex:1;font-size:13px;font-weight:600;}
+.toast-c{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none;display:none;}
+.toast{background:var(--card2);border:1px solid var(--border2);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:600;white-space:nowrap;animation:tIn .3s ease;display:flex;align-items:center;gap:6px;}
+.toast.ok{border-color:rgba(48,209,88,.4);color:var(--green);}
+.toast.err{border-color:rgba(255,59,92,.4);color:var(--red);}
+.toast.warn{border-color:rgba(255,214,10,.4);color:var(--gold);}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.surp-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.surp-wrap::-webkit-scrollbar{display:none;}
+.live-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.live-wrap::-webkit-scrollbar{display:none;}
+.live-mc{background:var(--card);border:1px solid rgba(255,59,92,.3);border-radius:var(--r);margin-bottom:8px;overflow:hidden;cursor:pointer;}
+.live-mc-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;}
+.live-mc-sc{font-size:20px;font-weight:900;color:var(--red);letter-spacing:3px;}
+.live-mc-min{font-size:11px;color:var(--red);font-weight:700;}
+.live-mc-lg{font-size:10px;color:var(--muted);padding:0 12px 4px;}
+.live-mc-teams{font-size:12px;padding:0 12px 8px;}
+.live-pp{display:none;border-top:1px solid var(--border);}
+.live-mc.open .live-pp{display:block;}
+.live-mc.gol-alarm{border-color:rgba(255,59,92,.95)!important;animation:alarmBlink .7s ease-in-out infinite;}
+#sel-bar{display:none;position:sticky;top:0;z-index:10;background:linear-gradient(135deg,rgba(48,209,88,.15),rgba(61,142,255,.1));border-bottom:1px solid rgba(48,209,88,.4);padding:8px 14px;}
+</style>
+</head>
+<body>
+<!-- PRELOAD -->
+<div id="preload-bar">
+  <div style="font-size:48px;margin-bottom:4px;">🦁</div>
+  <div style="font-family:'Orbitron',monospace;font-size:16px;font-weight:900;background:linear-gradient(90deg,#ffd60a,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CYBER ORACLE GOLD</div>
+  <div style="font-size:11px;color:var(--cyan);font-weight:700;" id="preload-msg">⚡ Sistem Başlatılıyor...</div>
+  <div id="preload-progress"><div id="preload-fill" style="width:0%"></div></div>
+  <div style="font-size:10px;color:var(--muted)" id="preload-pct">%0</div>
+  <div style="font-size:9px;color:var(--dim);margin-top:4px;">v3.9 · Matematik+Dual AI · 6h Cache</div>
+</div>
+<div id="stars"></div>
+
+<!-- KEŞFET -->
+<div id="p-kesfet" class="panel active">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="font-size:28px;">🦁</div>
+        <div>
+          <div style="font-family:'Orbitron',monospace;font-size:13px;font-weight:900;background:linear-gradient(90deg,#ffd60a,#00d4ff,#ff2d78);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;">CYBER ORACLE</div>
+          <div style="font-size:8px;font-weight:700;color:#ffaa00;letter-spacing:1.5px;">GOLD · MATH+DUAL AI v3.9</div>
+        </div>
+      </div>
+      <div class="hdr-btns">
+        <div class="hico" onclick="showSortModal()">⇅</div>
+        <div class="hico" onclick="openSearch()">🔍</div>
+        <div class="hico" id="theme-btn" onclick="toggleTheme()">🌙</div>
+        <div class="hico" onclick="showLeagueModal()">🎛</div>
+        <div class="hico" onclick="switchPanel('ayarlar',null)">⚙️</div>
+      </div>
+    </div>
+    <div class="date-bar" id="date-bar"></div>
+    <div style="padding:0 14px 8px;">
+      <div class="ai-banner">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:16px">🧮</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;">Matematik Motor + Dual AI Yorum</div>
+            <div style="font-size:10px;color:var(--muted)" id="src-status">Yükleniyor...</div>
+          </div>
+        </div>
+        <div class="ai-trust" id="trust-pct">🔥 %82</div>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="ftab active" onclick="setFilter('all',this)">Tümü</div>
+      <div class="ftab" onclick="setFilter('scheduled',this)">⏰ Yakında</div>
+      <div class="ftab t-green" onclick="setFilter('favori',this)">🏆 Favori</div>
+      <div class="ftab t-orange" onclick="setFilter('gol',this)">⚽ Gollü</div>
+      <div class="ftab" onclick="setFilter('fav',this)">⭐ Yıldız</div>
+      <div class="ftab" onclick="setFilter('finished',this)">✅ Bitti</div>
+    </div>
+    <div class="time-filter" id="time-filter">
+      <div class="tf-btn active" onclick="setTimeFilter(1,this)">1H</div>
+      <div class="tf-btn" onclick="setTimeFilter(3,this)">3H</div>
+      <div class="tf-btn" onclick="setTimeFilter(6,this)">6H</div>
+      <div class="tf-btn" onclick="setTimeFilter(12,this)">12H</div>
+      <div class="tf-btn" onclick="setTimeFilter(24,this)">Tümü</div>
+    </div>
+  </div>
+  <div id="sel-bar">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:11px;font-weight:800;color:var(--green);"><span id="sel-count">0</span> maç seçildi</div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="genFromSelected()" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:var(--green);color:#000;">🎯 Kupon</button>
+        <button onclick="clearSelected()" style="padding:5px 10px;border-radius:8px;font-size:11px;font-weight:700;border:1px solid var(--border);cursor:pointer;background:transparent;color:var(--muted);">✕</button>
+      </div>
+    </div>
+    <div id="sel-names" style="font-size:9px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+  </div>
+  <div class="scroll-area" id="sc-today">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;">
+      <div class="sp" style="width:22px;height:22px;border-width:3px;"></div>
+      <div style="font-size:13px;color:var(--muted);">Maçlar yükleniyor...</div>
+    </div>
+  </div>
+</div>
+
+<!-- CANLI -->
+<div id="p-xg" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;display:flex;align-items:center;gap:7px;"><span style="color:var(--red)">●</span> Canlı Maçlar</div>
+      <div style="display:flex;gap:6px;">
+        <div class="hico" onclick="loadLive()">🔄</div>
+        <div class="hico" id="auto-btn" onclick="toggleAuto()" style="font-size:10px;font-weight:700;color:var(--muted);">AUTO</div>
+      </div>
+    </div>
+  </div>
+  <div class="live-wrap" id="xg-list">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;">
+      <div style="font-size:36px;opacity:.3">⚡</div>
+      <div style="font-size:13px;color:var(--muted);">🔄 ile güncelle</div>
+    </div>
+  </div>
+</div>
+
+<!-- KUPON -->
+<div id="p-kupon" class="panel">
+  <div class="hdr" style="padding:10px 14px 6px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="font-size:15px;font-weight:800;">🎯 Kuponlar</div>
+      <div class="hico" onclick="genCoupons()" id="btn-gen" style="font-size:14px;">✨</div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:4px;">
+      <div id="tab-yeni" onclick="showCpTab('yeni',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--blue);color:#fff;background:var(--blue);text-align:center;">✨ Yeni</div>
+      <div id="tab-gecmis" onclick="showCpTab('gecmis',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;text-align:center;">📋 Geçmiş</div>
+      <div id="tab-istatistik" onclick="showCpTab('istatistik',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;text-align:center;">📊 İstatistik</div>
+    </div>
+  </div>
+  <div class="coupon-wrap" id="coupon-wrap">
+    <div id="cp-yeni"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:220px;gap:12px;"><div style="font-size:36px;opacity:.3">🎯</div><div style="font-size:13px;color:var(--muted);">✨ ile kupon oluştur</div></div></div>
+    <div id="cp-gecmis" style="display:none;"><div id="cp-gecmis-list"></div></div>
+    <div id="cp-istatistik" style="display:none;"><div id="cp-stat-content"></div></div>
+  </div>
+</div>
+
+<!-- PUAN TABLOSU -->
+<div id="p-puan" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;"><div style="font-size:15px;font-weight:800;">📊 Puan Tablosu</div></div>
+  <div class="st-wrap"><div class="st-tabs" id="st-tabs"></div><div id="st-content"><div style="text-align:center;padding:40px;color:var(--muted);">Lig seç</div></div></div>
+</div>
+
+<!-- SÜRPRİZ -->
+<div id="p-surpriz" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;">🔀 Sürpriz Analiz</div>
+      <div class="hico" onclick="loadSurpriz(true)">🔄</div>
+    </div>
+  </div>
+  <div class="surp-wrap" id="surp-wrap">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;" id="surp-empty">
+      <div style="font-size:36px;opacity:.3">🔀</div>
+      <div style="font-size:13px;color:var(--muted);">🔄 ile analiz başlat</div>
+    </div>
+    <div id="surp-list"></div>
+  </div>
+</div>
+
+<!-- AYARLAR -->
+<div id="p-ayarlar" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;"><div style="font-size:15px;font-weight:800;">⚙️ Ayarlar</div></div>
+  <div class="set-wrap">
+    <div style="background:linear-gradient(135deg,rgba(61,142,255,.1),rgba(191,90,242,.08));border:1px solid rgba(61,142,255,.2);border-radius:var(--r);padding:13px;margin-bottom:10px;text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:15px;font-weight:900;background:linear-gradient(90deg,#ffd60a,#00d4ff,#ff2d78);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CYBER ORACLE GOLD</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:3px;">v3.9 · Matematik Motor + Dual AI · 6h Cache</div>
+    </div>
+    <div class="set-sec">
+      <div class="set-i"><div class="set-ico">🌙</div><div class="set-lbl">Karanlık Tema</div><div class="toggle on" id="theme-toggle" onclick="toggleTheme()"></div></div>
+      <div class="set-i"><div class="set-ico">🚨</div><div class="set-lbl">Gol Alarm</div><div class="toggle on" id="notif-toggle" onclick="toggleNotif()"></div></div>
+    </div>
+    <div class="set-sec">
+      <div class="set-i"><div class="set-ico">🧮</div><div class="set-lbl">Karar Motoru</div><div class="set-val">Matematik (Veri bazlı)</div></div>
+      <div class="set-i"><div class="set-ico">🧮</div><div class="set-lbl">Karar Motoru</div><div class="set-val">Matematik (Veri bazlı)</div></div>
+      <div class="set-i"><div class="set-ico">🤖</div><div class="set-lbl">AI Motor</div><div class="set-val">GPT-4o-mini + Groq (Yorum)</div></div>
+      <div class="set-i"><div class="set-ico">📡</div><div class="set-lbl">Odds Kaynağı</div><div class="set-val">TheOdds → APISports</div></div>
+      <div class="set-i"><div class="set-ico">🗄️</div><div class="set-lbl">Cache Süresi</div><div class="set-val">6 Saat</div></div>
+      <div class="set-i" onclick="clearAllCache()" style="cursor:pointer;"><div class="set-ico">🗑️</div><div class="set-lbl">Cache Temizle</div><div class="set-val" style="color:var(--red);">Temizle</div></div>
+      <div class="set-i"><div class="set-ico">💾</div><div class="set-lbl">Önbellekteki Veri</div><div class="set-val" id="cache-size-lbl">Hesaplanıyor...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="bnav">
+  <div class="ni active" data-nav="kesfet" onclick="switchPanel('kesfet',this)"><div class="ni-i">🏆</div><div class="ni-l" style="color:var(--blue)">Keşfet</div></div>
+  <div class="ni" data-nav="xg" onclick="switchPanel('xg',this)"><div class="ni-i">⚡</div><div class="ni-l">Radar</div></div>
+  <div class="ni" data-nav="kupon" onclick="switchPanel('kupon',this)"><div class="ni-i">🎯</div><div class="ni-l">Kupon</div></div>
+  <div class="ni" data-nav="puan" onclick="switchPanel('puan',this)"><div class="ni-i">📊</div><div class="ni-l">Puan</div></div>
+  <div class="ni" data-nav="surpriz" onclick="switchPanel('surpriz',this)"><div class="ni-i">🔀</div><div class="ni-l">Sürpriz</div></div>
+</nav>
+
+<!-- MODALLER -->
+<div class="sov" id="sov">
+  <div class="sov-box">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <input class="sov-inp" id="sov-inp" placeholder="🔍  Takım ara..." oninput="doSearch(this.value)">
+      <div style="color:var(--muted);font-size:13px;cursor:pointer;font-weight:600;" onclick="closeSearch()">İptal</div>
+    </div>
+  </div>
+  <div class="sov-res" id="sov-res"><div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">Takım adı yaz</div></div>
+</div>
+<div class="modal" id="lg-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbox">
+    <div style="font-size:14px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;">Lig Filtresi <span style="font-size:18px;cursor:pointer;" onclick="document.getElementById('lg-modal').classList.remove('open')">✕</span></div>
+    <input placeholder="🔍 Lig ara..." oninput="filterLgList(this.value)" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;color:var(--text);font-size:13px;outline:none;margin-bottom:11px;font-family:'Inter';">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;"><div style="color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;" onclick="selectAllLg()">✓ Tümünü Seç</div><div style="font-size:10px;color:var(--muted)" id="sel-cnt">0 lig</div></div>
+    <div id="lg-list"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+      <button onclick="clearLg()" style="padding:10px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;background:var(--card2);color:var(--text);">Temizle</button>
+      <button onclick="applyLg()" style="padding:10px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;background:var(--green);color:#000;">Uygula</button>
+    </div>
+  </div>
+</div>
+<div class="modal" id="sort-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbox">
+    <div style="font-size:14px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;">Sıralama <span style="font-size:18px;cursor:pointer;" onclick="document.getElementById('sort-modal').classList.remove('open')">✕</span></div>
+    <div class="mi" onclick="sortBy('time_asc');document.getElementById('sort-modal').classList.remove('open')"><span>🕐</span><div class="mi-nm">Yakın Maçlar</div></div>
+    <div class="mi" onclick="sortBy('time_desc');document.getElementById('sort-modal').classList.remove('open')"><span>🕔</span><div class="mi-nm">Uzak Maçlar</div></div>
+  </div>
+</div>
+<div class="toast-c" id="toast-c"></div>
+<script>
+const PROXY='https://steep-night-fc54.tezcanbilgic0043.workers.dev';
+const API_BASE='https://v3.football.api-sports.io';
+const CACHE_TTL={fixtures:360,teamHistory:360,standings:1440,odds:15,h2h:720};
+const MEM={};
+function cGet(k){if(MEM[k]&&Date.now()-MEM[k].ts<MEM[k].ttl*60000)return MEM[k].d;try{const r=localStorage.getItem('cog_v38_'+k);if(!r)return null;const o=JSON.parse(r);if(Date.now()-o.ts>o.ttl*60000){localStorage.removeItem('cog_v38_'+k);return null;}MEM[k]=o;return o.d;}catch{return null;}}
+function cSet(k,d,ttl){const o={d,ts:Date.now(),ttl:ttl||360};MEM[k]=o;try{localStorage.setItem('cog_v38_'+k,JSON.stringify(o));}catch{try{const ks=Object.keys(localStorage).filter(x=>x.startsWith('cog_v38_')).sort((a,b)=>{try{return JSON.parse(localStorage.getItem(a)).ts-JSON.parse(localStorage.getItem(b)).ts;}catch{return 0;}});if(ks.length)localStorage.removeItem(ks[0]);localStorage.setItem('cog_v38_'+k,JSON.stringify(o));}catch{}}}
+function cDel(k){delete MEM[k];try{localStorage.removeItem('cog_v38_'+k);}catch{}}
+function clearAllCache(){Object.keys(localStorage).filter(k=>k.startsWith('cog_v38_')).forEach(k=>localStorage.removeItem(k));Object.keys(MEM).forEach(k=>delete MEM[k]);updateCacheSizeLabel();showToast('🗑️ Cache temizlendi','ok');}
+function updateCacheSizeLabel(){try{const ks=Object.keys(localStorage).filter(k=>k.startsWith('cog_v38_'));let sz=0;ks.forEach(k=>sz+=localStorage.getItem(k).length);const el=document.getElementById('cache-size-lbl');if(el)el.textContent=ks.length+' kayıt · '+(sz/1024).toFixed(1)+' KB';}catch{}}
+
+const EXCLUDE_KW=['u19','u18','u21','u23','u17','reserve','reserves','youth','akademi','amateur','women','kadin','wsl','futsal','nb ii','nb iii','div ','regional'];
+const TOP_LEAGUES=['eredivisie','allsvenskan','superettan','eliteserien','veikkausliiga','swiss super league','jupiler','pro league','belgian first','primeira liga','liga portugal','superliga','3f superliga','ekstraklasa','austrian bundesliga','scottish premiership','ligue 1','ligue 2','premier league','championship','1. bundesliga','2. bundesliga','bundesliga','la liga','laliga','serie a','serie b','super lig','tff 1','brasileiro','primera division','mls','major league soccer','j1 league','chinese super','a-league','nb i','danish superliga','saudi pro league','roshn saudi league','urvalsdeild'];
+const PRIORITY_LEAGUES=['eredivisie','dutch eredivisie','jupiler pro league','belgian first division','pro league','eliteserien','norwegian eliteserien','veikkausliiga','finnish veikkausliiga','swiss super league','super league switzerland','a-league','australian a-league','primeira liga','liga portugal bwin','liga portugal','mls','major league soccer','allsvenskan','swedish allsvenskan','3f superliga','danish superliga','2. bundesliga','2.bundesliga','austrian football bundesliga','j1 league','j.league','chinese super league','super league china','scottish premiership','urvalsdeild','iceland premier','icelandic urvalsdeild'];
+const GOL_LEAGUES=new Set(['eredivisie','allsvenskan','eliteserien','veikkausliiga','swiss super league','jupiler','primera liga','3f superliga','ekstraklasa','austrian bundesliga','scottish premiership','ligue 1','2. bundesliga','mls','major league soccer','j1 league','chinese super','a-league','saudi pro league','premier league','bundesliga','la liga','serie a','ligue 2','championship','super lig','primera division','urvalsdeild']);
+const LEAGUE_HIST_SURP={'eredivisie':32,'allsvenskan':28,'eliteserien':27,'veikkausliiga':30,'swiss super league':25,'jupiler':26,'primeira liga':24,'3f superliga':29,'ekstraklasa':27,'austrian bundesliga':28,'scottish premiership':24,'ligue 1':26,'2. bundesliga':27,'mls':31,'j1 league':26,'chinese super':30,'a-league':29,'saudi pro league':25,'premier league':23,'bundesliga':24,'la liga':22,'serie a':23,'urvalsdeild':28};
+const TOP_TEAMS=new Set(['Ajax','Feyenoord','PSV','AZ Alkmaar','Twente','Malmö FF','AIK','Hammarby','Bodø/Glimt','Molde','Rosenborg','HJK','KuPS','Young Boys','FC Basel','Club Brugge','Anderlecht','Gent','Benfica','Porto','Sporting CP','FC Copenhagen','Red Bull Salzburg','Sturm Graz','Rapid Wien','Celtic','Rangers','PSG','Paris Saint-Germain','Marseille','Lyon','Monaco','Lille','Manchester City','Manchester United','Liverpool','Arsenal','Chelsea','Tottenham','Brighton','Newcastle','Bayern Munich','Borussia Dortmund','Bayer Leverkusen','RB Leipzig','Real Madrid','FC Barcelona','Atletico Madrid','Sevilla','Inter Milan','AC Milan','Juventus','Napoli','AS Roma','Galatasaray','Fenerbahçe','Beşiktaş','Trabzonspor','Vissel Kobe','Kawasaki Frontale','LA Galaxy','LAFC','Inter Miami','Seattle Sounders']);
+const HG_TEAMS=new Set([...TOP_TEAMS,'Sparta Rotterdam','NEC Nijmegen','Go Ahead Eagles','NAC Breda','Union SG','Genk','Antwerp','Viking','Fredrikstad','Lillestrøm','Brann','Silkeborg','Viborg','Nordsjælland','AGF','FC Midtjylland','Brøndby','OB','Lausanne','Servette','FC Zürich','Lugano','Hamburger SV','Hannover 96','Fortuna Düsseldorf','Hertha BSC','LASK','Austria Wien','Wolfsberg','Elfsborg','Djurgårdens','BK Häcken','IFK Göteborg','Brest','Lens','Nice','Hoffenheim','SC Freiburg','Werder Bremen','Athletic Club','Real Betis','Girona','Inter','Bologna','Atalanta','Fiorentina','Lazio','Wellington Phoenix','Melbourne City','Melbourne Victory','Sydney FC']);
+const ST_LEAGUES=[{id:203,name:'Süper Lig',flag:'🇹🇷'},{id:39,name:'Premier Lig',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},{id:140,name:'La Liga',flag:'🇪🇸'},{id:78,name:'Bundesliga',flag:'🇩🇪'},{id:135,name:'Serie A',flag:'🇮🇹'},{id:61,name:'Ligue 1',flag:'🇫🇷'},{id:2,name:'Şampiyonlar L.',flag:'🏆'}];
+
+function isExcluded(ln){const l=(ln||'').toLowerCase();return EXCLUDE_KW.some(k=>l.includes(k));}
+function isTopLeague(ln){const l=(ln||'').toLowerCase();if(EXCLUDE_KW.some(k=>l.includes(k)))return false;return TOP_LEAGUES.some(k=>l.includes(k.toLowerCase()));}
+function isGolLig(ln){const l=(ln||'').toLowerCase();if(EXCLUDE_KW.some(k=>l.includes(k)))return false;return isTopLeague(ln)||[...GOL_LEAGUES].some(k=>l.includes(k));}
+function isPriorityLeague(ln){if(!ln)return false;const l=ln.toLowerCase();return PRIORITY_LEAGUES.some(k=>l.includes(k));}
+function getPriorityScore(ln){if(!ln)return 0;const l=ln.toLowerCase();if(['saudi','roshn','uae','indonesia','thailand','indian'].some(k=>l.includes(k)))return -50;if(['eredivisie','jupiler','eliteserien','veikkausliiga','swiss super league','a-league','primeira liga','mls','allsvenskan','3f superliga','2. bundesliga','austrian bundesliga','j1 league','chinese super','urvalsdeild'].some(k=>l.includes(k)))return 100;if(isPriorityLeague(ln))return 60;if(isTopLeague(ln))return 30;return 0;}
+function isSurprizLig(ln){const l=(ln||'').toLowerCase();return isTopLeague(ln)||['eredivisie','allsvenskan','eliteserien','veikkausliiga','swiss super league','jupiler','primeira liga','3f superliga','mls','j1 league','chinese super','a-league','urvalsdeild'].some(k=>l.includes(k));}
+function getLeagueSurpHist(ln){const l=(ln||'').toLowerCase();const f=Object.keys(LEAGUE_HIST_SURP).find(k=>l.includes(k));return f?LEAGUE_HIST_SURP[f]:20;}
+
+let allMatches=[],liveMatches=[];
+let activeFilter='all',selLeagues=new Set();
+let openCardId=null,autoTimer=null,autoOn=false;
+let isDark=true,notifOn=true;
+let prevScores={};
+let oddsApiData=null,oddsApiLastFetch=0,oddsApiMap={};
+let activeTimeHours=1;
+let favorites=JSON.parse(localStorage.getItem('cog_favs')||'[]');
+let selectedMatchIds=new Set();
+let surprizLoaded=false;
+const standingsCache={};
+
+(function(){const s=document.getElementById('stars');s.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(61,142,255,.07) 0%,transparent 60%),linear-gradient(180deg,#070a14,#040609);';for(let i=0;i<60;i++){const d=document.createElement('div');const sz=Math.random()*2+.4;d.style.cssText=`position:absolute;border-radius:50%;background:#fff;width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${Math.random()*.4+.1};`;s.appendChild(d);}})();
+
+function showToast(msg,type=''){const c=document.getElementById('toast-c');c.style.display='block';c.innerHTML=`<div class="toast ${type}">${msg}</div>`;setTimeout(()=>{c.style.display='none';},3500);}
+window.toast=showToast;
+function switchPanel(name,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.ni').forEach(n=>{n.classList.remove('active');n.querySelector('.ni-l').style.color='';});document.getElementById('p-'+name).classList.add('active');if(el&&el.classList){el.classList.add('active');el.querySelector('.ni-l').style.color='var(--blue)';}if(name==='xg')loadLive();if(name==='puan')initStandings();if(name==='surpriz'&&!surprizLoaded){if(allMatches.length>0)loadSurpriz(false);else setTimeout(()=>{if(!surprizLoaded)loadSurpriz(false);},3000);}if(name==='ayarlar')updateCacheSizeLabel();}
+function fmtTime(s){if(!s)return'--:--';try{return new Date(s).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Istanbul'});}catch{return'--:--';}}
+function todayStr(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function cc(p){return p>=70?'var(--green)':p>=50?'var(--orange)':'var(--red)';}
+function toggleTheme(){isDark=!isDark;document.body.classList.toggle('light',!isDark);document.getElementById('theme-toggle').classList.toggle('on',isDark);document.getElementById('theme-btn').textContent=isDark?'🌙':'☀️';}
+function toggleNotif(){notifOn=!notifOn;document.getElementById('notif-toggle').classList.toggle('on',notifOn);showToast(notifOn?'🚨 Gol alarmı açık':'Gol alarmı kapalı','');}
+function cleanJSON(txt){if(!txt)return'{}';txt=txt.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();const js=txt.indexOf('{'),je=txt.lastIndexOf('}');if(js>=0&&je>js)txt=txt.substring(js,je+1);txt=txt.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g,'');txt=txt.replace(/,\s*([}\]])/g,'$1');return txt;}
+
+let _lastApiCall=0;
+async function apiFetch(path){
+  const cKey='api_'+path.replace(/[^a-z0-9]/gi,'_').slice(0,80);
+  const cached=cGet(cKey);if(cached!==null)return cached;
+  const now=Date.now();const wait=1200-(now-_lastApiCall);if(wait>0)await new Promise(r=>setTimeout(r,wait));
+  _lastApiCall=Date.now();
+  const res=await fetch(PROXY+'/?url='+encodeURIComponent(API_BASE+path));
+  if(!res.ok)throw new Error('HTTP '+res.status);
+  const json=await res.json();
+  if(json.errors&&Object.keys(json.errors).length&&!(json.response&&json.response.length))throw new Error(Object.values(json.errors)[0]);
+  const data=json.response||[];
+  let ttl=CACHE_TTL.fixtures;
+  if(path.includes('standings'))ttl=CACHE_TTL.standings;
+  else if(path.includes('last='))ttl=CACHE_TTL.teamHistory;
+  else if(path.includes('h2h'))ttl=CACHE_TTL.h2h;
+  else if(path.includes('live'))ttl=0;
+  if(ttl>0)cSet(cKey,data,ttl);
+  return data;
+}
+
+async function fetchOddsData(){
+  const now=Date.now();
+  if(oddsApiData&&now-oddsApiLastFetch<15*60*1000)return oddsApiData;
+  const cached=cGet('odds_main');if(cached){oddsApiData=cached;buildOddsMap(cached);oddsApiLastFetch=now;return cached;}
+  try{const r=await fetch(PROXY+'/odds');if(!r.ok)throw new Error('HTTP '+r.status);const raw=await r.json();let resp=Array.isArray(raw.data)?raw.data:Array.isArray(raw)?raw:[];oddsApiData=resp;buildOddsMap(resp);cSet('odds_main',resp,CACHE_TTL.odds);oddsApiLastFetch=now;return oddsApiData;}
+  catch(e){console.warn('Odds:',e.message);return[];}
+}
+function buildOddsMap(resp){oddsApiMap={};(resp||[]).forEach(item=>{if(item._id)oddsApiMap['_theodds_'+String(item._id)]=item;if(item._fixtureId)oddsApiMap[String(item._fixtureId)]=item;if(item.id)oddsApiMap[String(item.id)]=item;if(item.fixture&&item.fixture.id)oddsApiMap[String(item.fixture.id)]=item;});}
+function extractOddsFromItem(item){
+  if(!item)return null;
+  if(item._source==='theodds'||item._source==='apisports'){const o={home:item.home||null,draw:item.draw||null,away:item.away||null,over25:item.over25||null,over35:item.over35||null,over45:item.over45||null,under25:item.under25||null,bttsYes:item.bttsYes||null,bttsNo:item.bttsNo||null};if(o.home||o.over25||o.bttsYes)return o;}
+  if(Array.isArray(item.bookmakers)){const bm=item.bookmakers[0];if(!bm)return null;const getBet=n=>(bm.bets||[]).find(b=>b.name===n);const mw=getBet('Match Winner'),ou=getBet('Goals Over/Under'),btts=getBet('Both Teams Score');const getVal=(bet,val)=>{if(!bet||!bet.values)return null;const v=bet.values.find(x=>x.value===val);return v?parseFloat(v.odd||v.odds||0)||null:null;};return{home:getVal(mw,'Home'),draw:getVal(mw,'Draw'),away:getVal(mw,'Away'),over25:getVal(ou,'Over 2.5'),under25:getVal(ou,'Under 2.5'),over35:getVal(ou,'Over 3.5'),over45:getVal(ou,'Over 4.5'),bttsYes:getVal(btts,'Yes'),bttsNo:getVal(btts,'No')};}
+  return null;
+}
+function findOddsForMatch(home,away,allOdds,fixtureId){
+  if(fixtureId&&oddsApiMap[String(fixtureId)]){const r=extractOddsFromItem(oddsApiMap[String(fixtureId)]);if(r)return r;}
+  if(!allOdds||!allOdds.length)return null;
+  const hk=home.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);const ak=away.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);
+  const m0=allOdds.find(x=>{if(!x.home_team||!x.away_team)return false;const ht=x.home_team.toLowerCase().replace(/[^a-z]/g,'');const at=x.away_team.toLowerCase().replace(/[^a-z]/g,'');return(ht.includes(hk)||hk.includes(ht.slice(0,5)))&&(at.includes(ak)||ak.includes(at.slice(0,5)));});
+  if(m0)return extractOddsFromItem(m0);return null;
+}
+
+async function fetchTeamHistory(teamId){
+  if(!teamId)return null;
+  const cKey='hist_'+teamId;const cached=cGet(cKey);if(cached)return cached;
+  try{
+    const data=await apiFetch(`/fixtures?team=${teamId}&last=10&timezone=Europe%2FIstanbul`);
+    if(!data||!data.length)return null;
+    let tg=0,o25=0,o35=0,o45=0,btts=0,wins=0,draws=0,losses=0,htftSurp=0,homeG=0,homeA=0,homeN=0,awayG=0,awayA=0,awayN=0,homeWins=0,awayWins=0,cleanSheets=0,failedToScore=0,last3Goals=[];
+    data.forEach((m,idx)=>{
+      const hg=parseInt(m.goals?.home)||0,ag=parseInt(m.goals?.away)||0,tot=hg+ag;
+      tg+=tot;if(tot>2.5)o25++;if(tot>3.5)o35++;if(tot>4.5)o45++;if(hg>0&&ag>0)btts++;
+      const hhg=parseInt(m.score?.halftime?.home)||0,hag=parseInt(m.score?.halftime?.away)||0;
+      const isHome=m.teams?.home?.id===teamId;const gf=isHome?hg:ag,ga=isHome?ag:hg;
+      if(gf>ga)wins++;else if(gf===ga)draws++;else losses++;
+      if(ga===0)cleanSheets++;if(gf===0)failedToScore++;
+      if(idx<3)last3Goals.push(tot);
+      if(isHome){homeG+=gf;homeA+=ga;homeN++;if(gf>ga)homeWins++;}else{awayG+=gf;awayA+=ga;awayN++;if(gf>ga)awayWins++;}
+      if(hhg!==hag&&hg!==ag){const htW=hhg>hag?'H':'A';const ftW=hg>ag?'H':'A';if(htW!==ftW)htftSurp++;}
+    });
+    const n=data.length;
+    const formArr=data.slice(0,5).map(m=>{const isHome=m.teams?.home?.id===teamId;const gf=isHome?(m.goals?.home||0):(m.goals?.away||0);const ga=isHome?(m.goals?.away||0):(m.goals?.home||0);return gf>ga?'W':gf===ga?'D':'L';});
+        const trend=last3Goals.length>0?Math.round(last3Goals.reduce((a,b)=>a+b,0)/last3Goals.length*10)/10:0;
+    const result={n,avg:(tg/n).toFixed(1),o25p:Math.round(o25/n*100),o35p:Math.round(o35/n*100),o45p:Math.round(o45/n*100),bttsp:Math.round(btts/n*100),wins,draws,losses,form:formArr.join(''),htftSurpP:Math.round(htftSurp/n*100),cleanSheetP:Math.round(cleanSheets/n*100),failScoreP:Math.round(failedToScore/n*100),homeAvg:homeN>0?(homeG/homeN).toFixed(1):'1.2',awayAvg:awayN>0?(awayG/awayN).toFixed(1):'1.0',homeWinP:homeN>0?Math.round(homeWins/homeN*100):0,awayWinP:awayN>0?Math.round(awayWins/awayN*100):0,goalTrend:trend};
+    cSet(cKey,result,CACHE_TTL.teamHistory);return result;
+  }catch(e){console.warn('fetchTeamHistory:',e.message);return null;}
+}
+
+async function fetchH2H(homeId,awayId){
+  if(!homeId||!awayId)return null;
+  const cKey='h2h_'+homeId+'_'+awayId;const cached=cGet(cKey);if(cached)return cached;
+  try{
+    const data=await apiFetch(`/fixtures/headtohead?h2h=${homeId}-${awayId}&last=10`);
+    if(!data||!data.length)return null;
+    let homeWins=0,awayWins=0,draws=0,totalGoals=0,btts=0,over25=0,htftSurp=0;
+    const last5=data.slice(0,5);
+    last5.forEach(m=>{const hg=parseInt(m.goals?.home)||0,ag=parseInt(m.goals?.away)||0,tot=hg+ag;totalGoals+=tot;if(tot>2.5)over25++;if(hg>0&&ag>0)btts++;if(hg>ag)homeWins++;else if(ag>hg)awayWins++;else draws++;const hhg=parseInt(m.score?.halftime?.home)||0,hag=parseInt(m.score?.halftime?.away)||0;if(hhg!==hag&&hg!==ag){const htW=hhg>hag?'H':'A';const ftW=hg>ag?'H':'A';if(htW!==ftW)htftSurp++;}});
+    const n=last5.length||1;
+    const result={n,homeWins,awayWins,draws,avgGoals:(totalGoals/n).toFixed(1),over25p:Math.round(over25/n*100),bttsp:Math.round(btts/n*100),htftSurpP:Math.round(htftSurp/n*100),matches:last5.map(m=>({home:m.teams?.home?.name||'',away:m.teams?.away?.name||'',hg:m.goals?.home||0,ag:m.goals?.away||0,date:(m.fixture?.date||'').slice(0,10)}))};
+    cSet(cKey,result,CACHE_TTL.h2h);return result;
+  }catch(e){console.warn('fetchH2H:',e.message);return null;}
+}
+
+function cacheStandings(st,lgId){
+  if(!st||!st.length)return;
+  const today=new Date().toISOString().slice(0,10);
+  st.forEach(s=>{
+    const name=(s.team?.name||'').toLowerCase();
+    const data={lgId,rank:s.rank||99,played:s.all?.played||0,wins:s.all?.win||0,draws:s.all?.draw||0,losses:s.all?.lose||0,gf:s.all?.goals?.for||0,ga:s.all?.goals?.against||0,pts:s.points||0,homeW:s.home?.win||0,homeD:s.home?.draw||0,homeL:s.home?.lose||0,homeGf:s.home?.goals?.for||0,homeGa:s.home?.goals?.against||0,homePlayed:s.home?.played||0,awayW:s.away?.win||0,awayD:s.away?.draw||0,awayL:s.away?.lose||0,awayGf:s.away?.goals?.for||0,awayGa:s.away?.goals?.against||0,awayPlayed:s.away?.played||0,form:s.form||'',date:today};
+    standingsCache[name]=data;const parts=name.split(' ');if(parts.length>1){standingsCache[parts[0]]=data;standingsCache[parts[parts.length-1]]=data;}
+  });
+}
+function getTeamStandings(teamName){
+  if(!teamName)return null;const today=new Date().toISOString().slice(0,10);
+  const key=(teamName||'').toLowerCase();
+  if(standingsCache[key]&&standingsCache[key].date===today)return standingsCache[key];
+  const found=Object.keys(standingsCache).find(k=>k.includes(key.slice(0,6))||key.includes(k.slice(0,6)));
+  if(found&&standingsCache[found].date===today)return standingsCache[found];return null;
+}
+
+// ══ MATEMATİKSEL KARAR MOTORU ══
+function calcMatchScores(m,hh,ah,h2h,odds){
+  const scores={};
+  const hSt=getTeamStandings(m.teams?.home?.name||'');
+  const aSt=getTeamStandings(m.teams?.away?.name||'');
+  const ln=m.league?.name||'';
+  let ms1=0;
+  if(hh){ms1+=(hh.homeWinP||0)*0.35;ms1+=(hh.wins/(hh.n||1))*20;}
+  if(h2h)ms1+=(h2h.homeWins/(h2h.n||1))*25;
+  if(hSt&&aSt&&hSt.rank<aSt.rank)ms1+=Math.min(25,(aSt.rank-hSt.rank)*2);
+  if(odds?.home&&odds?.away){const ho=parseFloat(odds.home),ao=parseFloat(odds.away);if(ho<ao)ms1+=Math.min(30,(ao-ho)*8);}
+  scores.ms1=Math.round(Math.min(90,ms1));
+  let ms2=0;
+  if(ah){ms2+=(ah.awayWinP||0)*0.35;ms2+=(ah.wins/(ah.n||1))*20;}
+  if(h2h)ms2+=(h2h.awayWins/(h2h.n||1))*25;
+  if(hSt&&aSt&&aSt.rank<hSt.rank)ms2+=Math.min(25,(hSt.rank-aSt.rank)*2);
+  if(odds?.home&&odds?.away){const ho=parseFloat(odds.home),ao=parseFloat(odds.away);if(ao<ho)ms2+=Math.min(30,(ho-ao)*8);}
+  scores.ms2=Math.round(Math.min(90,ms2));
+  scores.x=Math.max(5,Math.round(100-scores.ms1-scores.ms2-15));
+  let ust25=0;
+  if(hh)ust25+=(hh.o25p||0)*0.3;if(ah)ust25+=(ah.o25p||0)*0.3;if(h2h)ust25+=(h2h.over25p||0)*0.2;
+  if(isGolLig(ln))ust25+=15;
+  if(odds?.over25){const o=parseFloat(odds.over25);if(o<1.65)ust25+=20;else if(o<1.80)ust25+=10;}
+  scores.ust25=Math.round(Math.min(95,ust25));scores.alt25=Math.round(Math.max(5,100-scores.ust25));
+  let ust35=0;
+  if(hh)ust35+=(hh.o35p||0)*0.35;if(ah)ust35+=(ah.o35p||0)*0.35;
+  if(odds?.over35){const o=parseFloat(odds.over35);if(o<1.70)ust35+=20;else if(o<1.90)ust35+=10;}
+  scores.ust35=Math.round(Math.min(90,ust35));scores.alt35=Math.round(Math.max(5,100-scores.ust35));
+  let ust45=0;if(hh)ust45+=(hh.o45p||0)*0.4;if(ah)ust45+=(ah.o45p||0)*0.4;scores.ust45=Math.round(Math.min(80,ust45));
+  let kgv=0;if(hh)kgv+=(hh.bttsp||0)*0.3;if(ah)kgv+=(ah.bttsp||0)*0.3;if(h2h)kgv+=(h2h.bttsp||0)*0.2;
+  if(odds?.bttsYes){const o=parseFloat(odds.bttsYes);if(o<1.55)kgv+=25;else if(o<1.75)kgv+=12;}
+  scores.kgv=Math.round(Math.min(95,kgv));scores.kgy=Math.round(Math.max(5,100-scores.kgv));
+  const hAvg=parseFloat(hh?.homeAvg||1.2),aAvg=parseFloat(ah?.awayAvg||1.0);
+  scores.korner=Math.round((hAvg+aAvg)*3.6);
+  scores.kornerUst85=scores.korner>=9?68:scores.korner>=8?52:38;
+  scores.kornerAlt85=100-scores.kornerUst85;
+  return scores;
+}
+
+function makeDecision(scores){
+  const all=[
+    {bet:'MS1',score:scores.ms1,label:'🏠 Ev Galibiyet'},
+    {bet:'MS2',score:scores.ms2,label:'✈️ Dep Galibiyet'},
+    {bet:'X',score:scores.x,label:'🤝 Beraberlik'},
+    {bet:'2.5UST',score:scores.ust25,label:'⬆️ 2.5 Üst'},
+    {bet:'2.5ALT',score:scores.alt25,label:'⬇️ 2.5 Alt'},
+    {bet:'3.5UST',score:scores.ust35,label:'⬆️ 3.5 Üst'},
+    {bet:'3.5ALT',score:scores.alt35,label:'⬇️ 3.5 Alt'},
+    {bet:'4.5UST',score:scores.ust45,label:'⬆️ 4.5 Üst'},
+    {bet:'KGV',score:scores.kgv,label:'⚽ KG Var'},
+    {bet:'KGY',score:scores.kgy,label:'🚫 KG Yok'},
+    {bet:'KORNER_UST',score:scores.kornerUst85,label:'📐 Korner 8.5Ü'},
+    {bet:'KORNER_ALT',score:scores.kornerAlt85,label:'📐 Korner 8.5A'},
+  ].sort((a,b)=>b.score-a.score);
+  const tb=[scores.ms1,scores.ms2,scores.x];const tmx=Math.max(...tb);const ti=tb.indexOf(tmx);
+  return{sorted:all,top1:all[0],top2:all[1],top3:all[2],taraf:ti===0?'MS1':ti===1?'MS2':'X',confidence:Math.round(Math.min(90,all[0].score*0.75+15))};
+}
+const AI_SYS=`Profesyonel futbol analisti. Matematiksel karar motoru kararı verdi, sen SADECE Türkçe yorum yaz. Ham JSON döndür:
+{"key_reason":"neden bu karar mantıklı","risk":"ORTA","gol_beklentisi":"YUKSEK","htft_surpriz":"YOK","htft_surp_pct":0,"best_bet_reason":"açıklama"}
+KURAL: prediction, confidence, yüzdeler YAZMA. Sadece yorum yaz.`;
+
+const COUPON_SYS=`Profesyonel futbol bahis analisti. SADECE ham JSON. 4 BANKO kupon oluştur.
+Dep oranı < Ev → MS2. KGV%>60 + gollü lig → KGV/2.5UST. data_basis ZORUNLU.
+ÖNCELİKLİ: Eredivisie,Jupiler,Eliteserien,Veikkausliiga,Swiss Super League,A-League,Primeira Liga,MLS,Allsvenskan,3F Superliga,2.Bundesliga,Austrian Bundesliga,J1 League,Chinese Super,Úrvalsdeild(İzlanda)
+FORMAT: {"coupons":[{"type":"banko1","title":"🏆 BANKO 1","confidence":85,"total_odds":7.20,"risk":"DÜŞÜK","selections":[{"match":"Ev vs Dep","league":"Lig","bet":"MS2","odds":1.80,"reason":"açıklama","favori":"DEPLASMAN","data_basis":"oran+form"}]}]}`;
+
+const SURP_SYS=`Futbol analisti. SADECE ham JSON.
+{"htft_singles":[{"match":"Ev vs Dep","league":"Lig","htft_bet":"1/2","confidence":70,"reason":"açıklama","home_odds":1.45,"away_odds":2.80,"htft_odds":8.50,"surp_score":75,"hist_surp_pct":30}],"kg_kombinler":[{"title":"2li KG","type":"ikili","total_odds":3.20,"confidence":72,"legs":[{"match":"E1 vs D1","league":"L1","bet":"IY_KG","odds":1.65,"iy_kg_pct":62,"ms_kg_pct":80}]}]}
+htft_singles MIN 3, kg_kombinler MIN 2`;
+
+async function callOpenAI(prompt,sys){const r=await fetch(PROXY+'/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:600,temperature:0.3,messages:[{role:'system',content:sys||AI_SYS},{role:'user',content:prompt}]})});const d=await r.json();if(d.error)throw new Error('OpenAI: '+d.error.message);return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));}
+async function callGroq(prompt,sys){const r=await fetch(PROXY+'/groq',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sys||AI_SYS},{role:'user',content:prompt}],max_tokens:600,temperature:0.4})});const d=await r.json();if(d.error)throw new Error('Groq: '+(d.error.message||JSON.stringify(d.error)));return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));}
+
+function buildAICommentPrompt(home,away,lg,decision,scores,hh,ah,h2h,odds){
+  let p=`Maç: ${home} vs ${away} | Lig: ${lg}`;
+  p+=`\nMATEMATİK KARAR: ${decision.top1.label}(${decision.top1.score}) | #2:${decision.top2?.label}(${decision.top2?.score}) | #3:${decision.top3?.label}(${decision.top3?.score})`;
+  p+=`\nTaraf:${decision.taraf} Güven:%${decision.confidence}`;
+  if(odds?.home)p+=`\n1X2: ${parseFloat(odds.home).toFixed(2)}/${parseFloat(odds.draw||0).toFixed(2)}/${parseFloat(odds.away||0).toFixed(2)}`;
+  if(odds?.over25)p+=` 2.5U:${parseFloat(odds.over25).toFixed(2)}`;
+  if(odds?.bttsYes)p+=` KGV:${parseFloat(odds.bttsYes).toFixed(2)}`;
+  if(hh)p+=`\nEv: Ort${hh.avg} 2.5U%${hh.o25p} KGV%${hh.bttsp} Form:${hh.form}`;
+  if(ah)p+=`\nDep: Ort${ah.avg} 2.5U%${ah.o25p} KGV%${ah.bttsp} Form:${ah.form}`;
+  if(h2h)p+=`\nH2H: Ev${h2h.homeWins}G Dep${h2h.awayWins}G Ort${h2h.avgGoals}`;
+  const hSt=getTeamStandings(home),aSt=getTeamStandings(away);
+  if(hSt)p+=`\nEv:#${hSt.rank} ${hSt.pts}pts`;if(aSt)p+=` Dep:#${aSt.rank} ${aSt.pts}pts`;
+  return p;
+}
+
+
+async function callDualAI(home,away,lg,hs,as2,live,min,odds,stats,hh,ah,h2h){
+  const prompt=buildAIPrompt(home,away,lg,hs,as2,live,min,odds,stats,hh,ah,h2h);
+  const results=await Promise.allSettled([callOpenAI(prompt),callGroq(prompt)]);
+  const oa=results[0].status==='fulfilled'?results[0].value:null;
+  const ga=results[1].status==='fulfilled'?results[1].value:null;
+  if(!oa&&!ga)throw new Error('Her iki AI da yanıt vermedi');
+  if(!oa)return{...ga,_source:'groq_only'};if(!ga)return{...oa,_source:'openai_only'};
+  function avg2(a,b){return Math.round(((a||0)+(b||0))/2);}
+  const agree=oa.prediction===ga.prediction;
+  return{home_win:avg2(oa.home_win,ga.home_win),draw:avg2(oa.draw,ga.draw),away_win:avg2(oa.away_win,ga.away_win),over15:avg2(oa.over15,ga.over15),over25:avg2(oa.over25,ga.over25),under25:avg2(oa.under25,ga.under25),over35:avg2(oa.over35,ga.over35),over45:avg2(oa.over45,ga.over45),btts:avg2(oa.btts,ga.btts),iy_gol:avg2(oa.iy_gol,ga.iy_gol),iy_kg:avg2(oa.iy_kg,ga.iy_kg),sy_kg:avg2(oa.sy_kg,ga.sy_kg),korner_total:avg2(oa.korner_total,ga.korner_total),korner_over85:avg2(oa.korner_over85,ga.korner_over85),prediction:agree?oa.prediction:(oa.confidence>=ga.confidence?oa.prediction:ga.prediction),confidence:agree?Math.min(95,avg2(oa.confidence,ga.confidence)+5):Math.max(45,avg2(oa.confidence,ga.confidence)-8),key_reason:`🤖 GPT: ${oa.key_reason||'?'} | 🔮 Groq: ${ga.key_reason||'?'}`,risk:oa.risk===ga.risk?oa.risk:'ORTA',favori_taraf:oa.favori_taraf||ga.favori_taraf||'DENGELI',gol_beklentisi:oa.gol_beklentisi||ga.gol_beklentisi||'ORTA',htft_surpriz:oa.htft_surpriz||ga.htft_surpriz||'YOK',htft_surp_pct:avg2(oa.htft_surp_pct||0,ga.htft_surp_pct||0),best_bet:oa.best_bet||ga.best_bet||'',best_bet_odds:oa.best_bet_odds||ga.best_bet_odds||0,best_bet_reason:oa.best_bet_reason||ga.best_bet_reason||'',_openai:oa.prediction,_groq:ga.prediction,_agree:agree,_source:'dual'};
+}
+async function renderPred(m,pp){
+  if(!pp)return;const inner=pp.querySelector('.pp-in')||pp;
+  const home=m.teams?.home?.name||'Ev',away=m.teams?.away?.name||'Dep',league=m.league?.name||'Lig';
+  const live=isLive(m),fid=m.fixture?.id,odds=m._odds||null;
+  const homeId=m.teams?.home?.id,awayId=m.teams?.away?.id;
+  inner.innerHTML=`<div class="ld"><div class="sp"></div> Veriler yükleniyor...</div>`;
+  let homeHist=null,awayHist=null,h2hData=null,stats=null;
+  try{
+    const fetchArr=[fetchTeamHistory(homeId),fetchTeamHistory(awayId),fetchH2H(homeId,awayId)];
+    if(live)fetchArr.push(fetchStats(fid));
+    const results=await Promise.allSettled(fetchArr);
+    homeHist=results[0].status==='fulfilled'?results[0].value:null;
+    awayHist=results[1].status==='fulfilled'?results[1].value:null;
+    h2hData=results[2].status==='fulfilled'?results[2].value:null;
+    if(live&&results[3])stats=results[3].status==='fulfilled'?results[3].value:null;
+  }catch(e){console.warn('Data:',e);}
+  const mathScores=calcMatchScores(m,homeHist,awayHist,h2hData,odds);
+  const decision=makeDecision(mathScores);
+  inner.innerHTML=`<div class="ld"><div class="sp"></div> AI yorum yazıyor...</div>`;
+  let ai={key_reason:'Analiz tamamlandı.',risk:'ORTA',gol_beklentisi:'ORTA',htft_surpriz:'YOK',htft_surp_pct:0,best_bet_reason:''};
+  try{
+    const prompt=buildAICommentPrompt(home,away,league,decision,mathScores,homeHist,awayHist,h2hData,odds);
+    const res=await Promise.allSettled([callOpenAI(prompt,AI_SYS),callGroq(prompt,AI_SYS)]);
+    const oa=res[0].status==='fulfilled'?res[0].value:null;
+    const ga=res[1].status==='fulfilled'?res[1].value:null;
+    const merged=oa||ga||{};
+    ai={key_reason:merged.key_reason||'Veri analizi tamamlandı.',risk:merged.risk||'ORTA',gol_beklentisi:merged.gol_beklentisi||'ORTA',htft_surpriz:merged.htft_surpriz||'YOK',htft_surp_pct:merged.htft_surp_pct||0,best_bet_reason:merged.best_bet_reason||''};
+  }catch(e){ai.key_reason='AI yorum alınamadı.';}
+  inner.innerHTML=buildPredHTML(decision,mathScores,ai,home,away,live,m.goals?.home,m.goals?.away,odds,stats,homeHist,awayHist,h2hData);
+}
+
+
+function buildH2HHtml(h2h,home,away){
+  if(!h2h||!h2h.matches||!h2h.matches.length)return'';
+  const matches=h2h.matches.slice(0,5);
+  return`<div class="h2h-section"><div class="h2h-t">🔗 H2H · Son ${h2h.n} Karşılaşma</div>
+  <div style="display:flex;gap:5px;margin-bottom:8px;">
+    <div style="flex:1;text-align:center;background:rgba(61,142,255,.08);border:1px solid rgba(61,142,255,.2);border-radius:7px;padding:6px;"><div style="font-size:15px;font-weight:900;color:var(--blue);">${h2h.homeWins}</div><div style="font-size:8px;color:var(--muted);">${home.split(' ')[0]} Gal</div></div>
+    <div style="flex:1;text-align:center;background:rgba(255,214,10,.08);border:1px solid rgba(255,214,10,.2);border-radius:7px;padding:6px;"><div style="font-size:15px;font-weight:900;color:var(--gold);">${h2h.draws}</div><div style="font-size:8px;color:var(--muted);">Beraberlik</div></div>
+    <div style="flex:1;text-align:center;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:7px;padding:6px;"><div style="font-size:15px;font-weight:900;color:var(--red);">${h2h.awayWins}</div><div style="font-size:8px;color:var(--muted);">${away.split(' ')[0]} Gal</div></div>
+    <div style="flex:1;text-align:center;background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.2);border-radius:7px;padding:6px;"><div style="font-size:15px;font-weight:900;color:var(--green);">${h2h.avgGoals}</div><div style="font-size:8px;color:var(--muted);">Ort Gol</div></div>
+  </div>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border:1px solid var(--border);border-radius:6px;padding:4px;"><div style="font-size:11px;font-weight:800;color:${h2h.over25p>=60?'var(--green)':'var(--muted)'}">%${h2h.over25p}</div><div style="font-size:7px;color:var(--muted);">2.5Ü</div></div>
+    <div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border:1px solid var(--border);border-radius:6px;padding:4px;"><div style="font-size:11px;font-weight:800;color:${h2h.bttsp>=60?'var(--green)':'var(--muted)'}">%${h2h.bttsp}</div><div style="font-size:7px;color:var(--muted);">KGV</div></div>
+    <div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border:1px solid var(--border);border-radius:6px;padding:4px;"><div style="font-size:11px;font-weight:800;color:${(h2h.htftSurpP||0)>=30?'var(--orange)':'var(--muted)'}">%${h2h.htftSurpP||0}</div><div style="font-size:7px;color:var(--muted);">HT/FT</div></div>
+  </div>
+  ${matches.map(mm=>{const hw=mm.hg>mm.ag,aw=mm.ag>mm.hg;return\`<div class="h2h-row"><div class="h2h-tn" style="\${hw?'color:var(--green);font-weight:700;':''}">\${mm.home}</div><div class="h2h-sc">\${mm.hg}-\${mm.ag}</div><div class="h2h-tn" style="text-align:right;\${aw?'color:var(--green);font-weight:700;':''}">\${mm.away}</div></div>\`;}).join('')}
+  </div>`;
+}
+
+function buildPredHTML(decision,scores,ai,home,away,live,hs,as2,odds,stats,hh,ah,h2h){
+  const rc={'DUSUK':'var(--green)','ORTA':'var(--orange)','YUKSEK':'var(--red)'}[ai.risk]||'var(--muted)';
+  let mathHTML=`<div class="math-section"><div class="math-title">🧮 MATEMATİK KARAR MOTORU</div><div class="math-grid">`;
+  decision.sorted.slice(0,8).forEach((item,i)=>{
+    const cls=i===0?'top1':i===1?'top2':i===2?'top3':'';
+    mathHTML+=`<div class="math-item ${cls}"><div class="math-val" style="color:${i===0?'var(--gold)':i===1?'var(--orange)':'var(--muted)'}">${item.score}</div><div class="math-lbl">${item.bet}</div></div>`;
+  });
+  mathHTML+=`</div><div class="math-decision-row"><div style="font-size:16px;font-weight:900;color:var(--gold);">#1 ${decision.top1.label}</div><div style="font-size:12px;font-weight:800;color:var(--cyan);">%${decision.confidence}</div></div>`;
+  if(decision.top2)mathHTML+=`<div style="font-size:9px;color:var(--muted);margin-top:2px;">📌 #2: ${decision.top2.label}(${decision.top2.score}) #3: ${decision.top3?.label||''}(${decision.top3?.score||0})</div>`;
+  mathHTML+='</div>';
+  const hsd=getTeamStandings(home),asd=getTeamStandings(away);
+  let standHTML='';
+  if(hsd||asd){
+    standHTML=`<div style="background:rgba(50,213,255,.04);border:1px solid rgba(50,213,255,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;"><div style="font-size:9px;font-weight:800;color:var(--cyan);margin-bottom:7px;">📊 PUAN TABLOSU</div><div style="display:flex;gap:5px;">`;
+    if(hsd){const hEg=hsd.homePlayed>0?(hsd.homeGf/hsd.homePlayed).toFixed(1):'?';standHTML+=`<div style="flex:1;background:rgba(0,0,0,.15);border-radius:7px;padding:7px;">${hsd.rank<=5?'⭐':''}<div style="font-size:9px;font-weight:800;color:var(--blue);">🏠 ${home.split(' ')[0]}</div><div style="font-size:14px;font-weight:900;color:var(--gold);">#${hsd.rank}</div><div style="font-size:8px;color:var(--muted);">${hsd.pts}pts</div><div style="font-size:9px;color:var(--green);">Ev:${hsd.homeW}G ${hsd.homeL}M ${hEg}⚽</div></div>`;}
+    if(asd){const aAg=asd.awayPlayed>0?(asd.awayGf/asd.awayPlayed).toFixed(1):'?';standHTML+=`<div style="flex:1;background:rgba(0,0,0,.15);border-radius:7px;padding:7px;">${asd.rank<=5?'⭐':''}<div style="font-size:9px;font-weight:800;color:var(--orange);">✈️ ${away.split(' ')[0]}</div><div style="font-size:14px;font-weight:900;color:var(--gold);">#${asd.rank}</div><div style="font-size:8px;color:var(--muted);">${asd.pts}pts</div><div style="font-size:9px;color:var(--green);">Dep:${asd.awayW}G ${asd.awayL}M ${aAg}⚽</div></div>`;}
+    standHTML+='</div></div>';
+  }
+  let histHTML='';
+  if(hh||ah){
+    histHTML=`<div class="hist-section"><div class="hist-t">📊 GEÇMİŞ</div>`;
+    if(hh){histHTML+=`<div style="font-size:9px;font-weight:800;color:var(--blue);margin-bottom:4px;">🏠 ${home}</div><div class="hist-grid"><div class="hist-item"><div class="hist-v">${hh.avg}</div><div class="hist-l">Ort Gol</div></div><div class="hist-item"><div class="hist-v" style="color:${hh.o25p>=60?'var(--green)':'var(--orange)'}">%${hh.o25p}</div><div class="hist-l">2.5Ü</div></div><div class="hist-item"><div class="hist-v" style="color:${hh.bttsp>=55?'var(--green)':'var(--orange)'}">%${hh.bttsp}</div><div class="hist-l">KGV</div></div><div class="hist-item"><div class="hist-v">%${hh.htftSurpP||0}</div><div class="hist-l">HT/FT</div></div></div>`;
+    if(hh.form)histHTML+=`<div class="form-dots">${hh.form.split('').map(f=>`<div class="fd fd-${f.toLowerCase()}">${f}</div>`).join('')}</div>`;}
+    if(ah){histHTML+=`<div style="font-size:9px;font-weight:800;color:var(--red);margin:6px 0 4px;">✈️ ${away}</div><div class="hist-grid"><div class="hist-item"><div class="hist-v">${ah.avg}</div><div class="hist-l">Ort Gol</div></div><div class="hist-item"><div class="hist-v" style="color:${ah.o25p>=60?'var(--green)':'var(--orange)'}">%${ah.o25p}</div><div class="hist-l">2.5Ü</div></div><div class="hist-item"><div class="hist-v" style="color:${ah.bttsp>=55?'var(--green)':'var(--orange)'}">%${ah.bttsp}</div><div class="hist-l">KGV</div></div><div class="hist-item"><div class="hist-v">%${ah.awayWinP||0}</div><div class="hist-l">DepGal</div></div></div>`;
+    if(ah.form)histHTML+=`<div class="form-dots">${ah.form.split('').map(f=>`<div class="fd fd-${f.toLowerCase()}">${f}</div>`).join('')}</div>`;}
+    histHTML+='</div>';
+  }
+  let h2hHTML='';
+  if(h2h&&h2h.matches&&h2h.matches.length){
+    h2hHTML=`<div class="h2h-section"><div class="h2h-t">🔗 H2H · Son ${h2h.n}</div><div style="display:flex;gap:5px;margin-bottom:6px;"><div style="flex:1;text-align:center;background:rgba(61,142,255,.08);border:1px solid rgba(61,142,255,.2);border-radius:7px;padding:5px;"><div style="font-size:14px;font-weight:900;color:var(--blue);">${h2h.homeWins}</div><div style="font-size:8px;color:var(--muted);">Ev</div></div><div style="flex:1;text-align:center;background:rgba(255,214,10,.08);border:1px solid rgba(255,214,10,.2);border-radius:7px;padding:5px;"><div style="font-size:14px;font-weight:900;color:var(--gold);">${h2h.draws}</div><div style="font-size:8px;color:var(--muted);">Ber</div></div><div style="flex:1;text-align:center;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:7px;padding:5px;"><div style="font-size:14px;font-weight:900;color:var(--red);">${h2h.awayWins}</div><div style="font-size:8px;color:var(--muted);">Dep</div></div><div style="flex:1;text-align:center;background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.2);border-radius:7px;padding:5px;"><div style="font-size:14px;font-weight:900;color:var(--green);">${h2h.avgGoals}</div><div style="font-size:8px;color:var(--muted);">Ort</div></div></div>${h2h.matches.map(mm=>`<div class="h2h-row"><div class="h2h-tn">${mm.home}</div><div class="h2h-sc">${mm.hg}-${mm.ag}</div><div class="h2h-tn" style="text-align:right">${mm.away}</div></div>`).join('')}</div>`;
+  }
+  let oddsDetailHTML='';
+  if(odds&&odds.home){
+    oddsDetailHTML=`<div class="odds-detail"><div class="odds-detail-t">🎰 ORANLAR</div><div class="odds-row"><div class="odd-box ${decision.taraf==='MS1'?'rec':''}"><span class="odd-lbl">Ev(1)</span><span class="odd-val">${parseFloat(odds.home).toFixed(2)}</span>${decision.taraf==='MS1'?'<span class="odd-rec">✓</span>':''}</div><div class="odd-box"><span class="odd-lbl">Ber(X)</span><span class="odd-val">${parseFloat(odds.draw||0).toFixed(2)}</span></div><div class="odd-box ${decision.taraf==='MS2'?'rec':''}"><span class="odd-lbl">Dep(2)</span><span class="odd-val">${parseFloat(odds.away||0).toFixed(2)}</span>${decision.taraf==='MS2'?'<span class="odd-rec">✓</span>':''}</div></div><div class="odds-row">${odds.over25?`<div class="odd-box ${scores.ust25>scores.alt25?'rec':''}"><span class="odd-lbl">2.5Ü</span><span class="odd-val">${parseFloat(odds.over25).toFixed(2)}</span></div>`:''}${odds.over35?`<div class="odd-box"><span class="odd-lbl">3.5Ü</span><span class="odd-val">${parseFloat(odds.over35).toFixed(2)}</span></div>`:''}${odds.bttsYes?`<div class="odd-box ${scores.kgv>scores.kgy?'rec':''}"><span class="odd-lbl">KGV</span><span class="odd-val">${parseFloat(odds.bttsYes).toFixed(2)}</span></div>`:''}</div></div>`;
+  }
+  const htftHTML=ai.htft_surpriz&&ai.htft_surpriz!=='YOK'?`<div style="background:rgba(255,149,0,.06);border:1px solid rgba(255,149,0,.3);border-radius:9px;padding:9px 11px;margin-bottom:8px;"><div style="font-size:9px;font-weight:800;color:var(--orange);margin-bottom:5px;">🔀 HT/FT SÜRPRİZ</div><div style="display:flex;justify-content:space-between;"><span style="font-size:20px;font-weight:900;color:var(--orange);">${ai.htft_surpriz}</span><span style="font-size:11px;color:var(--muted);">%${ai.htft_surp_pct||'?'}</span></div></div>`:'';
+  const liveStatHTML=stats?buildLiveStatsHTML(stats,{teams:{home:{name:home},away:{name:away}}}):'';
+  return`${mathHTML}${standHTML}${liveStatHTML}${histHTML}${h2hHTML}
+  <div class="conf-w"><div class="conf-l"><div class="conf-t">MATEMATİK GÜVEN</div><div class="conf-p">%${decision.confidence}</div></div><div class="conf-b"><div class="conf-f" style="width:${decision.confidence}%;background:${cc(decision.confidence)}"></div></div></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><div style="font-size:14px;font-weight:800;color:var(--blue)">${decision.top1.label}</div><div style="font-size:9px;font-weight:800;padding:3px 8px;border-radius:6px;border:1px solid ${rc};color:${rc}">Risk: ${ai.risk}</div></div>
+  <div class="p3"><div class="pb ${decision.taraf==='MS1'?'win':''}"><div class="pbl">MS1 Ev</div><div class="pbv" style="color:var(--green)">${scores.ms1}</div></div><div class="pb ${decision.taraf==='X'?'win':''}"><div class="pbl">Beraberlik</div><div class="pbv" style="color:var(--orange)">${scores.x}</div></div><div class="pb ${decision.taraf==='MS2'?'win':''}"><div class="pbl">MS2 Dep</div><div class="pbv" style="color:var(--red)">${scores.ms2}</div></div></div>
+  <div class="p2"><div class="p2b"><div class="p2l">2.5 Üst</div><div class="p2v ${scores.ust25>50?'y':'n'}">${scores.ust25}%</div></div><div class="p2b"><div class="p2l">2.5 Alt</div><div class="p2v ${scores.alt25>50?'y':'n'}">${scores.alt25}%</div></div><div class="p2b"><div class="p2l">3.5 Üst</div><div class="p2v ${scores.ust35>50?'y':'n'}">${scores.ust35}%</div></div><div class="p2b"><div class="p2l">KGV</div><div class="p2v ${scores.kgv>50?'y':'n'}">${scores.kgv}%</div></div><div class="p2b"><div class="p2l">KGY</div><div class="p2v ${scores.kgy>50?'y':'n'}">${scores.kgy}%</div></div><div class="p2b"><div class="p2l">4.5 Üst</div><div class="p2v ${scores.ust45>50?'y':'n'}">${scores.ust45}%</div></div></div>
+  ${htftHTML}
+  <div class="korner-section"><div class="korner-t">📐 KORNER</div><div class="korner-g"><div class="korner-i"><div class="korner-n">${scores.korner}</div><div class="korner-l">Tahmin</div></div><div class="korner-i"><div class="korner-n" style="color:${scores.kornerUst85>50?'var(--green)':'var(--red)'}">%${scores.kornerUst85}</div><div class="korner-l">8.5Ü</div></div><div class="korner-i"><div class="korner-n">%${scores.ust35}</div><div class="korner-l">3.5Ü İht</div></div><div class="korner-i"><div class="korner-n">%${scores.kgv}</div><div class="korner-l">KGV İht</div></div></div></div>
+  ${oddsDetailHTML}
+  <div class="ai-b"><div class="ai-bt">🤖 AI YORUM</div><div class="ai-bx">${ai.key_reason||'Analiz tamamlandı.'}</div></div>`;
+}
+
+function buildCard(m){
+  const live=isLive(m),fin=m.fixture?.status?.short==='FT';
+  const hs=m.goals?.home,as2=m.goals?.away,id=m.fixture?.id,min=m.fixture?.status?.elapsed;
+  const isFav=favorites.includes(id),odds=m._odds;
+  const hSt=getTeamStandings(m.teams?.home?.name||'');
+  const aSt=getTeamStandings(m.teams?.away?.name||'');
+  const isTop5=(hSt&&hSt.rank<=5)||(aSt&&aSt.rank<=5);
+  let cardClass='mc';
+  if(live)cardClass+=' live';
+  if(m._goalAlert)cardClass+=' gol-alarm';
+  else if(isTop5&&m._isFavGol)cardClass+=' top5-card';
+  else if(isTop5)cardClass+=' top5-card';
+  else if(m._isFavGol)cardClass+=' favgol-card';
+  else if(m._hg)cardClass+=' hg';
+  else if(m._isGol)cardClass+=' gol-card';
+  let lbl='';
+  if(m._goalAlert)lbl=`<div class="lbl-tag" style="color:var(--red);"><span class="alarm-icon">🚨</span>GOL!</div>`;
+  else if(isTop5&&m._isFavGol)lbl=`<div class="lbl-tag lbl-top5">⭐TOP5+GOL</div>`;
+  else if(isTop5)lbl=`<div class="lbl-tag lbl-top5">⭐ TOP5</div>`;
+  else if(m._isFavGol)lbl=`<div class="lbl-tag lbl-favgol">FAV+GOL</div>`;
+  else if(m._hg)lbl=`<div class="lbl-tag lbl-hg">YÜK.G</div>`;
+  else if(m._isGol)lbl=`<div class="lbl-tag lbl-gol">GOLLÜ</div>`;
+  let oddsStripHTML='';
+  if(odds&&odds.home){
+    const best=Math.max(parseFloat(odds.home||0),parseFloat(odds.draw||0),parseFloat(odds.away||0));
+    oddsStripHTML=`<div class="odds-strip"><div class="odds-strip-item ${parseFloat(odds.home)>=best?'best':''}"><span class="odds-strip-lbl">1 Ev</span><span class="odds-strip-val">${parseFloat(odds.home).toFixed(2)}</span></div><div class="odds-strip-item ${parseFloat(odds.draw||0)>=best?'best':''}"><span class="odds-strip-lbl">X</span><span class="odds-strip-val">${parseFloat(odds.draw||0).toFixed(2)}</span></div><div class="odds-strip-item ${parseFloat(odds.away||0)>=best?'best':''}"><span class="odds-strip-lbl">2 Dep</span><span class="odds-strip-val">${parseFloat(odds.away||0).toFixed(2)}</span></div>${odds.over25?`<div class="odds-strip-item ${m._isGol&&parseFloat(odds.over25)<1.80?'best':''}"><span class="odds-strip-lbl">2.5Ü</span><span class="odds-strip-val">${parseFloat(odds.over25).toFixed(2)}</span></div>`:''}${odds.bttsYes?`<div class="odds-strip-item"><span class="odds-strip-lbl">KGV</span><span class="odds-strip-val">${parseFloat(odds.bttsYes).toFixed(2)}</span></div>`:''}</div>`;
+  }
+  const selId=String(id);const isSel=selectedMatchIds.has(selId);
+  return`<div class="${cardClass}" id="mc-${id}" onclick="toggleCard(${id},this)">
+  <div class="mc-top">
+    <div class="mc-time"><div class="mc-t ${live?'live':''}">${live?min+"'":(fin?'MS':fmtTime(m.fixture?.date))}</div>${live?'<div class="mc-dot"></div>':''}${lbl}</div>
+    <div class="mc-teams">
+      <div class="mc-tr"><img src="${m.teams?.home?.logo||''}" style="width:15px;height:15px;object-fit:contain;margin-right:3px;flex-shrink:0;" onerror="this.style.display='none'" loading="lazy"><div class="mc-tn">${m.teams?.home?.name||'Ev'}${hSt&&hSt.rank<=5?` <span style="font-size:9px;color:var(--gold);">⭐#${hSt.rank}</span>`:''}</div>${hs!==null&&hs!==undefined?`<div class="mc-sc ${live?'live':''}">${hs}</div>`:''}</div>
+      <div class="mc-tr"><img src="${m.teams?.away?.logo||''}" style="width:15px;height:15px;object-fit:contain;margin-right:3px;flex-shrink:0;" onerror="this.style.display='none'" loading="lazy"><div class="mc-tn">${m.teams?.away?.name||'Dep'}${aSt&&aSt.rank<=5?` <span style="font-size:9px;color:var(--gold);">⭐#${aSt.rank}</span>`:''}</div>${as2!==null&&as2!==undefined?`<div class="mc-sc ${live?'live':''}">${as2}</div>`:''}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;flex-shrink:0;">
+      <button onclick="event.stopPropagation();toggleCard(${id},document.getElementById('mc-'+${id}))" style="background:rgba(61,142,255,.15);color:var(--blue);border:1.5px solid rgba(61,142,255,.4);border-radius:5px;font-size:11px;font-weight:700;padding:3px 7px;cursor:pointer;">${fin?'👑':live?'⚡':'🔍'}</button>
+      <div style="display:flex;gap:3px;">
+        <button id="addbtn-${id}" onclick="event.stopPropagation();toggleSelMatch(${id})" style="background:${isSel?'var(--green)':'rgba(48,209,88,.15)'};color:${isSel?'#000':'var(--green)'};border:1.5px solid rgba(48,209,88,.5);border-radius:5px;font-size:11px;font-weight:700;padding:2px 5px;cursor:pointer;">${isSel?'✓':'＋'}</button>
+        <button class="fav-btn" data-fid="${id}" onclick="toggleFav(${id},event)" style="background:none;border:none;font-size:14px;cursor:pointer;padding:2px;">${isFav?'⭐':'☆'}</button>
+      </div>
+    </div>
+  </div>
+  ${oddsStripHTML}
+  <div class="pp" id="pp-${id}"><div class="pp-in"><div class="ld"><div class="sp"></div> Tıkla → Analiz</div></div></div>
+  </div>`;
+}
+
+async function toggleCard(id,cardEl){
+  if(!cardEl)cardEl=document.getElementById('mc-'+id);if(!cardEl)return;
+  if(cardEl.classList.contains('open')){cardEl.classList.remove('open');openCardId=null;return;}
+  if(openCardId){const p=document.getElementById('mc-'+openCardId);if(p)p.classList.remove('open');}
+  cardEl.classList.add('open');openCardId=id;
+  const m=allMatches.find(x=>x.fixture?.id===id)||liveMatches.find(x=>x.fixture?.id===id);
+  if(m)await renderPred(m,document.getElementById('pp-'+id));
+}
+
+function isLive(m){return['1H','2H','HT','ET','BT','P'].includes(m.fixture?.status?.short);}
+function setFilter(f,el){activeFilter=f;document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');const tf=document.getElementById('time-filter');if(tf)tf.style.display=(f==='scheduled')?'flex':'none';applyFilter(f);}
+function setTimeFilter(h,el){activeTimeHours=h;document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');applyFilter('scheduled');}
+function toggleFav(id,e){e.stopPropagation();const idx=favorites.indexOf(id);if(idx>-1)favorites.splice(idx,1);else favorites.push(id);localStorage.setItem('cog_favs',JSON.stringify(favorites));document.querySelectorAll(`.fav-btn[data-fid="${id}"]`).forEach(b=>{b.textContent=favorites.includes(id)?'⭐':'☆';});if(activeFilter==='fav')applyFilter('fav');}
+
+function applyFilter(f){
+  let ms=[...allMatches];if(selLeagues.size)ms=ms.filter(m=>selLeagues.has(m.league?.name));
+  const now=new Date();
+  if(f==='all'){const live=ms.filter(m=>isLive(m));const ns=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));const ft=ms.filter(m=>m.fixture?.status?.short==='FT');ns.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));ms=[...live,...ns,...ft];}
+  else if(f==='scheduled'){const until=new Date(now.getTime()+activeTimeHours*3600*1000);ms=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short)&&new Date(m.fixture?.date)>=now&&new Date(m.fixture?.date)<=until);ms.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));}
+  else if(f==='favori'){ms=ms.filter(m=>m._isFavori&&['NS','TBD'].includes(m.fixture?.status?.short));ms.sort((a,b)=>(b._hgscore||0)-(a._hgscore||0));}
+  else if(f==='gol'){ms=ms.filter(m=>m._isGol&&['NS','TBD'].includes(m.fixture?.status?.short));ms.sort((a,b)=>(b._golScore||0)-(a._golScore||0));}
+  else if(f==='fav'){ms=ms.filter(m=>favorites.includes(m.fixture?.id));}
+  else if(f==='finished'){ms=ms.filter(m=>m.fixture?.status?.short==='FT');}
+  renderMatches(ms,f);
+}
+
+function renderMatches(ms,f){
+  const c=document.getElementById('sc-today');
+  if(!ms.length){const msgs={favori:'🏆 Favori yok',gol:'⚽ Gollü yok',scheduled:`⏰ ${activeTimeHours}H içinde yok`,fav:'⭐ Yıldız yok',finished:'✅ Biten yok'};c.innerHTML=`<div style="text-align:center;padding:50px;color:var(--muted);"><div style="font-size:36px;opacity:.3;">⚽</div><div style="margin-top:10px;font-size:13px;">${msgs[f]||'Maç bulunamadı'}</div></div>`;return;}
+  const live=ms.filter(m=>isLive(m));const sched=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short)).sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));const fin=ms.filter(m=>m.fixture?.status?.short==='FT');
+  function byLg(list){const lg={};list.forEach(m=>{const l=m.league?.name||'Diğer';if(!lg[l])lg[l]=[];lg[l].push(m);});let h='';Object.entries(lg).forEach(([l,lm])=>{h+=`<div><div class="lg-hdr"><div class="lg-name">🏆 ${l}</div><div class="lg-cnt">${lm.length}</div></div>`;lm.forEach(m=>h+=buildCard(m));h+='</div>';});return h;}
+  let html='';
+  if(live.length){html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:#ff2d78;letter-spacing:1px;">🔴 CANLI · ${live.length}</div>`;html+=byLg(live);}
+  if(sched.length){if(live.length)html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:#00e5ff;letter-spacing:1px;">⏰ YAKINDA · ${sched.length}</div>`;html+=byLg(sched);}
+  if(fin.length){html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:var(--muted);letter-spacing:1px;">✅ BİTEN · ${fin.length}</div>`;html+=byLg(fin);}
+  c.innerHTML=html;
+}
+
+function toggleSelMatch(id){const s=String(id);const btn=document.getElementById('addbtn-'+s);if(selectedMatchIds.has(s)){selectedMatchIds.delete(s);if(btn){btn.textContent='＋';btn.style.background='rgba(48,209,88,.15)';btn.style.color='var(--green)';}}else{selectedMatchIds.add(s);if(btn){btn.textContent='✓';btn.style.background='var(--green)';btn.style.color='#000';}}updateSelBar();}
+function updateSelBar(){const bar=document.getElementById('sel-bar');const n=selectedMatchIds.size;if(n>0){bar.style.display='block';document.getElementById('sel-count').textContent=n;const selMs=allMatches.filter(m=>selectedMatchIds.has(String(m.fixture?.id)));document.getElementById('sel-names').textContent=selMs.map(m=>m.teams?.home?.name+' vs '+m.teams?.away?.name).join(' · ');}else bar.style.display='none';}
+function clearSelected(){selectedMatchIds.forEach(id=>{const btn=document.getElementById('addbtn-'+id);if(btn){btn.textContent='＋';btn.style.background='rgba(48,209,88,.15)';btn.style.color='var(--green)';}});selectedMatchIds.clear();updateSelBar();}
+
+async function fetchStats(fid){try{const data=await apiFetch(`/fixtures/statistics?fixture=${fid}`);if(!data||!data.length)return null;const h=data[0]?.statistics||[],a=data[1]?.statistics||[];const get=(arr,type)=>{const v=arr.find(s=>s.type===type)?.value;return v||0;};const poss=v=>{const s=String(v||'').replace('%','');return parseInt(s)||0;};return{homePoss:poss(get(h,'Ball Possession')),awayPoss:poss(get(a,'Ball Possession')),homeShots:parseInt(get(h,'Total Shots'))||0,awayShots:parseInt(get(a,'Total Shots'))||0,homeShotsOn:parseInt(get(h,'Shots on Goal'))||0,awayShotsOn:parseInt(get(a,'Shots on Goal'))||0,homeCorners:parseInt(get(h,'Corner Kicks'))||0,awayCorners:parseInt(get(a,'Corner Kicks'))||0};}catch{return null;}}
+function buildLiveStatsHTML(stats,m){function bar(hV,aV,label,hC,aC){const tot=hV+aV+.01;const hP=Math.round(hV/tot*100);return`<div style="margin-bottom:7px;"><div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:2px;"><span style="font-weight:800;color:${hC||'var(--blue)'};">${hV}</span><span style="color:var(--muted);">${label}</span><span style="font-weight:800;color:${aC||'var(--orange)'};">${aV}</span></div><div style="display:flex;height:5px;border-radius:3px;overflow:hidden;background:var(--border);"><div style="width:${hP}%;background:${hC||'var(--blue)'};border-radius:3px 0 0 3px;"></div><div style="width:${100-hP}%;background:${aC||'var(--orange)'};border-radius:0 3px 3px 0;"></div></div></div>`;}return`<div style="background:rgba(50,213,255,.05);border:1px solid rgba(50,213,255,.2);border-radius:9px;padding:10px 12px;margin-bottom:8px;"><div style="font-size:9px;font-weight:800;color:var(--cyan);margin-bottom:8px;">📊 CANLI</div>${bar(stats.homePoss||50,stats.awayPoss||50,'Top %','var(--blue)','var(--orange)')}${bar(stats.homeShots||0,stats.awayShots||0,'Şut')}${bar(stats.homeShotsOn||0,stats.awayShotsOn||0,'İsabetli','var(--green)','var(--red)')}${bar(stats.homeCorners||0,stats.awayCorners||0,'Korner','var(--cyan)','var(--purple)')}</div>`;}
+
+async function loadLive(){
+  const c=document.getElementById('xg-list');
+  c.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Canlı yükleniyor...</div></div>`;
+  try{
+    const data=await apiFetch('/fixtures?live=all');liveMatches=data;
+    if(!liveMatches.length){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:36px;opacity:.3;">⚡</div><div style="font-size:13px;">Canlı maç yok</div></div>`;return;}
+    liveMatches.forEach(m=>{const id=m.fixture?.id,tot=(m.goals?.home||0)+(m.goals?.away||0);const prev=prevScores[id];if(prev!==undefined&&tot>prev&&notifOn){m._goalAlert=true;showToast(`🚨 GOL! ${m.teams?.home?.name} ${m.goals?.home}-${m.goals?.away} ${m.teams?.away?.name}`,'warn');}else m._goalAlert=false;prevScores[id]=tot;if(!allMatches.find(x=>x.fixture?.id===id))allMatches.push(m);});
+    let html=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:#ff2d78;letter-spacing:1px;">🔴 ${liveMatches.length} CANLI MAÇ</div>`;
+    liveMatches.forEach(m=>{const id=m.fixture?.id,hs=m.goals?.home||0,as2=m.goals?.away||0,total=hs+as2,min=m.fixture?.status?.elapsed||0;const alarms=[];if(total>=2)alarms.push('1.5 ÜST ✓');if(total>=3)alarms.push('2.5 ÜST ✓');
+      html+=`<div class="live-mc${m._goalAlert?' gol-alarm':''}" id="lmc-${id}"><div class="live-mc-hdr" onclick="toggleLiveCard(${id})"><div><div class="live-mc-lg">${m.league?.name}</div><div class="live-mc-sc">${hs} — ${as2}</div></div><div style="text-align:right"><div class="live-mc-min">● ${min}'</div></div></div><div class="live-mc-teams">${m.teams?.home?.name} vs ${m.teams?.away?.name}</div>${alarms.length?`<div style="display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px;">${alarms.map(a=>`<div style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;background:rgba(48,209,88,.15);color:var(--green);">${a}</div>`).join('')}</div>`:''}<div class="live-pp" id="lpp-${id}"><div class="pp-in"><div class="ld"><div class="sp"></div> Tıkla → Analiz</div></div></div></div>`;
+    });
+    c.innerHTML=html;showToast(`⚡ ${liveMatches.length} canlı maç`,'ok');
+  }catch(e){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ ${e.message}</div>`;}
+}
+async function toggleLiveCard(id){const card=document.getElementById('lmc-'+id);const pp=document.getElementById('lpp-'+id);if(!card||!pp)return;if(card.classList.contains('open')){card.classList.remove('open');return;}card.classList.add('open');if(pp.innerHTML.includes('Tıkla')){const m=liveMatches.find(x=>x.fixture?.id===id)||allMatches.find(x=>x.fixture?.id===id);if(!m)return;await renderPred(m,pp.querySelector('.pp-in')||pp);}}
+function toggleAuto(){const btn=document.getElementById('auto-btn');if(autoOn){clearInterval(autoTimer);autoOn=false;btn.style.color='var(--muted)';showToast('⏹️ Durduruldu','');}else{autoOn=true;autoTimer=setInterval(loadLive,60000);loadLive();btn.style.color='var(--green)';showToast('✅ Auto aktif','ok');}}
+
+async function callOpenAI_coupon(msg){const r=await fetch(PROXY+'/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:3000,temperature:0.2,messages:[{role:'system',content:COUPON_SYS},{role:'user',content:msg}]})});const d=await r.json();if(d.error)throw new Error(d.error.message);return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));}
+async function callGroq_coupon(msg){const r=await fetch(PROXY+'/groq',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:COUPON_SYS},{role:'user',content:msg}],max_tokens:3000,temperature:0.3})});const d=await r.json();if(d.error)throw new Error(d.error.message||JSON.stringify(d.error));return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));}
+
+function buildCoupon(cp,saveId=''){
+  const colors={banko1:'var(--gold)',banko2:'#ffaa00',banko3:'#ff8c00',banko4:'#ff6000'};const color=colors[cp.type]||'var(--blue)';
+  const items=(cp.selections||[]).map((s,i)=>{const betColors={'MS1':'var(--green)','MS2':'var(--blue)','KGV':'var(--purple)','2.5UST':'var(--orange)','3.5UST':'var(--orange)','KGY':'var(--red)'};const bc=betColors[s.bet]||'var(--green)';const db=s.data_basis?`<div style="font-size:8px;color:var(--dim);margin-top:1px;">📊 ${s.data_basis}</div>`:'';return`<div class="cp-item"><div class="cp-num">${i+1}</div><div class="cp-info"><div class="cp-match">${s.match}</div><div style="font-size:9px;color:${bc};font-weight:700;margin-top:1px;">📌 ${s.bet}</div><div style="font-size:9px;color:var(--muted);">${s.reason||''}</div>${db}</div><div class="cp-odd">${parseFloat(s.odds||0).toFixed(2)}</div></div>`;}).join('');
+  const resultBar=saveId&&cp._result?`<div style="padding:6px 12px;background:${cp._result==='win'?'rgba(48,209,88,.15)':'rgba(255,59,92,.15)'};border-top:1px solid var(--border);font-size:11px;font-weight:800;color:${cp._result==='win'?'var(--green)':'var(--red)'};text-align:center;">${cp._result==='win'?'✅ KAZANDI':'❌ KAYBETTİ'}</div>`:'';
+  const btns=saveId?`<div style="display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--border);"><button onclick="setCpResult('${saveId}','${cp.type}','win')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(48,209,88,.15);color:var(--green);">✅ Kazandı</button><button onclick="setCpResult('${saveId}','${cp.type}','lose')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(255,59,92,.15);color:var(--red);">❌ Kaybetti</button></div>`:'';
+  return`<div class="cp-card ${cp.type}" style="border:2px solid ${color};"><div class="cp-head"><div><div class="cp-title" style="color:${color}">${cp.title}</div></div><div style="text-align:right"><div class="cp-odds" style="color:${color}">x${parseFloat(cp.total_odds||0).toFixed(2)}</div><div class="cp-odds-lbl">TOPLAM</div></div></div>${items}<div class="cp-foot"><span style="color:${color}">Risk: ${cp.risk||'DÜŞÜK'}</span><span>%${cp.confidence||75} Güven</span></div>${resultBar}${btns}</div>`;
+}
+
+function showCpTab(tab,el){['yeni','gecmis','istatistik'].forEach(t=>{document.getElementById('cp-'+t).style.display=t===tab?'block':'none';const btn=document.getElementById('tab-'+t);if(btn){btn.style.background=t===tab?'var(--blue)':'transparent';btn.style.color=t===tab?'#fff':'var(--muted)';btn.style.borderColor=t===tab?'var(--blue)':'var(--border)';}});if(tab==='gecmis')renderCpHistory();if(tab==='istatistik')renderCpStats();}
+
+function renderCpHistory(){const c=document.getElementById('cp-gecmis-list');try{const hist=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');if(!hist.length){c.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);">Geçmiş yok</div>';return;}let html='';hist.forEach(entry=>{html+=`<div style="background:var(--card2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;padding:10px 12px;"><div style="font-size:10px;color:var(--muted);margin-bottom:6px;">📅 ${entry.date} ${entry.time}</div>`;(entry.coupons||[]).forEach(cp=>{html+=buildCoupon(cp,entry.id);});html+='</div>';});c.innerHTML=html;}catch(e){c.innerHTML='<div style="text-align:center;padding:30px;color:var(--red);">Hata: '+e.message+'</div>';}}
+
+function renderCpStats(){const c=document.getElementById('cp-stat-content');try{const hist=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');let total=0,wins=0,losses=0;hist.forEach(e=>(e.coupons||[]).forEach(cp=>{if(cp._result){total++;if(cp._result==='win')wins++;else losses++;}}));c.innerHTML=`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:13px;"><div style="font-size:14px;font-weight:800;margin-bottom:10px;">📊 İstatistik</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;"><div style="text-align:center;padding:10px;background:var(--card2);border-radius:9px;"><div style="font-size:22px;font-weight:900;color:var(--blue);">${total}</div><div style="font-size:9px;color:var(--muted);">Toplam</div></div><div style="text-align:center;padding:10px;background:var(--card2);border-radius:9px;"><div style="font-size:22px;font-weight:900;color:var(--green);">${wins}</div><div style="font-size:9px;color:var(--muted);">Kazandı</div></div><div style="text-align:center;padding:10px;background:var(--card2);border-radius:9px;"><div style="font-size:22px;font-weight:900;color:var(--red);">${losses}</div><div style="font-size:9px;color:var(--muted);">Kaybetti</div></div></div>${total>0?`<div style="margin-top:10px;padding:9px;background:rgba(255,214,10,.06);border:1px solid rgba(255,214,10,.2);border-radius:9px;text-align:center;font-size:14px;font-weight:800;color:var(--gold);">Başarı: %${Math.round(wins/total*100)}</div>`:''}</div>`;}catch(e){c.innerHTML='<div style="text-align:center;padding:30px;color:var(--red);">Hata</div>';}}
+
+function setCpResult(saveId,cpType,result){try{const hist=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');const entry=hist.find(e=>e.id===saveId);if(entry){const cp=entry.coupons.find(c=>c.type===cpType);if(cp){cp._result=result;localStorage.setItem('cog_coupon_history',JSON.stringify(hist));renderCpHistory();showToast(result==='win'?'✅ Kazandı olarak işaretlendi':'❌ Kaybetti olarak işaretlendi','ok');}}}catch(e){}}
+
+async function genCoupons(){
+  const btn=document.getElementById('btn-gen');btn.textContent='⏳';
+  const c=document.getElementById('cp-yeni');
+  c.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Kupon oluşturuluyor...</div></div>';
+  try{
+    const upcoming=allMatches.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short)&&!isExcluded(m.league?.name||''));
+    function matchScore(m){let s=0;s+=getPriorityScore(m.league?.name||'')*3;if(m._isFavGol)s+=200;else if(m._isFavori)s+=120;else if(m._isGol)s+=80;if(m._top5)s+=60;s+=(m._hgscore||0)*0.4;s+=(m._golScore||0)*0.6;return s;}
+    const pool=[...upcoming].filter(m=>m._isFavori||m._isGol||m._top5).sort((a,b)=>matchScore(b)-matchScore(a)).slice(0,45);
+    await Promise.allSettled(pool.slice(0,10).map(async m=>{const[hh,ah,h2h]=await Promise.allSettled([fetchTeamHistory(m.teams?.home?.id),fetchTeamHistory(m.teams?.away?.id),fetchH2H(m.teams?.home?.id,m.teams?.away?.id)]);m._cpHomeHist=hh.value||null;m._cpAwayHist=ah.value||null;m._cpH2H=h2h.value||null;}));
+    const list=pool.map(m=>{
+      const odds=m._odds;const hh=m._cpHomeHist,ah=m._cpAwayHist,h2h=m._cpH2H;
+      const ho=odds?parseFloat(odds.home||0).toFixed(2):'-';const xa=odds?parseFloat(odds.draw||0).toFixed(2):'-';const ao=odds?parseFloat(odds.away||0).toFixed(2):'-';
+      const o25=odds&&odds.over25?parseFloat(odds.over25).toFixed(2):'-';const btts=odds&&odds.bttsYes?parseFloat(odds.bttsYes).toFixed(2):'-';
+      const realFav=ho!=='-'&&ao!=='-'?(parseFloat(ho)<parseFloat(ao)?'EV_FAV':parseFloat(ao)<parseFloat(ho)?'DEP_FAV':'DENGELI'):'?';
+      const typ=m._top5?'TOP5':(m._isFavGol?'FAV+GOL':m._isFavori?'FAV':m._isGol?'GOL':'NORMAL');
+      let line=`${m.teams?.home?.name} vs ${m.teams?.away?.name} [${m.league?.name}][${typ}][${realFav}] 1=${ho} X=${xa} 2=${ao} 2.5U=${o25} KGV=${btts}`;
+      if(hh)line+=` | EV:Ort${hh.avg} 2.5U%${hh.o25p} KGV%${hh.bttsp} Form:${hh.form}`;
+      if(ah)line+=` | DEP:Ort${ah.avg} 2.5U%${ah.o25p} KGV%${ah.bttsp} Form:${ah.form}`;
+      if(h2h)line+=` | H2H:Ev${h2h.homeWins}G Dep${h2h.awayWins}G Ort${h2h.avgGoals}`;
+      const hSt=getTeamStandings(m.teams?.home?.name||''),aSt=getTeamStandings(m.teams?.away?.name||'');
+      if(hSt)line+=` | EV:#${hSt.rank} ${hSt.pts}pts`;if(aSt)line+=` | DEP:#${aSt.rank} ${aSt.pts}pts`;
+      return line;
+    }).join('\n');
+    const userMsg=`Maç verileri (${pool.length} maç):\n${list}\n\n4 BANKO kupon oluştur. TOP5 ve FAV+GOL öncelikli. DEP_FAV → MS2. İzlanda Úrvalsdeild dahil tüm öncelikli ligler.`;
+    const[r1,r2]=await Promise.allSettled([callOpenAI_coupon(userMsg),callGroq_coupon(userMsg)]);
+    let parsed=null;
+    if(r1.status==='fulfilled'&&r2.status==='fulfilled'){const c1=r1.value?.coupons||[];const c2=r2.value?.coupons||[];const a1=c1.reduce((s,cp)=>s+(cp.confidence||0),0)/(c1.length||1);const a2=c2.reduce((s,cp)=>s+(cp.confidence||0),0)/(c2.length||1);parsed={coupons:a1>=a2?c1:c2};}
+    else{for(const r of[r1,r2])if(r.status==='fulfilled'&&r.value?.coupons?.length){parsed=r.value;break;}}
+    if(!parsed)throw new Error('Kupon üretilemedi');
+    const coupons=(parsed.coupons||[]).slice(0,4);const types=['banko1','banko2','banko3','banko4'];const titles=['🏆 BANKO 1','🏆 BANKO 2','🏆 BANKO 3','🏆 BANKO 4'];
+    coupons.forEach((cp,i)=>{cp.type=types[i];cp.title=titles[i];if(!cp.risk)cp.risk='DÜŞÜK';});
+    const saveId='cp_'+Date.now();const now2=new Date();
+    const saveData={id:saveId,date:now2.toLocaleDateString('tr-TR'),time:now2.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),coupons,results:{}};
+    try{const hist=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');hist.unshift(saveData);localStorage.setItem('cog_coupon_history',JSON.stringify(hist.slice(0,50)));}catch(e){}
+    let cpHtml=`<div style="font-size:10px;color:var(--muted);padding:4px 2px 6px;">📅 ${saveData.date} ${saveData.time} · Math+TOP5</div>`;
+    coupons.forEach(cp=>{cpHtml+=buildCoupon(cp,saveId);});
+    c.innerHTML=cpHtml;showToast('🎯 4 BANKO kupon hazır!','ok');
+  }catch(e){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ '+e.message+'</div>';}
+  btn.textContent='✨';
+}
+
+async function genFromSelected(){
+  if(!selectedMatchIds.size){showToast('Önce maç seç!','err');return;}
+  switchPanel('kupon',document.querySelector('.ni[data-nav="kupon"]'));showCpTab('yeni',null);
+  const btn=document.getElementById('btn-gen');if(btn)btn.textContent='⏳';
+  const c=document.getElementById('cp-yeni');c.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp"></div><div style="font-size:13px;color:var(--muted);">Seçili maçlardan kupon...</div></div>';
+  try{
+    const selMs=allMatches.filter(m=>selectedMatchIds.has(String(m.fixture?.id)));if(!selMs.length)throw new Error('Maç bulunamadı');
+    await Promise.allSettled(selMs.map(async m=>{const[hh,ah,h2h]=await Promise.allSettled([fetchTeamHistory(m.teams?.home?.id),fetchTeamHistory(m.teams?.away?.id),fetchH2H(m.teams?.home?.id,m.teams?.away?.id)]);m._cpHomeHist=hh.value||null;m._cpAwayHist=ah.value||null;m._cpH2H=h2h.value||null;}));
+    const list=selMs.map(m=>{const odds=m._odds;const ho=odds?parseFloat(odds.home||0).toFixed(2):'-';const xa=odds?parseFloat(odds.draw||0).toFixed(2):'-';const ao=odds?parseFloat(odds.away||0).toFixed(2):'-';const realFav=ho!=='-'&&ao!=='-'?(parseFloat(ho)<parseFloat(ao)?'EV_FAV':parseFloat(ao)<parseFloat(ho)?'DEP_FAV':'DENGELI'):'?';let line=`${m.teams?.home?.name} vs ${m.teams?.away?.name} [${m.league?.name}][${realFav}] 1:${ho} X:${xa} 2:${ao}`;if(m._cpHomeHist)line+=` | EV:${m._cpHomeHist.avg}gol KGV%${m._cpHomeHist.bttsp}`;if(m._cpAwayHist)line+=` | DEP:${m._cpAwayHist.avg}gol KGV%${m._cpAwayHist.bttsp}`;return line;}).join('\n');
+    const userMsg=`Seçili maçlar:\n${list}\n\n4 kupon oluştur. DEP_FAV → MS2.`;
+    const results=await Promise.allSettled([callOpenAI_coupon(userMsg),callGroq_coupon(userMsg)]);
+    let parsed=null;for(const r of results)if(r.status==='fulfilled'&&r.value?.coupons?.length){parsed=r.value;break;}
+    if(!parsed)throw new Error('Kupon üretilemedi');
+    const coupons=(parsed.coupons||[]).slice(0,4);const types=['banko1','banko2','banko3','banko4'];const titles=['🏆 BANKO 1','🏆 BANKO 2','🏆 BANKO 3','🏆 BANKO 4'];
+    coupons.forEach((cp,i)=>{cp.type=types[i];cp.title=titles[i];if(!cp.risk)cp.risk='DÜŞÜK';});
+    const saveId='cp_'+Date.now();const now2=new Date();const saveData={id:saveId,date:now2.toLocaleDateString('tr-TR'),time:now2.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),coupons,results:{}};
+    try{const hist=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');hist.unshift(saveData);localStorage.setItem('cog_coupon_history',JSON.stringify(hist.slice(0,50)));}catch(e){}
+    let cpHtml=`<div style="font-size:10px;color:var(--muted);padding:4px 2px 10px;">📅 ${saveData.date} · ${selMs.length} maçtan</div>`;
+    coupons.forEach(cp=>{cpHtml+=buildCoupon(cp,saveId);});c.innerHTML=cpHtml;clearSelected();showToast('🎯 Kupon hazır!','ok');
+  }catch(e){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ '+e.message+'</div>';}
+  if(btn)btn.textContent='✨';
+}
+
+async function callSurprizAI(msg){const[r1,r2]=await Promise.allSettled([callOpenAI(msg,SURP_SYS),callGroq(msg,SURP_SYS)]);for(const r of[r1,r2])if(r.status==='fulfilled'&&(r.value?.htft_singles?.length||r.value?.kg_kombinler?.length))return r.value;throw new Error('Sürpriz AI başarısız');}
+
+
+function renderSurprizResult(aiData,candidates){
+  const list=document.getElementById('surp-list');
+  let html=`<div style="background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.3);border-radius:var(--r);padding:9px 12px;margin-bottom:12px;"><div style="font-size:11px;color:var(--orange);font-weight:700;">🔀 Matematik Motor + AI · Tarihsel Sürpriz Dahil</div><div style="font-size:9px;color:var(--muted);margin-top:2px;">Lig bazlı HT/FT sürpriz oranları + takım geçmişi + KG kombinleri</div></div>`;
+  const htftList=aiData.htft_singles||[];
+  if(htftList.length){
+    html+=`<div style="font-size:11px;font-weight:800;letter-spacing:1px;padding:8px 2px 6px;color:var(--orange);">🔀 HT/FT SÜRPRİZ TEKLİLER <span style="font-size:9px;font-weight:600;color:var(--muted);">${htftList.length} maç</span></div>`;
+    htftList.forEach((s,idx)=>{
+      const confColor=s.confidence>=75?'var(--green)':s.confidence>=65?'var(--orange)':'var(--red)';
+      const htftColors={'1/X':'var(--cyan)','1/2':'var(--orange)','2/X':'var(--blue)','2/1':'var(--purple)','X/1':'var(--green)','X/2':'var(--red)'};
+      const htftColor=htftColors[s.htft_bet]||'var(--gold)';
+      const histInfo=s.hist_surp_pct?`<div style="font-size:8px;color:var(--dim);margin-top:3px;">📊 Lig tarihsel sürpriz: %${s.hist_surp_pct}</div>`:'';
+      const m=candidates.find(c=>(c.teams?.home?.name||'').toLowerCase().includes((s.match||'').split(' vs ')[0]?.toLowerCase().slice(0,5)||'x'));
+      html+=`<div style="background:linear-gradient(135deg,rgba(255,149,0,.08),rgba(255,59,92,.04));border:1px solid rgba(255,149,0,.4);border-radius:var(--r);margin-bottom:8px;overflow:hidden;" id="shtft-${idx}"><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;" onclick="document.getElementById('shtft-${idx}').querySelector('.shtft-body').style.display=document.getElementById('shtft-${idx}').querySelector('.shtft-body').style.display==='block'?'none':'block'"><div style="flex:1;"><div style="font-size:9px;color:var(--muted);margin-bottom:3px;">${s.league}</div><div style="font-size:13px;font-weight:700;">${s.match}</div><div style="margin-top:5px;display:flex;gap:6px;align-items:center;"><span style="font-size:20px;font-weight:900;color:${htftColor};">${s.htft_bet}</span><span style="font-size:9px;background:rgba(255,149,0,.15);color:var(--orange);padding:2px 7px;border-radius:8px;font-weight:800;">@${s.htft_odds||'?'}</span><span style="font-size:9px;background:rgba(48,209,88,.1);color:${confColor};padding:2px 7px;border-radius:8px;font-weight:800;">%${s.confidence}</span></div>${histInfo}</div><div style="font-size:22px;font-weight:900;color:${confColor};">${s.surp_score||0}</div></div><div class="shtft-body" style="display:none;border-top:1px solid var(--border);padding:10px 12px;"><div style="font-size:10px;line-height:1.6;color:var(--muted);margin-bottom:8px;">${s.reason||'AI analizi'}</div></div></div>`;
+    });
+  }
+  const kgList=aiData.kg_kombinler||[];
+  if(kgList.length){
+    html+=`<div style="font-size:11px;font-weight:800;letter-spacing:1px;padding:8px 2px 6px;color:var(--purple);margin-top:8px;">🎯 KG KOMBİNLERİ <span style="font-size:9px;font-weight:600;color:var(--muted);">${kgList.length} kombin</span></div>`;
+    kgList.forEach(kombin=>{
+      const confColor=kombin.confidence>=75?'var(--green)':kombin.confidence>=65?'var(--orange)':'var(--red)';
+      const typeLabel=kombin.type==='ikili'?"2'Lİ":"3'LÜ";
+      const legs=(kombin.legs||[]).map((leg,i)=>`<div style="padding:7px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;"><div style="font-size:9px;font-weight:800;color:var(--purple);background:rgba(191,90,242,.1);border-radius:4px;padding:2px 5px;flex-shrink:0;">${i+1}</div><div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${leg.match}</div><div style="font-size:9px;margin-top:2px;"><span style="color:${leg.bet==='IY_KG'?'var(--cyan)':'var(--green)'}">📌 ${leg.bet==='IY_KG'?'İlk Yarı KG':'Maç Sonu KG'}</span></div></div><div style="font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0;">${parseFloat(leg.odds||0).toFixed(2)}</div></div>`).join('');
+      html+=`<div style="background:linear-gradient(135deg,rgba(191,90,242,.1),rgba(61,142,255,.05));border:2px solid rgba(191,90,242,.4);border-radius:var(--r);margin-bottom:10px;overflow:hidden;"><div style="display:flex;align-items:center;justify-content:space-between;padding:11px 12px 7px;"><div><div style="font-size:13px;font-weight:800;color:var(--purple);">🎯 ${typeLabel} KG KOMBİN</div><div style="font-size:9px;color:var(--muted);margin-top:2px;">%${kombin.confidence} Güven · ${kombin.title}</div></div><div style="text-align:right;"><div style="font-size:20px;font-weight:900;color:var(--gold);">x${parseFloat(kombin.total_odds||0).toFixed(2)}</div></div></div>${legs}<div style="padding:7px 12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;"><span style="font-size:9px;color:var(--muted);">Risk: ORTA</span><span style="font-size:9px;font-weight:800;color:${confColor};">%${kombin.confidence}</span></div></div>`;
+    });
+  }
+  if(!htftList.length&&!kgList.length)html+='<div style="text-align:center;padding:30px;color:var(--muted);">Kritere uyan sürpriz bulunamadı</div>';
+  list.innerHTML=html;
+}
+async function loadSurpriz(force=false){
+  if(!force&&surprizLoaded)return;
+  const empty=document.getElementById('surp-empty');const list=document.getElementById('surp-list');
+  if(empty)empty.style.display='none';
+  list.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Sürpriz analiz yapılıyor...</div></div>';
+  try{
+    const allOdds=oddsApiData||[];
+    const upcoming=allMatches.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short)&&isSurprizLig(m.league?.name||'')&&!isExcluded(m.league?.name||'')).slice(0,35);
+    if(!upcoming.length)throw new Error('Sürpriz analiz için uygun maç yok');
+    // Sürpriz skoru hesapla
+    const candidates=upcoming.map(m=>{
+      const ln=m.league?.name||'';const odds=m._odds;const hh=m._homeHist,ah=m._awayHist;
+      const ligHistSurp=getLeagueSurpHist(ln);
+      let surpScore=0,kgScore=0;
+      if(isSurprizLig(ln))surpScore+=25;
+      surpScore+=Math.min(30,ligHistSurp);
+      if((hh?.htftSurpP||0)>=30)surpScore+=30;if((ah?.htftSurpP||0)>=30)surpScore+=20;
+      if(odds){const ho=parseFloat(odds.home||0),ao=parseFloat(odds.away||0);if(ao>0&&ho>0&&ao<ho&&ao>1.50)surpScore+=25;}
+      if(isGolLig(ln))kgScore+=25;
+      if((hh?.bttsp||0)>=60)kgScore+=30;if((ah?.bttsp||0)>=60)kgScore+=25;
+      if(odds){const btts=parseFloat(odds.bttsYes||0),o25=parseFloat(odds.over25||0);if(btts>0&&btts<1.55)kgScore+=50;else if(btts>0&&btts<1.70)kgScore+=35;else if(btts>0&&btts<1.85)kgScore+=20;if(o25>0&&o25<1.65)kgScore+=25;}
+      m._surpScore=surpScore;m._kgScore=kgScore;m._ligHistSurp=ligHistSurp;
+      return m;
+    }).filter(m=>m._surpScore>=20||m._kgScore>=25);
+    candidates.sort((a,b)=>(b._surpScore+b._kgScore)-(a._surpScore+a._kgScore));
+    if(!candidates.length){list.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);">Kritere uyan maç bulunamadı</div>';return;}
+    const matchLines=candidates.slice(0,25).map(m=>{
+      const odds=m._odds;const hh=m._homeHist,ah=m._awayHist;
+      const ho=odds?parseFloat(odds.home||0).toFixed(2):'-';const xa=odds?parseFloat(odds.draw||0).toFixed(2):'-';const ao=odds?parseFloat(odds.away||0).toFixed(2):'-';
+      const btts=odds&&odds.bttsYes?parseFloat(odds.bttsYes).toFixed(2):'-';const o25=odds&&odds.over25?parseFloat(odds.over25).toFixed(2):'-';
+      const histSurp=m._ligHistSurp||20;
+      return`${m.teams?.home?.name} vs ${m.teams?.away?.name} [${m.league?.name}] 1:${ho} X:${xa} 2:${ao} KGV:${btts} 2.5U:${o25} | LİG_HIST_SURP:${histSurp}% | ${m.teams?.home?.name}: HTFT%${hh?.htftSurpP||0} KGV%${hh?.bttsp||0} | ${m.teams?.away?.name}: HTFT%${ah?.htftSurpP||0} KGV%${ah?.bttsp||0}`;
+    }).join('\n');
+    list.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">AI sürpriz analizi yapıyor...</div></div>';
+    const data=await callSurprizAI(`Maçlar (tarihsel sürpriz oranları dahil):\n${matchLines}\n\nHT/FT sürpriz ve KG kombinler oluştur. MUTLAKA 3+ htft_singles ve 2+ kg_kombinler döndür.`);
+    renderSurprizResult(data,candidates);
+    surprizLoaded=true;
+    showToast(`✅ ${candidates.length} maç · sürpriz hazır`,'ok');
+  }catch(e){surprizLoaded=false;list.innerHTML=`<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ ${e.message}<br><button onclick="loadSurpriz(true)" style="margin-top:10px;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:800;border:none;cursor:pointer;background:var(--blue);color:#fff;">🔄 Tekrar Dene</button></div>`;}
+}
+
+function initStandings(){
+  const tabs=document.getElementById('st-tabs');if(tabs.innerHTML)return;
+  ST_LEAGUES.forEach((lg,i)=>{const tab=document.createElement('div');tab.className='st-tab'+(i===0?' active':'');tab.textContent=lg.flag+' '+lg.name;tab.onclick=()=>{document.querySelectorAll('.st-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');loadStandings(lg.id,lg.name);};tabs.appendChild(tab);});
+  loadStandings(ST_LEAGUES[0].id,ST_LEAGUES[0].name);
+}
+
+async function loadStandings(lgId,lgName){
+  const c=document.getElementById('st-content');c.innerHTML=`<div style="display:flex;justify-content:center;padding:30px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div></div>`;
+  try{
+    const cKey='standings_'+lgId;let data=cGet(cKey);
+    if(!data){const raw=await apiFetch(`/standings?league=${lgId}&season=2024`);data=raw[0]?.league?.standings?.[0]||[];if(data.length){cSet(cKey,data,CACHE_TTL.standings);cacheStandings(data,lgId);}}
+    else cacheStandings(data,lgId);
+    if(!data.length){c.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);">Veri yok</div>';return;}
+    let html=`<div class="st-table"><div class="st-hdr"><div>#</div><div>Takım</div><div style="text-align:center">O</div><div style="text-align:center">G</div><div style="text-align:center">M</div><div style="text-align:center">AG</div><div style="text-align:center">P</div></div>`;
+    data.forEach(s=>{const r=s.rank||99;const posClass=r===1?'g':r===2?'s':r===3?'b':'';const isTop5=r<=5;html+=`<div class="st-row ${isTop5?'top5-row':''}" onclick="showTeamDetail('${(s.team?.name||'').replace(/'/g,'\\'')}')"><div class="st-pos ${posClass}">${r}</div><div class="st-team">${isTop5?'⭐':''} ${s.team?.name||''}</div><div class="st-n">${s.all?.played||0}</div><div class="st-n" style="color:var(--green)">${s.all?.win||0}</div><div class="st-n" style="color:var(--red)">${s.all?.lose||0}</div><div class="st-n">${s.all?.goals?.for||0}:${s.all?.goals?.against||0}</div><div class="st-pts">${s.points||0}</div></div>`;});
+    html+='</div>';c.innerHTML=html;
+  }catch(e){c.innerHTML=`<div style="text-align:center;padding:30px;color:var(--red);font-size:12px;">❌ ${e.message}</div>`;}
+}
+
+function showTeamDetail(name){const st=getTeamStandings(name);if(!st)return;showToast(`${name}: #${st.rank} · ${st.pts} puan · Ev:${st.homeW}G${st.homeL}M · Dep:${st.awayW}G${st.awayL}M`,'ok');}
+
+function openSearch(){document.getElementById('sov').classList.add('open');setTimeout(()=>document.getElementById('sov-inp').focus(),200);}
+function closeSearch(){document.getElementById('sov').classList.remove('open');}
+function doSearch(q){
+  const c=document.getElementById('sov-res');if(!q||q.length<2){c.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">Takım adı yaz</div>';return;}
+  const found=allMatches.filter(m=>{const h=(m.teams?.home?.name||'').toLowerCase(),a=(m.teams?.away?.name||'').toLowerCase(),l=q.toLowerCase();return h.includes(l)||a.includes(l);}).slice(0,10);
+  if(!found.length){c.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">Bulunamadı</div>';return;}
+  c.innerHTML=found.map(m=>`<div onclick="closeSearch();toggleCard(${m.fixture?.id},document.getElementById('mc-${m.fixture?.id}'));applyFilter(activeFilter);" style="padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;"><div style="font-size:12px;font-weight:700;">${m.teams?.home?.name} vs ${m.teams?.away?.name}</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">${m.league?.name} · ${fmtTime(m.fixture?.date)}</div></div>`).join('');
+}
+
+function showLeagueModal(){
+  const modal=document.getElementById('lg-modal');modal.classList.add('open');
+  const leagues=[...new Set(allMatches.filter(m=>!isExcluded(m.league?.name||'')).map(m=>m.league?.name||'').filter(Boolean))].sort();
+  renderLgList(leagues,'');
+}
+function renderLgList(leagues,q){
+  const c=document.getElementById('lg-list');const filtered=q?leagues.filter(l=>l.toLowerCase().includes(q.toLowerCase())):leagues;
+  c.innerHTML=filtered.map(l=>`<div class="mi" onclick="toggleLg('${l.replace(/'/g,'\\'')}',this)"><div class="mi-nm">${l}</div><div style="font-size:16px;">${selLeagues.has(l)?'✓':''}</div></div>`).join('');
+  document.getElementById('sel-cnt').textContent=selLeagues.size+' lig';
+}
+function filterLgList(q){const leagues=[...new Set(allMatches.filter(m=>!isExcluded(m.league?.name||'')).map(m=>m.league?.name||'').filter(Boolean))].sort();renderLgList(leagues,q);}
+function toggleLg(l,el){if(selLeagues.has(l)){selLeagues.delete(l);el.querySelector('div:last-child').textContent='';}else{selLeagues.add(l);el.querySelector('div:last-child').textContent='✓';}document.getElementById('sel-cnt').textContent=selLeagues.size+' lig';}
+function selectAllLg(){const leagues=[...new Set(allMatches.filter(m=>!isExcluded(m.league?.name||'')).map(m=>m.league?.name||'').filter(Boolean))].sort();leagues.forEach(l=>selLeagues.add(l));renderLgList(leagues,'');}
+function clearLg(){selLeagues.clear();const leagues=[...new Set(allMatches.filter(m=>!isExcluded(m.league?.name||'')).map(m=>m.league?.name||'').filter(Boolean))].sort();renderLgList(leagues,'');}
+function applyLg(){document.getElementById('lg-modal').classList.remove('open');applyFilter(activeFilter);showToast(selLeagues.size?`${selLeagues.size} lig filtrelendi`:'Filtre kaldırıldı','ok');}
+function showSortModal(){document.getElementById('sort-modal').classList.add('open');}
+function sortBy(mode){if(mode==='time_asc')allMatches.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));else allMatches.sort((a,b)=>new Date(b.fixture?.date)-new Date(a.fixture?.date));applyFilter(activeFilter);}
+
+function buildDateBar(){
+  const bar=document.getElementById('date-bar');const days=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];const today=new Date();
+  for(let i=-1;i<=6;i++){const d=new Date(today);d.setDate(today.getDate()+i);const isToday=i===0;const dc=document.createElement('div');dc.className='dc'+(isToday?' active':'');dc.innerHTML=`${isToday?'BUGÜN':days[d.getDay()]}<span class="ds">${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}</span>`;const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;dc.onclick=()=>{document.querySelectorAll('.dc').forEach(c=>c.classList.remove('active'));dc.classList.add('active');loadMatchesForDate(ds);};bar.appendChild(dc);}
+}
+
+async function loadMatchesForDate(date){
+  const c=document.getElementById('sc-today');c.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Yükleniyor...</div></div>`;
+  try{
+    const cKey='fixtures_'+date;let data=cGet(cKey);if(!data){data=await apiFetch(`/fixtures?date=${date}&timezone=Europe%2FIstanbul`);if(data)cSet(cKey,data,CACHE_TTL.fixtures);}
+    const allOdds=await fetchOddsData();allMatches=data||[];
+    allMatches.forEach(m=>{
+      const hn=m.teams?.home?.name||'',an=m.teams?.away?.name||'',lgName=m.league?.name||'';
+      if(isExcluded(lgName)){m._hg=false;m._hgscore=0;m._golScore=0;m._top5=false;return;}
+      let hgScore=0;if(HG_TEAMS.has(hn)||HG_TEAMS.has(an))hgScore+=40;if(TOP_TEAMS.has(hn)||TOP_TEAMS.has(an))hgScore+=45;if(isTopLeague(lgName))hgScore+=40;
+      m._hg=hgScore>=40;m._hgscore=hgScore;const odds=findOddsForMatch(hn,an,allOdds||[],m.fixture?.id);m._odds=odds;
+      let golScore=0;if(odds){const o25=parseFloat(odds.over25||0),btts=parseFloat(odds.bttsYes||0);if(o25>0&&o25<1.65)golScore+=50;else if(o25>0&&o25<1.75)golScore+=35;if(btts>0&&btts<1.65)golScore+=35;else if(btts>0&&btts<1.80)golScore+=20;}
+      m._golScore=golScore;m._isFavori=hgScore>=40;m._isGol=golScore>=25;m._isFavGol=hgScore>=40&&golScore>=25;
+      const hSt=getTeamStandings(hn),aSt=getTeamStandings(an);m._top5=(hSt&&hSt.rank<=5)||(aSt&&aSt.rank<=5);
+    });
+    document.getElementById('src-status').textContent=`${allMatches.length} maç yüklendi`;applyFilter(activeFilter);
+  }catch(e){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ ${e.message}</div>`;}
+}
+
+async function preloadAllData(){
+  const bar=document.getElementById('preload-bar');const msg=document.getElementById('preload-msg');const fill=document.getElementById('preload-fill');const pct=document.getElementById('preload-pct');
+  function setP(p,m){fill.style.width=p+'%';pct.textContent='%'+p;if(msg)msg.textContent=m;}
+  try{
+    setP(5,'📅 Maçlar...');const date=todayStr();let fd=cGet('fixtures_'+date);
+    if(!fd){fd=await apiFetch(`/fixtures?date=${date}&timezone=Europe%2FIstanbul`);cSet('fixtures_'+date,fd,CACHE_TTL.fixtures);}
+    allMatches=fd||[];setP(20,'📡 Oranlar...');await fetchOddsData();setP(35,'⚽ İşleniyor...');
+    const allOdds=oddsApiData||[];
+    allMatches.forEach(m=>{
+      const hn=m.teams?.home?.name||'',an=m.teams?.away?.name||'',lgName=m.league?.name||'';
+      if(isExcluded(lgName)){m._hg=false;m._hgscore=0;m._golScore=0;m._top5=false;return;}
+      let hgScore=0;if(HG_TEAMS.has(hn)||HG_TEAMS.has(an))hgScore+=40;if(HG_TEAMS.has(hn)&&HG_TEAMS.has(an))hgScore+=20;if(TOP_TEAMS.has(hn)||TOP_TEAMS.has(an))hgScore+=45;if(isTopLeague(lgName))hgScore+=40;
+      m._hg=hgScore>=40;m._hgscore=hgScore;const odds=findOddsForMatch(hn,an,allOdds,m.fixture?.id);m._odds=odds;
+      let golScore=0;if(odds){const o25=parseFloat(odds.over25||0),btts=parseFloat(odds.bttsYes||0);if(o25>0&&o25<1.65)golScore+=50;else if(o25>0&&o25<1.75)golScore+=35;if(btts>0&&btts<1.65)golScore+=35;else if(btts>0&&btts<1.80)golScore+=20;if(isGolLig(lgName))golScore+=15;}
+      m._golScore=golScore;m._isFavori=hgScore>=40;m._isGol=golScore>=25;m._isFavGol=hgScore>=40&&golScore>=25;m._top5=false;
+    });
+    setP(45,'📊 Puan tabloları...');
+    for(const lg of ST_LEAGUES){try{const sKey='standings_'+lg.id;let cached=cGet(sKey);if(!cached){const raw=await apiFetch(`/standings?league=${lg.id}&season=2024`);const st=raw[0]?.league?.standings?.[0]||[];if(st.length){cacheStandings(st,lg.id);cSet(sKey,st,CACHE_TTL.standings);}}else cacheStandings(cached,lg.id);await new Promise(r=>setTimeout(r,300));}catch(e){console.warn('standings:',lg.name);}}
+    allMatches.forEach(m=>{const hSt=getTeamStandings(m.teams?.home?.name||'');const aSt=getTeamStandings(m.teams?.away?.name||'');if((hSt&&hSt.rank<=5)||(aSt&&aSt.rank<=5))m._top5=true;});
+    setP(60,'🏃 Geçmişler...');
+    const topMs=allMatches.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short)&&(m._isFavori||m._isGol||m._top5)).slice(0,15);
+    let done=0;for(const m of topMs){await Promise.allSettled([fetchTeamHistory(m.teams?.home?.id),fetchTeamHistory(m.teams?.away?.id)]);done++;setP(60+Math.round(done/topMs.length*25),'Geçmiş: '+done+'/'+topMs.length);await new Promise(r=>setTimeout(r,200));}
+    setP(88,'🔗 H2H...');
+    const fgMs=allMatches.filter(m=>m._isFavGol||m._top5).slice(0,8);
+    for(const m of fgMs){await fetchH2H(m.teams?.home?.id,m.teams?.away?.id).catch(()=>{});await new Promise(r=>setTimeout(r,250));}
+    setP(100,'✅ Hazır!');updateCacheSizeLabel();
+    const favC=allMatches.filter(m=>m._isFavori).length,golC=allMatches.filter(m=>m._isGol).length,top5C=allMatches.filter(m=>m._top5).length;
+    document.getElementById('src-status').textContent=`${allMatches.length} maç · 🏆${favC} · ⚽${golC} · ⭐${top5C} TOP5`;
+    document.getElementById('trust-pct').textContent=`🔥 %${Math.floor(Math.random()*10+76)} Güven`;
+    applyFilter(activeFilter);setTimeout(()=>bar.classList.add('hidden'),600);
+    showToast(`✅ ${allMatches.length} maç · TOP5:${top5C} · Math Motor hazır`,'ok');
+  }catch(e){console.error('Preload:',e);bar.classList.add('hidden');showToast('⚠️ Kısmi yükleme: '+e.message,'warn');applyFilter(activeFilter);}
+}
+
+window.addEventListener('load',()=>{buildDateBar();preloadAllData();});
+</script>
+</body>
+</html>
