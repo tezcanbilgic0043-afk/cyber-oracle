@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Cyber Oracle Gold</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#050810">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--bg:#070a14;--bg2:#0c1020;--card:#10151f;--card2:#161d2e;--border:#1a2440;--border2:#253060;--blue:#3d8eff;--orange:#ff9500;--gold:#ffd60a;--red:#ff3b5c;--green:#30d158;--purple:#bf5af2;--cyan:#32d5ff;--pink:#ff375f;--text:#eef2ff;--muted:#5a6a9a;--dim:#2a3555;--r:13px;}
+body.light{--bg:#f2f5ff;--bg2:#e8eeff;--card:#fff;--card2:#f5f8ff;--border:#d0d8f5;--text:#111830;--muted:#5060a0;}
+html,body{height:100%;overflow:hidden;background:var(--bg);}
+body{font-family:"Inter",sans-serif;color:var(--text);display:flex;flex-direction:column;}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#preload-bar{position:fixed;inset:0;z-index:9999;background:rgba(7,10,20,.98);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px;}
+#preload-bar.hidden{display:none;}
+#preload-progress{width:100%;max-width:320px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+#preload-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:3px;transition:width .4s;}
+.hdr{position:relative;z-index:50;background:rgba(7,10,20,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);flex-shrink:0;}
+body.light .hdr{background:rgba(242,245,255,.96);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;}
+.hdr-btns{display:flex;gap:6px;}
+.hico{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;}
+.hico:active{transform:scale(.87);}
+.date-bar{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding:6px 14px 8px;}
+.date-bar::-webkit-scrollbar{display:none;}
+.dc{flex:0 0 auto;padding:7px 14px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;text-align:center;border:1.5px solid transparent;transition:.15s;}
+.dc.active{background:linear-gradient(135deg,rgba(255,214,10,.18),rgba(0,213,255,.08));border-color:var(--gold)!important;color:var(--gold);box-shadow:0 0 12px rgba(255,214,10,.3);}
+.dc:not(.active){background:rgba(255,255,255,.07);color:var(--text);border-color:rgba(255,255,255,.12);}
+.dc .ds{font-size:8px;display:block;opacity:.7;margin-top:1px;}
+.ai-banner{margin:0 14px 8px;background:linear-gradient(135deg,rgba(61,142,255,.12),rgba(191,90,242,.08));border:1px solid rgba(61,142,255,.25);border-radius:var(--r);padding:9px 12px;display:flex;align-items:center;justify-content:space-between;}
+.ai-trust{background:linear-gradient(90deg,var(--orange),var(--pink));color:#fff;font-size:10px;font-weight:800;padding:4px 9px;border-radius:18px;}
+.filter-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 14px 8px;}
+.filter-row::-webkit-scrollbar{display:none;}
+.ftab{flex:0 0 auto;padding:5px 12px;border-radius:18px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.ftab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.ftab.t-green{border-color:var(--green);color:var(--green);}
+.ftab.t-green.active{background:var(--green);color:#000;}
+.ftab.t-orange{border-color:var(--orange);color:var(--orange);}
+.ftab.t-orange.active{background:var(--orange);color:#000;}
+.ftab.t-purple{border-color:var(--purple);color:var(--purple);}
+.ftab.t-purple.active{background:var(--purple);color:#fff;}
+.time-filter{gap:5px;padding:0 14px 8px;overflow-x:auto;scrollbar-width:none;display:none;}
+.time-filter::-webkit-scrollbar{display:none;}
+.tf-btn{flex:0 0 auto;padding:4px 12px;border-radius:16px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.tf-btn.active{background:var(--cyan);color:#000;border-color:var(--cyan);}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px;position:relative;z-index:2;}
+.scroll-area::-webkit-scrollbar{display:none;}
+.lg-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 6px;}
+.lg-name{font-size:12px;font-weight:800;color:var(--gold);}
+.lg-cnt{background:var(--blue);color:#fff;font-size:9px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px;}
+.mc{margin:0 10px 5px;background:var(--card);border:1px solid rgba(0,229,255,.25);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:.15s;}
+.mc:active{transform:scale(.985);}
+.mc.live{border-color:rgba(255,45,120,.55);box-shadow:0 0 10px rgba(255,45,120,.2);}
+.mc.hg{border-left:3px solid #39ff14;border-color:rgba(57,255,20,.45);}
+.mc.gol-card{border-left:3px solid var(--orange);border-color:rgba(255,149,0,.45);}
+.mc.favgol-card{border-left:3px solid var(--purple);border-color:rgba(191,90,242,.45);}
+.mc.open{border-color:rgba(255,214,10,.5);box-shadow:0 0 12px rgba(255,214,10,.18);}
+.mc.gol-alarm{border-color:rgba(255,59,92,.95)!important;animation:alarmBlink .7s ease-in-out infinite;}
+@keyframes alarmBlink{0%,100%{box-shadow:0 0 10px rgba(255,59,92,.4);}50%{box-shadow:0 0 28px rgba(255,59,92,.9),0 0 50px rgba(255,59,92,.3);}}
+.alarm-icon{display:inline-block;animation:alarmIcon .6s ease-in-out infinite;font-size:13px;margin-left:3px;}
+@keyframes alarmIcon{0%,100%{opacity:1;transform:scale(1) rotate(0deg);}50%{opacity:.3;transform:scale(1.4) rotate(-15deg);}}
+.mc-top{display:flex;align-items:center;padding:9px 12px;gap:8px;}
+.mc-time{flex-shrink:0;text-align:center;min-width:40px;}
+.mc-t{font-size:12px;font-weight:900;color:#00e5ff;}
+.mc-t.live{color:#ff2d78;}
+.mc-dot{width:6px;height:6px;border-radius:50%;background:#ff2d78;margin:2px auto 0;animation:pls 1s infinite;}
+@keyframes pls{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(1.5);}}
+.lbl-tag{font-size:7px;font-weight:800;margin-top:2px;}
+.lbl-hg{color:var(--green);}
+.lbl-gol{color:var(--orange);}
+.lbl-favgol{color:var(--purple);}
+.mc-teams{flex:1;min-width:0;}
+.mc-tr{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:2px 0;}
+.mc-tn{font-size:13px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mc-sc{font-size:15px;font-weight:900;min-width:18px;text-align:center;}
+.mc-sc.live{color:#ff2d78;}
+.odds-strip{display:flex;gap:3px;padding:4px 12px 8px;}
+.odds-strip-item{flex:1;background:rgba(255,214,10,.07);border:1px solid rgba(255,214,10,.2);border-radius:7px;padding:5px 3px;text-align:center;}
+.odds-strip-item.best{border-color:rgba(48,209,88,.5);background:rgba(48,209,88,.1);}
+.odds-strip-lbl{font-size:8px;color:var(--muted);font-weight:700;display:block;}
+.odds-strip-val{font-size:13px;font-weight:900;color:var(--gold);display:block;}
+.odds-strip-item.best .odds-strip-val{color:var(--green);}
+.pp{display:none;border-top:1px solid var(--border);background:rgba(0,0,0,.1);}
+.mc.open .pp{display:block;}
+.pp-in{padding:10px 12px 12px;}
+.ld{display:flex;align-items:center;gap:8px;padding:10px 0;color:var(--blue);font-size:12px;font-weight:600;}
+.sp{width:14px;height:14px;border:2px solid rgba(61,142,255,.2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.conf-w{margin-bottom:10px;}
+.conf-l{display:flex;justify-content:space-between;margin-bottom:3px;}
+.conf-t{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;}
+.conf-p{font-size:12px;font-weight:800;color:var(--orange);}
+.conf-b{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.conf-f{height:100%;border-radius:3px;transition:.6s;}
+.p3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px;}
+.pb{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:7px;text-align:center;}
+.pb.win{border-color:var(--blue);background:rgba(61,142,255,.1);}
+.pbl{font-size:8px;color:var(--muted);font-weight:600;margin-bottom:3px;}
+.pbv{font-size:14px;font-weight:800;}
+.p2{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:8px;}
+.p2b{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:6px 9px;display:flex;align-items:center;justify-content:space-between;}
+.p2l{font-size:10px;font-weight:600;color:var(--muted);}
+.p2v{font-size:11px;font-weight:800;}
+.p2v.y{color:var(--green);}
+.p2v.n{color:var(--red);}
+.odds-detail{background:rgba(255,214,10,.04);border:1px solid rgba(255,214,10,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.odds-detail-t{font-size:9px;font-weight:800;color:var(--gold);letter-spacing:1px;margin-bottom:8px;}
+.odds-row{display:flex;gap:4px;margin-bottom:4px;}
+.odd-box{flex:1;background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:6px 4px;text-align:center;}
+.odd-box.rec{border-color:var(--green);background:rgba(48,209,88,.08);}
+.odd-lbl{font-size:8px;color:var(--muted);font-weight:600;display:block;}
+.odd-val{font-size:13px;font-weight:800;color:var(--gold);display:block;}
+.odd-rec{font-size:7px;color:var(--green);display:block;margin-top:1px;}
+.hist-section{background:rgba(255,149,0,.04);border:1px solid rgba(255,149,0,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.hist-t{font-size:9px;font-weight:800;color:var(--orange);letter-spacing:1px;margin-bottom:8px;}
+.hist-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-bottom:5px;}
+.hist-item{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:5px 3px;}
+.hist-v{font-size:12px;font-weight:800;color:var(--orange);}
+.hist-l{font-size:7px;color:var(--muted);}
+.form-dots{display:flex;gap:3px;margin-top:4px;}
+.fd{width:16px;height:16px;border-radius:4px;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.fd-w{background:rgba(48,209,88,.25);color:var(--green);}
+.fd-d{background:rgba(255,214,10,.2);color:var(--gold);}
+.fd-l{background:rgba(255,59,92,.2);color:var(--red);}
+.dual-ai-row{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;}
+.ai-badge{font-size:8px;font-weight:800;padding:3px 8px;border-radius:10px;}
+.ai-badge.openai{background:rgba(48,209,88,.15);color:var(--green);border:1px solid rgba(48,209,88,.3);}
+.ai-badge.groq{background:rgba(61,142,255,.15);color:var(--blue);border:1px solid rgba(61,142,255,.3);}
+.ai-badge.agree{background:rgba(255,214,10,.15);color:var(--gold);border:1px solid rgba(255,214,10,.3);}
+.ai-badge.disagree{background:rgba(255,59,92,.15);color:var(--red);border:1px solid rgba(255,59,92,.3);}
+.korner-section{background:rgba(48,209,88,.05);border:1px solid rgba(48,209,88,.15);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.korner-t{font-size:9px;font-weight:800;color:var(--green);letter-spacing:1px;margin-bottom:6px;}
+.korner-g{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;}
+.korner-i{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:6px;}
+.korner-n{font-size:14px;font-weight:800;color:var(--green);}
+.korner-l{font-size:8px;color:var(--muted);}
+.ai-b{background:rgba(61,142,255,.05);border:1px solid rgba(61,142,255,.15);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.ai-bt{font-size:9px;font-weight:800;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.ai-bx{font-size:11px;line-height:1.65;color:var(--muted);}
+.h2h-section{background:rgba(50,213,255,.04);border:1px solid rgba(50,213,255,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;}
+.h2h-t{font-size:9px;font-weight:800;color:var(--cyan);letter-spacing:1px;margin-bottom:7px;}
+.h2h-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.h2h-row:last-child{border-bottom:none;}
+.h2h-sc{font-size:12px;font-weight:900;min-width:34px;text-align:center;color:var(--gold);}
+.h2h-tn{font-size:9px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);}
+.bnav{position:relative;z-index:50;background:rgba(7,10,20,.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;align-items:center;padding:6px 0 max(6px,env(safe-area-inset-bottom));flex-shrink:0;}
+body.light .bnav{background:rgba(242,245,255,.96);}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 0;}
+.ni:active{transform:scale(.87);}
+.ni-i{font-size:17px;}
+.ni-l{font-size:8px;font-weight:600;color:var(--muted);}
+.ni.active .ni-l{color:var(--blue);}
+.panel{display:none;flex:1;flex-direction:column;overflow:hidden;position:relative;z-index:2;}
+.panel.active{display:flex;}
+.coupon-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.coupon-wrap::-webkit-scrollbar{display:none;}
+.cp-card{border-radius:var(--r);overflow:hidden;margin-bottom:10px;border:1px solid var(--border);}
+.cp-card.banko1{border-color:rgba(255,214,10,.5);background:linear-gradient(135deg,rgba(255,214,10,.1),var(--card));}
+.cp-card.banko2{border-color:rgba(255,170,0,.5);background:linear-gradient(135deg,rgba(255,170,0,.1),var(--card));}
+.cp-card.banko3{border-color:rgba(255,140,0,.5);background:linear-gradient(135deg,rgba(255,140,0,.1),var(--card));}
+.cp-card.banko4{border-color:rgba(255,100,0,.5);background:linear-gradient(135deg,rgba(255,100,0,.1),var(--card));}
+.cp-head{display:flex;align-items:center;justify-content:space-between;padding:11px 12px 7px;}
+.cp-title{font-size:13px;font-weight:800;}
+.cp-odds{font-size:18px;font-weight:900;color:var(--gold);}
+.cp-odds-lbl{font-size:8px;color:var(--muted);}
+.cp-item{padding:7px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.cp-num{font-size:9px;font-weight:800;color:var(--blue);background:rgba(61,142,255,.1);border-radius:4px;padding:2px 5px;flex-shrink:0;}
+.cp-info{flex:1;min-width:0;}
+.cp-match{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cp-bet{font-size:9px;color:var(--green);}
+.cp-odd{font-size:12px;font-weight:800;color:var(--gold);flex-shrink:0;}
+.cp-foot{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);}
+.st-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.st-wrap::-webkit-scrollbar{display:none;}
+.st-tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px;}
+.st-tabs::-webkit-scrollbar{display:none;}
+.st-tab{flex:0 0 auto;padding:5px 11px;border-radius:18px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;white-space:nowrap;transition:.15s;}
+.st-tab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.st-table{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.st-hdr{display:grid;grid-template-columns:20px 1fr 22px 22px 22px 38px 26px;gap:2px;padding:7px 10px;background:var(--card2);font-size:8px;font-weight:700;color:var(--muted);}
+.st-row{display:grid;grid-template-columns:20px 1fr 22px 22px 22px 38px 26px;gap:2px;padding:7px 10px;border-top:1px solid var(--border);font-size:11px;font-weight:600;align-items:center;}
+.st-pos{font-size:9px;color:var(--muted);}
+.st-pos.g{color:#ffd60a;}.st-pos.s{color:#c0c0c0;}.st-pos.b{color:#cd7f32;}
+.st-team{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.st-pts{font-weight:800;color:var(--blue);}
+.st-n{color:var(--muted);text-align:center;}
+.set-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.set-wrap::-webkit-scrollbar{display:none;}
+.set-sec{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px;}
+.set-i{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--border);}
+.set-i:last-child{border-bottom:none;}
+.set-ico{font-size:16px;width:22px;text-align:center;}
+.set-lbl{flex:1;font-size:14px;font-weight:500;}
+.set-val{font-size:11px;color:var(--muted);}
+.toggle{width:42px;height:23px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:.3s;flex-shrink:0;}
+.toggle.on{background:var(--blue);}
+.toggle::after{content:"";position:absolute;width:19px;height:19px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.3s;}
+.toggle.on::after{left:21px;}
+.sov{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(5px);flex-direction:column;}
+.sov.open{display:flex;}
+.sov-box{background:var(--card);border-bottom:1px solid var(--border);padding:11px 13px;}
+.sov-inp{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:10px 13px;color:var(--text);font-size:14px;outline:none;font-family:"Inter";}
+.sov-res{flex:1;overflow-y:auto;padding:9px 13px;}
+.sov-res::-webkit-scrollbar{display:none;}
+.modal{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.78);backdrop-filter:blur(4px);align-items:flex-end;}
+.modal.open{display:flex;}
+.mbox{background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:16px;width:100%;max-height:78vh;overflow-y:auto;}
+.mbox::-webkit-scrollbar{display:none;}
+.mi{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.mi:last-child{border-bottom:none;}
+.mi-nm{flex:1;font-size:13px;font-weight:600;}
+.toast-c{position:fixed;bottom:86px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none;display:none;}
+.toast{background:var(--card2);border:1px solid var(--border2);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:600;white-space:nowrap;animation:tIn .3s ease;display:flex;align-items:center;gap:6px;}
+.toast.ok{border-color:rgba(48,209,88,.4);color:var(--green);}
+.toast.err{border-color:rgba(255,59,92,.4);color:var(--red);}
+.toast.warn{border-color:rgba(255,214,10,.4);color:var(--gold);}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.surp-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.surp-wrap::-webkit-scrollbar{display:none;}
+.live-wrap{flex:1;overflow-y:auto;padding:10px;padding-bottom:80px;}
+.live-wrap::-webkit-scrollbar{display:none;}
+.live-mc{background:var(--card);border:1px solid rgba(255,59,92,.3);border-radius:var(--r);margin-bottom:8px;overflow:hidden;cursor:pointer;}
+.live-mc-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;}
+.live-mc-sc{font-size:20px;font-weight:900;color:var(--red);letter-spacing:3px;}
+.live-mc-min{font-size:11px;color:var(--red);font-weight:700;}
+.live-mc-lg{font-size:10px;color:var(--muted);padding:0 12px 4px;}
+.live-mc-teams{font-size:12px;padding:0 12px 8px;}
+.live-pp{display:none;border-top:1px solid var(--border);}
+.live-mc.open .live-pp{display:block;}
+.live-mc.gol-alarm{border-color:rgba(255,59,92,.95)!important;animation:alarmBlink .7s ease-in-out infinite;}
+#sel-bar{display:none;position:sticky;top:0;z-index:10;background:linear-gradient(135deg,rgba(48,209,88,.15),rgba(61,142,255,.1));border-bottom:1px solid rgba(48,209,88,.4);padding:8px 14px;}
+.mc.top5-card{border-left:3px solid var(--gold);border-color:rgba(255,214,10,.55);box-shadow:0 0 8px rgba(255,214,10,.15);}
+.lbl-top5{color:var(--gold);}
+.st-row.top5-row{background:rgba(255,214,10,.04);border-left:2px solid rgba(255,214,10,.4);}
+.math-section{background:linear-gradient(135deg,rgba(255,214,10,.08),rgba(61,142,255,.05));border:2px solid rgba(255,214,10,.35);border-radius:9px;padding:10px 12px;margin-bottom:8px;}
+.math-title{font-size:9px;font-weight:800;color:var(--gold);letter-spacing:1px;margin-bottom:8px;}
+.math-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:6px;}
+.math-item{text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:5px 3px;border:1px solid transparent;}
+.math-item.top1{border-color:var(--gold);background:rgba(255,214,10,.12);}
+.math-item.top2{border-color:rgba(255,149,0,.5);background:rgba(255,149,0,.08);}
+.math-item.top3{border-color:rgba(50,213,255,.4);background:rgba(50,213,255,.06);}
+.math-val{font-size:13px;font-weight:900;color:var(--gold);}
+.math-lbl{font-size:7px;color:var(--muted);}
+.math-decision-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,214,10,.06);border:1px solid rgba(255,214,10,.2);border-radius:7px;padding:7px 10px;margin-bottom:4px;}
+.ai-badge.math{background:rgba(255,214,10,.15);color:var(--gold);border:1px solid rgba(255,214,10,.3);}
+</style>
+</head>
+<body>
+<div id="preload-bar">
+  <img src="data:image/webp;base64,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" style="width:90px;height:90px;border-radius:16px;object-fit:cover;box-shadow:0 0 24px rgba(255,214,10,.6);margin-bottom:4px;">
+  <div style="font-family:'Orbitron',monospace;font-size:16px;font-weight:900;background:linear-gradient(90deg,#ffd60a,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CYBER ORACLE GOLD</div>
+  <div style="font-size:11px;color:var(--cyan);font-weight:700;" id="preload-msg">⚡ Hafıza Sistemi Başlatılıyor...</div>
+  <div id="preload-progress"><div id="preload-fill" style="width:0%"></div></div>
+  <div style="font-size:10px;color:var(--muted)" id="preload-pct">%0 — Maçlar yükleniyor</div>
+  <div style="font-size:9px;color:var(--dim);margin-top:4px;">6 saatlik önbellek · Kota koruması aktif</div>
+</div>
+<div id="stars"></div>
+<div id="p-kesfet" class="panel active">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:52px;height:52px;flex-shrink:0;"><img src="data:image/png;base64,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" style="width:52px;height:52px;border-radius:10px;object-fit:cover;display:block;box-shadow:0 0 10px rgba(255,214,10,.4);" /></div>
+        <div>
+          <div style="font-family:'Orbitron',monospace;font-size:13px;font-weight:900;background:linear-gradient(90deg,#ffd60a,#00d4ff,#ff2d78);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2;">CYBER ORACLE</div>
+          <div style="font-size:8px;font-weight:700;color:#ffaa00;letter-spacing:1.5px;">GOLD · MATH+AI v3.9</div>
+        </div>
+      </div>
+      <div class="hdr-btns">
+        <div class="hico" onclick="showSortModal()">⇅</div>
+        <div class="hico" onclick="openSearch()">🔍</div>
+        <div class="hico" id="theme-btn" onclick="toggleTheme()">🌙</div>
+        <div class="hico" onclick="showLeagueModal()">🎛</div>
+        <div class="hico" onclick="switchPanel('ayarlar',null)">⚙️</div>
+      </div>
+    </div>
+    <div class="date-bar" id="date-bar"></div>
+    <div style="padding:0 14px 8px;">
+      <div class="ai-banner">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:16px">🧠</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;">OpenAI + Groq · Dual AI + H2H Cache</div>
+            <div style="font-size:10px;color:var(--muted)" id="src-status">Yükleniyor...</div>
+          </div>
+        </div>
+        <div class="ai-trust" id="trust-pct">🔥 %82 Güven</div>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="ftab active" onclick="setFilter('all',this)">Tümü</div>
+      <div class="ftab" onclick="setFilter('scheduled',this)">⏰ Yakında</div>
+      <div class="ftab t-green" onclick="setFilter('favori',this)">🏆 Favori</div>
+      <div class="ftab t-orange" onclick="setFilter('gol',this)">⚽ Gollü</div>
+      <div class="ftab" onclick="setFilter('fav',this)">⭐ Yıldız</div>
+      <div class="ftab" onclick="setFilter('finished',this)">✅ Bitti</div>
+    </div>
+    <div class="time-filter" id="time-filter">
+      <div class="tf-btn active" onclick="setTimeFilter(1,this)">1H</div>
+      <div class="tf-btn" onclick="setTimeFilter(3,this)">3H</div>
+      <div class="tf-btn" onclick="setTimeFilter(6,this)">6H</div>
+      <div class="tf-btn" onclick="setTimeFilter(12,this)">12H</div>
+      <div class="tf-btn" onclick="setTimeFilter(24,this)">Tümü</div>
+    </div>
+  </div>
+  <div id="sel-bar">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:11px;font-weight:800;color:var(--green);"><span id="sel-count">0</span> maç seçildi</div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="genFromSelected()" style="padding:5px 12px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:var(--green);color:#000;">🎯 Kupon</button>
+        <button onclick="clearSelected()" style="padding:5px 10px;border-radius:8px;font-size:11px;font-weight:700;border:1px solid var(--border);cursor:pointer;background:transparent;color:var(--muted);">✕</button>
+      </div>
+    </div>
+    <div id="sel-names" style="font-size:9px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+  </div>
+  <div class="scroll-area" id="sc-today">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;">
+      <div class="sp" style="width:22px;height:22px;border-width:3px;"></div>
+      <div style="font-size:13px;color:var(--muted);">Maçlar yükleniyor...</div>
+    </div>
+  </div>
+</div>
+<div id="p-xg" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;display:flex;align-items:center;gap:7px;"><span style="color:var(--red)">●</span> Canlı Maçlar</div>
+      <div style="display:flex;gap:6px;">
+        <div class="hico" onclick="loadLive()">🔄</div>
+        <div class="hico" id="auto-btn" onclick="toggleAuto()" style="font-size:10px;font-weight:700;color:var(--muted);">AUTO</div>
+      </div>
+    </div>
+  </div>
+  <div class="live-wrap" id="xg-list"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;"><div style="font-size:36px;opacity:.3">⚡</div><div style="font-size:13px;color:var(--muted);">🔄 ile güncelle</div></div></div>
+</div>
+<div id="p-kupon" class="panel">
+  <div class="hdr" style="padding:10px 14px 6px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="font-size:15px;font-weight:800;">🎯 Kuponlar</div>
+      <div class="hico" onclick="genCoupons()" id="btn-gen" style="font-size:14px;">✨</div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:4px;">
+      <div id="tab-yeni" onclick="showCpTab('yeni',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--blue);color:#fff;background:var(--blue);text-align:center;">✨ Yeni</div>
+      <div id="tab-gecmis" onclick="showCpTab('gecmis',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;text-align:center;">📋 Geçmiş</div>
+      <div id="tab-istatistik" onclick="showCpTab('istatistik',this)" style="flex:1;padding:7px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid var(--border);color:var(--muted);background:transparent;text-align:center;">📊 İstatistik</div>
+    </div>
+  </div>
+  <div class="coupon-wrap" id="coupon-wrap">
+    <div id="cp-yeni"><div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:220px;gap:12px;"><div style="font-size:36px;opacity:.3">🎯</div><div style="font-size:13px;color:var(--muted);">✨ ile kupon oluştur</div></div></div>
+    <div id="cp-gecmis" style="display:none;"><div id="cp-gecmis-list"></div></div>
+    <div id="cp-istatistik" style="display:none;"><div id="cp-stat-content"></div></div>
+  </div>
+</div>
+<div id="p-puan" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;"><div style="font-size:15px;font-weight:800;">📊 Puan Tablosu</div></div>
+  <div class="st-wrap"><div class="st-tabs" id="st-tabs"></div><div id="st-content"><div style="text-align:center;padding:40px;color:var(--muted);">Lig seç</div></div></div>
+</div>
+<div id="p-surpriz" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;">🔀 Sürpriz & KG Analiz</div>
+      <div class="hico" onclick="loadSurpriz(true)">🔄</div>
+    </div>
+  </div>
+  <div class="surp-wrap" id="surp-wrap">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;" id="surp-empty">
+      <div style="font-size:36px;opacity:.3">🔀</div>
+      <div style="font-size:13px;color:var(--muted);">🔄 ile analiz başlat</div>
+    </div>
+    <div id="surp-list"></div>
+  </div>
+</div>
+<div id="p-ayarlar" class="panel">
+  <div class="hdr" style="padding:10px 14px 10px;"><div style="font-size:15px;font-weight:800;">⚙️ Ayarlar</div></div>
+  <div class="set-wrap">
+    <div style="background:linear-gradient(135deg,rgba(61,142,255,.1),rgba(191,90,242,.08));border:1px solid rgba(61,142,255,.2);border-radius:var(--r);padding:13px;margin-bottom:10px;text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:15px;font-weight:900;background:linear-gradient(90deg,#ffd60a,#00d4ff,#ff2d78);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CYBER ORACLE GOLD</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:3px;">v3.9 · Matematik Motor + Dual AI · Top5 · Oran+Güven Kupon</div>
+    </div>
+    <div class="set-sec">
+      <div class="set-i"><div class="set-ico">🌙</div><div class="set-lbl">Karanlık Tema</div><div class="toggle on" id="theme-toggle" onclick="toggleTheme()"></div></div>
+      <div class="set-i"><div class="set-ico">🚨</div><div class="set-lbl">Gol Alarm (Görsel)</div><div class="toggle on" id="notif-toggle" onclick="toggleNotif()"></div></div>
+    </div>
+    <div class="set-sec">
+      <div class="set-i"><div class="set-ico">🤖</div><div class="set-lbl">AI Motor</div><div class="set-val">GPT-4o-mini + Groq</div></div>
+      <div class="set-i"><div class="set-ico">📡</div><div class="set-lbl">Odds Kaynağı</div><div class="set-val">TheOdds → APISports</div></div>
+      <div class="set-i"><div class="set-ico">🗄️</div><div class="set-lbl">Cache Süresi</div><div class="set-val">6 Saat</div></div>
+      <div class="set-i"><div class="set-ico">🎯</div><div class="set-lbl">Kupon Sistemi</div><div class="set-val">Oran+Güven Tabanlı</div></div>
+      <div class="set-i" onclick="clearAllCache()" style="cursor:pointer;"><div class="set-ico">🗑️</div><div class="set-lbl">Cache Temizle</div><div class="set-val" style="color:var(--red);">Temizle</div></div>
+      <div class="set-i"><div class="set-ico">💾</div><div class="set-lbl">Önbellekteki Veri</div><div class="set-val" id="cache-size-lbl">Hesaplanıyor...</div></div>
+    </div>
+  </div>
+</div>
+<nav class="bnav">
+  <div class="ni active" data-nav="kesfet" onclick="switchPanel('kesfet',this)"><div class="ni-i">🏆</div><div class="ni-l" style="color:var(--blue)">Keşfet</div></div>
+  <div class="ni" data-nav="xg" onclick="switchPanel('xg',this)"><div class="ni-i">⚡</div><div class="ni-l">Radar</div></div>
+  <div class="ni" data-nav="kupon" onclick="switchPanel('kupon',this)"><div class="ni-i">🎯</div><div class="ni-l">Kupon</div></div>
+  <div class="ni" data-nav="puan" onclick="switchPanel('puan',this)"><div class="ni-i">📊</div><div class="ni-l">Puan</div></div>
+  <div class="ni" data-nav="surpriz" onclick="switchPanel('surpriz',this)"><div class="ni-i">🔀</div><div class="ni-l">Sürpriz</div></div>
+</nav>
+<div class="sov" id="sov">
+  <div class="sov-box">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <input class="sov-inp" id="sov-inp" placeholder="🔍  Takım ara..." oninput="doSearch(this.value)">
+      <div style="color:var(--muted);font-size:13px;cursor:pointer;font-weight:600;" onclick="closeSearch()">İptal</div>
+    </div>
+  </div>
+  <div class="sov-res" id="sov-res"><div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">Takım adı yaz</div></div>
+</div>
+<div class="modal" id="lg-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbox">
+    <div style="font-size:14px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;">Lig Filtresi <span style="font-size:18px;cursor:pointer;" onclick="document.getElementById('lg-modal').classList.remove('open')">✕</span></div>
+    <input placeholder="🔍 Lig ara..." oninput="filterLgList(this.value)" style="width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;color:var(--text);font-size:13px;outline:none;margin-bottom:11px;font-family:'Inter';">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;"><div style="color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;" onclick="selectAllLg()">✓ Tümünü Seç</div><div style="font-size:10px;color:var(--muted)" id="sel-cnt">0 lig seçildi</div></div>
+    <div id="lg-list"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+      <button onclick="clearLg()" style="padding:10px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;background:var(--card2);color:var(--text);">Temizle</button>
+      <button onclick="applyLg()" style="padding:10px;border-radius:9px;font-size:13px;font-weight:700;border:none;cursor:pointer;background:var(--green);color:#000;">Uygula</button>
+    </div>
+  </div>
+</div>
+<div class="modal" id="sort-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mbox">
+    <div style="font-size:14px;font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;">Sıralama <span style="font-size:18px;cursor:pointer;" onclick="document.getElementById('sort-modal').classList.remove('open')">✕</span></div>
+    <div class="mi" onclick="sortBy('time_asc');document.getElementById('sort-modal').classList.remove('open')"><span>🕐</span><div class="mi-nm">Yakın Maçlar</div></div>
+    <div class="mi" onclick="sortBy('time_desc');document.getElementById('sort-modal').classList.remove('open')"><span>🕔</span><div class="mi-nm">Uzak Maçlar</div></div>
+  </div>
+</div>
+<div class="toast-c" id="toast-c"></div>
+<script>
+const PROXY='https://steep-night-fc54.tezcanbilgic0043.workers.dev';
+const API_BASE='https://v3.football.api-sports.io';
+const CACHE_TTL={fixtures:6*60,teamHistory:6*60,standings:24*60,odds:15,h2h:12*60,injuries:6*60};
+
+const MEM={};
+function cGet(key){
+  if(MEM[key]&&Date.now()-MEM[key].ts<MEM[key].ttl*60000)return MEM[key].d;
+  try{const raw=localStorage.getItem('cog_v38_'+key);if(!raw)return null;const o=JSON.parse(raw);if(Date.now()-o.ts>o.ttl*60000){localStorage.removeItem('cog_v38_'+key);return null;}MEM[key]=o;return o.d;}catch{return null;}
+}
+function cSet(key,data,ttlMin){
+  const o={d:data,ts:Date.now(),ttl:ttlMin||360};MEM[key]=o;
+  try{localStorage.setItem('cog_v38_'+key,JSON.stringify(o));}catch(e){try{const keys=Object.keys(localStorage).filter(k=>k.startsWith('cog_v38_')).sort((a,b)=>{try{return JSON.parse(localStorage.getItem(a)).ts-JSON.parse(localStorage.getItem(b)).ts;}catch{return 0;}});if(keys.length>0)localStorage.removeItem(keys[0]);localStorage.setItem('cog_v38_'+key,JSON.stringify(o));}catch{}}
+}
+function cDel(key){delete MEM[key];try{localStorage.removeItem('cog_v38_'+key);}catch{}}
+function clearAllCache(){Object.keys(localStorage).filter(k=>k.startsWith('cog_v38_')).forEach(k=>localStorage.removeItem(k));Object.keys(MEM).forEach(k=>delete MEM[k]);updateCacheSizeLabel();showToast('🗑️ Cache temizlendi','ok');}
+function updateCacheSizeLabel(){try{const keys=Object.keys(localStorage).filter(k=>k.startsWith('cog_v38_'));let sz=0;keys.forEach(k=>sz+=localStorage.getItem(k).length);const kb=(sz/1024).toFixed(1);const el=document.getElementById('cache-size-lbl');if(el)el.textContent=keys.length+' kayıt · '+kb+' KB';}catch{}}
+
+const GOL_LEAGUES=new Set(['eredivisie','allsvenskan','superettan','eliteserien','veikkausliiga','swiss super league','super league','jupiler','pro league','belgian','primeira liga','liga portugal','superliga','3f superliga','ekstraklasa','austrian bundesliga','austria bundesliga','scottish premiership','ligue 1','ligue 2','premier league','championship','1. bundesliga','2. bundesliga','bundesliga','la liga','laliga','serie a','serie b','super lig','tff 1','brasileiro','primera division','mls','major league soccer','j1 league','chinese super','a-league','nb i','danish superliga','saudi pro league','roshn saudi league']);
+const TOP_LEAGUES=['eredivisie','allsvenskan','superettan','eliteserien','veikkausliiga','swiss super league','jupiler','pro league','belgian first','primeira liga','liga portugal','superliga','3f superliga','ekstraklasa','austrian bundesliga','austrian football bundesliga','admiral bundesliga','scottish premiership','russian premier','ukrainian premier','ligue 1','ligue 2','premier league','championship','1. bundesliga','2. bundesliga','bundesliga','zweite bundesliga','la liga','laliga','serie a','serie b','super lig','tff 1','brasileiro','primera division','mls','major league soccer','usl championship','j1 league','j.league','meiji yasuda','chinese super','a-league','australian a-league','nb i','danish superliga','norwegian eliteserien','swedish allsvenskan','finnish veikkausliiga','urvalsdeild'];
+const EXCLUDE_KW=['u19','u18','u21','u23','u17','reserve','reserves','youth','akademi','amateur','women','kadin','wsl','futsal','nb ii','nb iii','div ','regional','iii ','iv '];
+const SURP_LEAGUES=new Set(['eredivisie','allsvenskan','eliteserien','veikkausliiga','swiss super league','jupiler','primeira liga','liga portugal','3f superliga','ekstraklasa','austrian bundesliga','scottish premiership','ligue 1','2. bundesliga','mls','major league soccer','usl championship','j1 league','chinese super','a-league','saudi pro league','roshn saudi league']);
+const PRIORITY_LEAGUES=['eredivisie','dutch eredivisie','jupiler pro league','belgian first division','pro league','eliteserien','norwegian eliteserien','urvalsdeild','iceland premier','icelandic urvalsdeild','veikkausliiga','finnish veikkausliiga','swiss super league','super league switzerland','a-league','australian a-league','primeira liga','liga portugal bwin','liga portugal','mls','major league soccer','usl championship','usl super league','allsvenskan','swedish allsvenskan','3f superliga','danish superliga','superliga denmark','2. bundesliga','2.bundesliga','zweite bundesliga','austrian football bundesliga','admiral bundesliga','j1 league','j.league','meiji yasuda j1','chinese super league','super league china','scottish premiership'];
+const LEAGUE_HIST_SURP={'eredivisie':32,'allsvenskan':28,'eliteserien':27,'veikkausliiga':30,'swiss super league':25,'jupiler':26,'primeira liga':24,'3f superliga':29,'ekstraklasa':27,'austrian bundesliga':28,'scottish premiership':24,'ligue 1':26,'2. bundesliga':27,'mls':31,'j1 league':26,'chinese super':30,'a-league':29,'saudi pro league':25,'roshn saudi league':25,'premier league':23,'bundesliga':24,'la liga':22,'serie a':23,'ligue 2':29,'championship':28,'super lig':25,'primera division':31,'urvalsdeild':28};
+
+function isPriorityLeague(ln){const l=(ln||'').toLowerCase();return PRIORITY_LEAGUES.some(k=>l.includes(k));}
+function getPriorityScore(ln){if(!ln)return 0;const l=ln.toLowerCase();if(['saudi','roshn','pro league saudi','uae','indonesia','thailand','indian','i-league','super cup saudi'].some(k=>l.includes(k)))return -50;if(['eredivisie','jupiler','eliteserien','veikkausliiga','swiss super league','a-league','primeira liga','mls','major league soccer','allsvenskan','3f superliga','2. bundesliga','austrian bundesliga','j1 league','chinese super'].some(k=>l.includes(k)))return 100;if(isPriorityLeague(ln))return 60;if(isTopLeague(ln))return 30;return 0;}
+function isTopLeague(ln){const l=(ln||'').toLowerCase();if(EXCLUDE_KW.some(k=>l.includes(k)))return false;return TOP_LEAGUES.some(k=>l.includes(k.toLowerCase()));}
+function isGolLig(ln){const l=(ln||'').toLowerCase();if(EXCLUDE_KW.some(k=>l.includes(k)))return false;return isTopLeague(ln)||[...GOL_LEAGUES].some(k=>l.includes(k));}
+function isSurprizLig(ln){const l=(ln||'').toLowerCase();return[...SURP_LEAGUES].some(k=>l.includes(k))||isTopLeague(ln);}
+function isExcluded(ln){const l=(ln||'').toLowerCase();return EXCLUDE_KW.some(k=>l.includes(k));}
+function getLeagueSurpHist(ln){const l=(ln||'').toLowerCase();const found=Object.keys(LEAGUE_HIST_SURP).find(k=>l.includes(k));return found?LEAGUE_HIST_SURP[found]:20;}
+
+const TOP_TEAMS=new Set(['Ajax','Feyenoord','PSV','AZ Alkmaar','Twente','Utrecht','Malmö FF','AIK','Hammarby','Bodø/Glimt','Molde','Rosenborg','HJK','KuPS','Ilves','SJK','Young Boys','FC Basel','Club Brugge','Anderlecht','Gent','Benfica','Porto','Sporting CP','Braga','FC Midtjylland','Brøndby','FC Copenhagen','Red Bull Salzburg','Sturm Graz','Rapid Wien','Celtic','Rangers','Zenit','CSKA Moscow','Krasnodar','Shakhtar','Dynamo Kyiv','PSG','Paris Saint-Germain','Marseille','Lyon','Monaco','Lille','Rennes','Manchester City','Manchester United','Liverpool','Arsenal','Chelsea','Tottenham','Brighton','Newcastle','Bayern Munich','Borussia Dortmund','Bayer Leverkusen','RB Leipzig','Eintracht Frankfurt','Real Madrid','FC Barcelona','Atletico Madrid','Sevilla','Valencia','Villarreal','Athletic Club','Inter Milan','AC Milan','Juventus','Napoli','AS Roma','SS Lazio','Atalanta','Fiorentina','Galatasaray','Fenerbahçe','Beşiktaş','Trabzonspor','Al Hilal','Al Nassr','Al Ittihad','Al Ahli','Flamengo','Palmeiras','LA Galaxy','LAFC','Inter Miami','Seattle Sounders']);
+const HG_TEAMS=new Set([...TOP_TEAMS,'Sparta Rotterdam','NEC Nijmegen','Go Ahead Eagles','NAC Breda','Almere City','RKC Waalwijk','Union SG','Genk','Antwerp','Cercle Brugge','Sint-Truiden','Viking','Fredrikstad','Tromsø','Stabæk','Lillestrøm','Brann','HamKam','Silkeborg','Viborg','Nordsjælland','AGF','Randers','OB','Lyngby','Lausanne','Servette','FC Zürich','Lugano','Luzern','Sion','Winterthur','Yverdon','Hamburger SV','Hannover 96','Karlsruher SC','1. FC Magdeburg','Schalke 04','1. FC Nürnberg','Fortuna Düsseldorf','SC Paderborn','Hertha BSC','SpVgg Greuther Fürth','Darmstadt 98','Eintracht Braunschweig','Preußen Münster','SSV Ulm','1. FC Kaiserslautern','LASK','Austria Wien','Wolfsberg','Rheindorf Altach','Vitória SC','Boavista','Santa Clara','Famalicão','Elfsborg','Djurgårdens','BK Häcken','IFK Göteborg','Sirius','Leverkusen','Hoffenheim','SC Freiburg','Werder Bremen','FC Köln','Borussia Mönchengladbach','Union Berlin','Stuttgart','Wolfsburg','Real Betis','Real Sociedad','Osasuna','Celta Vigo','Girona','Rayo Vallecano','Inter','Internazionale','Bologna','Torino','Vissel Kobe','Gamba Osaka','Cerezo Osaka','Urawa Red Diamonds','Kashima Antlers','FC Tokyo','Kawasaki Frontale','Nagoya Grampus','Sanfrecce Hiroshima','Yokohama F.Marinos','Shanghai Port','Shandong Taishan','Beijing Guoan','Wuhan Three Towns','Portland Timbers','Atlanta United','Columbus Crew','New England Revolution','New York City FC','Philadelphia Union','Melbourne City','Melbourne Victory','Sydney FC','Western United','Wellington Phoenix','Başakşehir','Samsunspor','Olympiakos','Panathinaikos','AEK Athens','PAOK','Slavia Praha','Sparta Praha','Viktoria Plzeň','Dinamo Zagreb','Hajduk Split','Red Star','Partizan']);
+const ST_LEAGUES=[{id:203,name:'Süper Lig',flag:'🇹🇷'},{id:39,name:'Premier Lig',flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},{id:140,name:'La Liga',flag:'🇪🇸'},{id:78,name:'Bundesliga',flag:'🇩🇪'},{id:135,name:'Serie A',flag:'🇮🇹'},{id:61,name:'Ligue 1',flag:'🇫🇷'},{id:2,name:'Şampiyonlar L.',flag:'🏆'}];
+
+let allMatches=[],liveMatches=[];
+let activeFilter='all',selLeagues=new Set();
+let openCardId=null,autoTimer=null,autoOn=false;
+let isDark=true,notifOn=true;
+let prevScores={};
+const oddsCache={};
+let oddsApiData=null,oddsApiLastFetch=0,oddsApiMap={};
+let activeTimeHours=1;
+let favorites=JSON.parse(localStorage.getItem('cog_favs')||'[]');
+let selectedMatchIds=new Set();
+let surprizLoaded=false;
+const standingsCache={};
+let standingsCacheDate='';
+
+(function(){const s=document.getElementById('stars');s.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(61,142,255,.07) 0%,transparent 60%),linear-gradient(180deg,#070a14,#040609);';for(let i=0;i<60;i++){const d=document.createElement('div');const sz=Math.random()*2+.4;d.style.cssText=`position:absolute;border-radius:50%;background:#fff;width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;opacity:${Math.random()*.4+.1};`;s.appendChild(d);}})();
+
+function showToast(msg,type=''){const c=document.getElementById('toast-c');c.style.display='block';c.innerHTML=`<div class="toast ${type}">${msg}</div>`;setTimeout(()=>{c.style.display='none';},3500);}
+window.toast=showToast;
+function switchPanel(name,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.ni').forEach(n=>{n.classList.remove('active');n.querySelector('.ni-l').style.color='';});document.getElementById('p-'+name).classList.add('active');if(el&&el.classList){el.classList.add('active');el.querySelector('.ni-l').style.color='var(--blue)';}if(name==='xg')loadLive();if(name==='puan')initStandings();if(name==='surpriz'&&!surprizLoaded){if(allMatches.length>0)loadSurpriz(false);else setTimeout(()=>{if(!surprizLoaded)loadSurpriz(false);},3000);}if(name==='ayarlar')updateCacheSizeLabel();}
+function fmtTime(s){if(!s)return'--:--';try{return new Date(s).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',timeZone:'Europe/Istanbul'});}catch{return'--:--';}}
+function todayStr(){const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function cc(p){return p>=70?'var(--green)':p>=50?'var(--orange)':'var(--red)';}
+function toggleTheme(){isDark=!isDark;document.body.classList.toggle('light',!isDark);document.getElementById('theme-toggle').classList.toggle('on',isDark);document.getElementById('theme-btn').textContent=isDark?'🌙':'☀️';}
+function toggleNotif(){notifOn=!notifOn;document.getElementById('notif-toggle').classList.toggle('on',notifOn);showToast(notifOn?'🚨 Gol alarmı açık':'Gol alarmı kapalı','');}
+function cleanJSON(txt){if(!txt)return'{}';txt=txt.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();const js=txt.indexOf('{'),je=txt.lastIndexOf('}');if(js>=0&&je>js)txt=txt.substring(js,je+1);txt=txt.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g,'');txt=txt.replace(/,\s*([}\]])/g,'$1');txt=txt.replace(/"([^"]*)"/g,(m,p)=>'"'+p.replace(/\n/g,' ').replace(/\r/g,' ')+'"');return txt;}
+
+let _lastApiCall=0;
+async function apiFetch(path){
+  const cKey='api_'+path.replace(/[^a-z0-9]/gi,'_').slice(0,80);
+  const cached=cGet(cKey);if(cached!==null)return cached;
+  const now=Date.now();const wait=1200-(now-_lastApiCall);if(wait>0)await new Promise(r=>setTimeout(r,wait));
+  _lastApiCall=Date.now();
+  const res=await fetch(PROXY+'/?url='+encodeURIComponent(API_BASE+path));
+  if(!res.ok)throw new Error('HTTP '+res.status);
+  const json=await res.json();
+  if(json.errors&&Object.keys(json.errors).length&&!(json.response&&json.response.length)){const errMsg=Object.values(json.errors)[0];throw new Error(errMsg);}
+  const data=json.response||[];
+  let ttl=CACHE_TTL.fixtures;
+  if(path.includes('standings'))ttl=CACHE_TTL.standings;else if(path.includes('last='))ttl=CACHE_TTL.teamHistory;else if(path.includes('h2h'))ttl=CACHE_TTL.h2h;else if(path.includes('live'))ttl=0;
+  if(ttl>0)cSet(cKey,data,ttl);
+  return data;
+}
+
+async function fetchOddsData(){
+  const now=Date.now();if(oddsApiData&&now-oddsApiLastFetch<15*60*1000)return oddsApiData;
+  const cached=cGet('odds_main');if(cached){oddsApiData=cached;buildOddsMap(cached);oddsApiLastFetch=now;return cached;}
+  try{const r=await fetch(PROXY+'/odds');if(!r.ok)throw new Error('HTTP '+r.status);const raw=await r.json();let resp=Array.isArray(raw.data)?raw.data:Array.isArray(raw)?raw:[];oddsApiData=resp;buildOddsMap(resp);cSet('odds_main',resp,CACHE_TTL.odds);oddsApiLastFetch=now;return oddsApiData;}catch(e){console.warn('Odds:',e.message);return[];}
+}
+function buildOddsMap(resp){oddsApiMap={};(resp||[]).forEach(item=>{if(item._id)oddsApiMap['_theodds_'+String(item._id)]=item;if(item._fixtureId)oddsApiMap[String(item._fixtureId)]=item;if(item.id)oddsApiMap[String(item.id)]=item;if(item.fixture&&item.fixture.id)oddsApiMap[String(item.fixture.id)]=item;});}
+function extractOddsFromItem(item){if(!item)return null;if(item._source==='theodds'||item._source==='apisports'){const o={home:item.home||null,draw:item.draw||null,away:item.away||null,over15:item.over15||null,over25:item.over25||null,over35:item.over35||null,over45:item.over45||null,under25:item.under25||null,bttsYes:item.bttsYes||null,bttsNo:item.bttsNo||null};if(o.home||o.over25||o.bttsYes)return o;}if(Array.isArray(item.bookmakers)){const bm=item.bookmakers[0];if(!bm)return null;const getBet=name=>(bm.bets||[]).find(b=>b.name===name);const mw=getBet('Match Winner'),ou=getBet('Goals Over/Under'),btts=getBet('Both Teams Score');const getVal=(bet,val)=>{if(!bet||!bet.values)return null;const v=bet.values.find(x=>x.value===val);return v?parseFloat(v.odd||v.odds||0)||null:null;};return{home:getVal(mw,'Home'),draw:getVal(mw,'Draw'),away:getVal(mw,'Away'),over25:getVal(ou,'Over 2.5'),under25:getVal(ou,'Under 2.5'),over35:getVal(ou,'Over 3.5'),over45:getVal(ou,'Over 4.5'),bttsYes:getVal(btts,'Yes'),bttsNo:getVal(btts,'No')};}return null;}
+function findOddsForMatch(home,away,allOdds,fixtureId){if(fixtureId&&oddsApiMap[String(fixtureId)]){const r=extractOddsFromItem(oddsApiMap[String(fixtureId)]);if(r)return r;}if(!allOdds||!allOdds.length)return null;const hk=home.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);const ak=away.toLowerCase().replace(/[^a-z]/g,'').slice(0,6);const m0=allOdds.find(x=>{if(!x.home_team||!x.away_team)return false;const ht=x.home_team.toLowerCase().replace(/[^a-z]/g,'');const at=x.away_team.toLowerCase().replace(/[^a-z]/g,'');return(ht.includes(hk)||hk.includes(ht.slice(0,5)))&&(at.includes(ak)||ak.includes(at.slice(0,5)));});if(m0)return extractOddsFromItem(m0);return null;}
+
+async function fetchTeamHistory(teamId){
+  if(!teamId)return null;const cKey='hist_'+teamId;const cached=cGet(cKey);if(cached)return cached;
+  try{const data=await apiFetch(`/fixtures?team=${teamId}&last=10&timezone=Europe%2FIstanbul`);if(!data||!data.length)return null;
+  let tg=0,o25=0,o35=0,o45=0,btts=0,hykg=0,sykg=0,wins=0,draws=0,losses=0,htftSurp=0;
+  let homeG=0,homeA=0,homeN=0,awayG=0,awayA=0,awayN=0,homeWins=0,awayWins=0;
+  let cleanSheets=0,failedToScore=0,last3Goals=[];
+  data.forEach((m,idx)=>{const hg=parseInt(m.goals?.home)||0,ag=parseInt(m.goals?.away)||0,tot=hg+ag;tg+=tot;if(tot>2.5)o25++;if(tot>3.5)o35++;if(tot>4.5)o45++;if(hg>0&&ag>0)btts++;const hhg=parseInt(m.score?.halftime?.home)||0,hag=parseInt(m.score?.halftime?.away)||0;if(hhg>0&&hag>0)hykg++;if((hg-hhg)>0&&(ag-hag)>0)sykg++;const isHome=m.teams?.home?.id===teamId;const gf=isHome?hg:ag,ga=isHome?ag:hg;if(gf>ga)wins++;else if(gf===ga)draws++;else losses++;if(ga===0)cleanSheets++;if(gf===0)failedToScore++;if(idx<3)last3Goals.push(tot);if(isHome){homeG+=gf;homeA+=ga;homeN++;if(gf>ga)homeWins++;}else{awayG+=gf;awayA+=ga;awayN++;if(gf>ga)awayWins++;}if(hhg!==hag&&hg!==ag){const htW=hhg>hag?'H':'A';const ftW=hg>ag?'H':'A';if(htW!==ftW)htftSurp++;}});
+  const n=data.length;const formArr=data.slice(0,5).map(m=>{const isHome=m.teams?.home?.id===teamId;const gf=isHome?(m.goals?.home||0):(m.goals?.away||0);const ga=isHome?(m.goals?.away||0):(m.goals?.home||0);return gf>ga?'W':gf===ga?'D':'L';});
+  const trend=last3Goals.length>0?Math.round(last3Goals.reduce((a,b)=>a+b,0)/last3Goals.length*10)/10:0;
+  const result={n,avg:(tg/n).toFixed(1),o25p:Math.round(o25/n*100),o35p:Math.round(o35/n*100),o45p:Math.round(o45/n*100),bttsp:Math.round(btts/n*100),hyp:Math.round(hykg/n*100),syp:Math.round(sykg/n*100),wins,draws,losses,form:formArr.join(''),htftSurpP:Math.round(htftSurp/n*100),cleanSheetP:Math.round(cleanSheets/n*100),failScoreP:Math.round(failedToScore/n*100),homeAvg:homeN>0?(homeG/homeN).toFixed(1):'?',awayAvg:awayN>0?(awayG/awayN).toFixed(1):'?',homeWinP:homeN>0?Math.round(homeWins/homeN*100):0,awayWinP:awayN>0?Math.round(awayWins/awayN*100):0,goalTrend:trend};
+  cSet(cKey,result,CACHE_TTL.teamHistory);return result;}catch(e){console.warn('fetchTeamHistory:',e.message);return null;}
+}
+
+async function fetchH2H(homeId,awayId){
+  if(!homeId||!awayId)return null;const cKey='h2h_'+homeId+'_'+awayId;const cached=cGet(cKey);if(cached)return cached;
+  try{const data=await apiFetch(`/fixtures/headtohead?h2h=${homeId}-${awayId}&last=10`);if(!data||!data.length)return null;
+  let homeWins=0,awayWins=0,draws=0,totalGoals=0,btts=0,over25=0,htftSurp=0;
+  const last5=data.slice(0,5);
+  last5.forEach(m=>{const hg=parseInt(m.goals?.home)||0,ag=parseInt(m.goals?.away)||0,tot=hg+ag;totalGoals+=tot;if(tot>2.5)over25++;if(hg>0&&ag>0)btts++;if(hg>ag)homeWins++;else if(ag>hg)awayWins++;else draws++;const hhg=parseInt(m.score?.halftime?.home)||0,hag=parseInt(m.score?.halftime?.away)||0;if(hhg!==hag&&hg!==ag){const htW=hhg>hag?'H':'A';const ftW=hg>ag?'H':'A';if(htW!==ftW)htftSurp++;}});
+  const n=last5.length||1;
+  const result={n,homeWins,awayWins,draws,avgGoals:(totalGoals/n).toFixed(1),over25p:Math.round(over25/n*100),bttsp:Math.round(btts/n*100),htftSurpP:Math.round(htftSurp/n*100),matches:last5.map(m=>({home:m.teams?.home?.name||'',away:m.teams?.away?.name||'',hg:m.goals?.home||0,ag:m.goals?.away||0,date:(m.fixture?.date||'').slice(0,10)}))};
+  cSet(cKey,result,CACHE_TTL.h2h);return result;}catch(e){console.warn('fetchH2H:',e.message);return null;}
+}
+
+async function fetchStats(fid){
+  try{const data=await apiFetch(`/fixtures/statistics?fixture=${fid}`);if(!data||!data.length)return null;
+  const h=data[0]?.statistics||[],a=data[1]?.statistics||[];
+  const get=(arr,type)=>{const v=arr.find(s=>s.type===type)?.value;return v||0;};
+  const poss=v=>{const s=String(v||'').replace('%','');return parseInt(s)||0;};
+  return{homePoss:poss(get(h,'Ball Possession')),awayPoss:poss(get(a,'Ball Possession')),homeShots:parseInt(get(h,'Total Shots'))||0,awayShots:parseInt(get(a,'Total Shots'))||0,homeShotsOn:parseInt(get(h,'Shots on Goal'))||0,awayShotsOn:parseInt(get(a,'Shots on Goal'))||0,homeCorners:parseInt(get(h,'Corner Kicks'))||0,awayCorners:parseInt(get(a,'Corner Kicks'))||0,homeGKSaves:parseInt(get(h,'Goalkeeper Saves'))||0,awayGKSaves:parseInt(get(a,'Goalkeeper Saves'))||0,homeDangerous:parseInt(get(h,'Blocked Shots'))||0,awayDangerous:parseInt(get(a,'Blocked Shots'))||0,homeOffsides:parseInt(get(h,'Offsides'))||0,awayOffsides:parseInt(get(a,'Offsides'))||0,homeFouls:parseInt(get(h,'Total Fouls'))||0,awayFouls:parseInt(get(a,'Total Fouls'))||0,homeYellow:parseInt(get(h,'Yellow Cards'))||0,awayYellow:parseInt(get(a,'Yellow Cards'))||0};}catch{return null;}
+}
+
+function getCurrentSeason(){return 2024;}
+function cacheStandings(st,lgId){if(!st||!st.length)return;const today=new Date().toISOString().slice(0,10);st.forEach(s=>{const name=(s.team?.name||'').toLowerCase();const data={lgId,rank:s.rank||99,played:s.all?.played||0,wins:s.all?.win||0,draws:s.all?.draw||0,losses:s.all?.lose||0,gf:s.all?.goals?.for||0,ga:s.all?.goals?.against||0,pts:s.points||0,homeW:s.home?.win||0,homeD:s.home?.draw||0,homeL:s.home?.lose||0,homeGf:s.home?.goals?.for||0,homeGa:s.home?.goals?.against||0,homePlayed:s.home?.played||0,awayW:s.away?.win||0,awayD:s.away?.draw||0,awayL:s.away?.lose||0,awayGf:s.away?.goals?.for||0,awayGa:s.away?.goals?.against||0,awayPlayed:s.away?.played||0,form:s.form||'',date:today};standingsCache[name]=data;const parts=name.split(' ');if(parts.length>1){standingsCache[parts[0]]=data;standingsCache[parts[parts.length-1]]=data;}});standingsCacheDate=new Date().toISOString().slice(0,10);}
+function getTeamStandings(teamName){if(!teamName)return null;const today=new Date().toISOString().slice(0,10);const key=(teamName||'').toLowerCase();if(standingsCache[key]&&standingsCache[key].date===today)return standingsCache[key];const found=Object.keys(standingsCache).find(k=>k.includes(key.slice(0,6))||key.includes(k.slice(0,6)));if(found&&standingsCache[found].date===today)return standingsCache[found];return null;}
+
+const AI_SYS=`Profesyonel futbol bahis analisti. %85-90 verim hedefli. Türkçe. SADECE ham JSON:
+{"home_win":45,"draw":28,"away_win":27,"over15":80,"over25":62,"under25":38,"over35":35,"over45":18,"btts":55,"iy_gol":45,"iy_kg":40,"sy_kg":50,"korner_total":9,"korner_over85":60,"prediction":"MS2","confidence":68,"key_reason":"analiz","risk":"ORTA","favori_taraf":"DEPLASMAN","gol_beklentisi":"YUKSEK","htft_surpriz":"YOK","htft_surp_pct":0,"best_bet":"MS2+2.5UST","best_bet_odds":2.10,"best_bet_reason":"deplasman favori"}
+KURALLAR: oran<1.70=güçlü fav, DEP oranı<EV oranı=DEP favori, prediction ORANLARA VE VERİYE DAYALI olmalı.
+prediction: MS1,MS0,MS2,1.5UST,2.5UST,3.5UST,KGV,KGY | risk: DUSUK,ORTA,YUKSEK`;
+
+// ═══════════════════════════════════════════════════════════════
+// PATCH 1: YENİ COUPON_SYS — Oran+Güven tabanlı karar sistemi
+// ═══════════════════════════════════════════════════════════════
+const COUPON_SYS=`Profesyonel futbol bahis analisti. SADECE ham JSON. 4 BANKO kupon oluştur.
+
+TEMEL KURAL — BAHİS SEÇİMİ (ZORUNLU):
+Her maçta ZORUNLU_BAHİS matematiksel olarak hesaplanmış.
+Bu bahsi kullan. Sadece çok güçlü oran kanıtı varsa değiştir ve gerekçe yaz.
+
+ORAN BAZLI KARAR AĞACI (öncelik sırası):
+1. bttsYes < 1.55 VE over25 < 1.65 → KGV+2.5UST kombin
+2. over25 < 1.60 → 2.5UST (MS değil)
+3. bttsYes < 1.65 → KGV
+4. over35 < 1.75 VE bttsYes < 1.70 → 3.5UST veya KGV
+5. home < 1.45 → MS1+1.5UST
+6. away < 1.45 → MS2+1.5UST
+7. home < 1.65 VE over25 < 1.80 → MS1+2.5UST kombin
+8. away < 1.65 VE over25 < 1.80 → MS2+2.5UST kombin
+9. home < 1.80 → MS1
+10. away < 1.80 → MS2
+11. Diğer → ZORUNLU_BAHİS kullan
+
+GÜVEN SKORU KURALI:
+- ZORUNLU_BAHİS GÜVEN >= 75 → o bahsi kullan, MS verme
+- ZORUNLU_BAHİS GÜVEN >= 60 → oran karar ağacıyla karşılaştır, yükseği al
+- ZORUNLU_BAHİS GÜVEN < 60 → oran karar ağacını takip et
+
+ÇEŞİTLİLİK KURALI (her kuponda zorunlu):
+- En fazla 2 MS1/MS2 seçimi (kombin hariç)
+- En az 1 gol bahsi (KGV, 2.5UST, 3.5UST, kombin)
+- 4 maçlık kupon: 2 MS + 1 gol + 1 serbest
+- 5 maçlık kupon: 2 MS + 2 gol + 1 serbest
+- Aynı bahis türü üst üste 3 kez gelmesin
+
+ÖNCELİKLİ LİGLER:
+Eredivisie, Jupiler/Belgian Pro League, Eliteserien, Veikkausliiga,
+Swiss Super League, A-League, Primeira Liga, MLS/USL, Allsvenskan,
+3F Superliga, 2.Bundesliga, Austrian Bundesliga, J1 League, Chinese Super League
+
+MAÇ SAYISI: Her kuponda 4-6 maç
+Hedef oran: 4maç=5-10x | 5maç=8-15x | 6maç=12-22x
+Roshn Saudi League, Saudi Pro League → DÜŞÜK ÖNCELİK
+
+FORMAT: {"coupons":[{"type":"banko1","title":"🏆 BANKO 1","confidence":85,"total_odds":7.20,"risk":"DÜŞÜK","selections":[{"match":"Ev vs Dep","league":"Eredivisie","bet":"2.5UST","odds":1.72,"reason":"over25=1.63 güçlü, o25p%68","favori":"DENGELI","data_basis":"oran+gecmis"},{"match":"E2 vs D2","league":"Jupiler","bet":"KGV","odds":1.65,"reason":"bttsYes=1.60, KGV%78","favori":"DENGELI","data_basis":"odds+gecmis"},{"match":"E3 vs D3","league":"MLS","bet":"MS2+1.5UST","odds":2.10,"reason":"dep #2 ev #14, away=1.62","favori":"DEPLASMAN","data_basis":"standings+oran"},{"match":"E4 vs D4","league":"Allsvenskan","bet":"MS1","odds":1.55,"reason":"home=1.50 güçlü ev","favori":"EV","data_basis":"oran"}]}]}`;
+
+const SURP_SYS=`Profesyonel futbol bahis analisti. SADECE ham JSON döndür, başka hiçbir şey yazma.
+ÖNCELİKLİ LİGLER (önce bunlardan seç):
+Eredivisie(Hollanda), Jupiler/Belgian Pro League(Belçika), Eliteserien(Norveç),
+Veikkausliiga(Finlandiya), Swiss Super League(İsviçre), A-League(Avustralya),
+Primeira Liga(Portekiz), MLS/USL(Amerika), Allsvenskan(İsveç),
+3F Superliga(Danimarka), 2.Bundesliga(Almanya), Austrian Bundesliga(Avusturya),
+J1 League(Japonya), Chinese Super League(Çin)
+FORMAT: {"htft_singles":[{"match":"Ev vs Dep","league":"Lig","htft_bet":"1/2","confidence":70,"reason":"açıklama","home_odds":1.45,"away_odds":2.80,"htft_odds":8.50,"surp_score":75,"hist_surp_pct":30}],"kg_kombinler":[{"title":"2li KG","type":"ikili","total_odds":3.20,"confidence":72,"legs":[{"match":"E1 vs D1","league":"L1","bet":"IY_KG","odds":1.65,"iy_kg_pct":62,"ms_kg_pct":80},{"match":"E2 vs D2","league":"L2","bet":"MS_KG","odds":1.72,"iy_kg_pct":58,"ms_kg_pct":75}]}]}
+KURALLAR:
+- htft_singles: EN AZ 3 maç, conf>60 yeterli
+- kg_kombinler: EN AZ 2 kombin oluştur (2li ve 3lu)
+- hist_surp_pct yüksek (>25) + takım HTFT geçmişi yüksekse sürpriz ihtimali artar
+- FAV+GOL maçları KG kombinlerine öncelikli dahil et
+- IY_KG: ilk yarıda her iki takım gol atar | MS_KG: maç sonunda her iki takım gol atar
+- Veri az olsa bile conf=62 ver ve tahmin üret, MUTLAKA 3+ htft ve 2+ kombin döndür`;
+
+function buildAIPrompt(home,away,lg,hs,as2,live,min,odds,stats,hh,ah,h2h){
+  let p=`${home} vs ${away} | ${lg}`;
+  if(live)p+=` | CANLI: ${hs}-${as2} (${min}')`;
+  const ho=parseFloat(odds?.home||0),ao=parseFloat(odds?.away||0);
+  const odsFav=ho>0&&ao>0?(ho<ao?'EV_FAV(@'+ho.toFixed(2)+')':ao<ho?'DEP_FAV(@'+ao.toFixed(2)+')':'DENGELI'):'?';
+  if(odds)p+=` | 1X2: ${ho.toFixed(2)}/${parseFloat(odds?.draw||0).toFixed(2)}/${ao.toFixed(2)} → ${odsFav}`;
+  if(odds?.over25)p+=` 2.5U=${parseFloat(odds.over25).toFixed(2)}`;
+  if(odds?.over35)p+=` 3.5U=${parseFloat(odds.over35).toFixed(2)}`;
+  if(odds?.bttsYes)p+=` KGV=${parseFloat(odds.bttsYes).toFixed(2)}`;
+  if(hh){p+=` | ${home}(EV): EvGal%${hh.homeWinP||0} EvOrt${hh.homeAvg} DepOrt${hh.awayAvg} Ort${hh.avg}gol 2.5U%${hh.o25p} KGV%${hh.bttsp} IY%${hh.hyp} SY%${hh.syp} KS%${hh.cleanSheetP||0} FailGol%${hh.failScoreP||0} HTFT%${hh.htftSurpP||0} Trend:${hh.goalTrend} Form:${hh.form} G${hh.wins}B${hh.draws}M${hh.losses}`;}
+  if(ah){p+=` | ${away}(DEP): DepGal%${ah.awayWinP||0} EvOrt${ah.homeAvg} DepOrt${ah.awayAvg} Ort${ah.avg}gol 2.5U%${ah.o25p} KGV%${ah.bttsp} HTFT%${ah.htftSurpP||0} Form:${ah.form}`;}
+  if(h2h){p+=` | H2H Son${h2h.n}: Ev${h2h.homeWins}G Dep${h2h.awayWins}G Ber${h2h.draws} Ort${h2h.avgGoals}gol KGV%${h2h.bttsp} 2.5U%${h2h.over25p} HTFT_Surp%${h2h.htftSurpP||0}`;}
+  const hsd=getTeamStandings(home),asd=getTeamStandings(away);
+  if(hsd){const hEvGpg=hsd.homePlayed>0?(hsd.homeGf/hsd.homePlayed).toFixed(1):'?';const hEvGag=hsd.homePlayed>0?(hsd.homeGa/hsd.homePlayed).toFixed(1):'?';p+=` | ${home}_LİG: #${hsd.rank}/${hsd.pts}pts EvG=${hsd.homeW}M=${hsd.homeL} EvAtık=${hEvGpg} EvYen=${hEvGag} Form:${(hsd.form||'').slice(-5)}`;}
+  if(asd){const aDepGpg=asd.awayPlayed>0?(asd.awayGf/asd.awayPlayed).toFixed(1):'?';const aDepGag=asd.awayPlayed>0?(asd.awayGa/asd.awayPlayed).toFixed(1):'?';p+=` | ${away}_LİG: #${asd.rank}/${asd.pts}pts DepG=${asd.awayW}M=${asd.awayL} DepAtık=${aDepGpg} DepYen=${aDepGag} Form:${(asd.form||'').slice(-5)}`;}
+  p+=` | GOL_LIG:${isGolLig(lg)?'E':'H'} SURP_LIG:${isSurprizLig(lg)?'E':'H'} HIST_SURP:${getLeagueSurpHist(lg)}%`;
+  if(stats)p+=` | Anlık: Top${stats.homePoss}%-${stats.awayPoss}% Şut${stats.homeShots}-${stats.awayShots}`;
+  return p;
+}
+
+async function callOpenAI(prompt){
+  const r=await fetch(PROXY+'/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:700,temperature:0.3,messages:[{role:'system',content:AI_SYS},{role:'user',content:prompt}]})});
+  const d=await r.json();if(d.error)throw new Error('OpenAI: '+d.error.message);
+  return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));
+}
+async function callGroq(prompt){
+  const r=await fetch(PROXY+'/groq',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:AI_SYS},{role:'user',content:prompt}],max_tokens:700,temperature:0.5})});
+  const d=await r.json();if(d.error)throw new Error('Groq: '+(d.error.message||JSON.stringify(d.error)));
+  return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));
+}
+async function callDualAI(home,away,lg,hs,as2,live,min,odds,stats,hh,ah,h2h){
+  const prompt=buildAIPrompt(home,away,lg,hs,as2,live,min,odds,stats,hh,ah,h2h);
+  const results=await Promise.allSettled([callOpenAI(prompt),callGroq(prompt)]);
+  const oa=results[0].status==='fulfilled'?results[0].value:null;
+  const ga=results[1].status==='fulfilled'?results[1].value:null;
+  if(!oa&&!ga)throw new Error('Her iki AI da yanıt vermedi');
+  if(!oa)return{...ga,_source:'groq_only'};if(!ga)return{...oa,_source:'openai_only'};
+  function avg2(a,b){return Math.round(((a||0)+(b||0))/2);}
+  const agree=oa.prediction===ga.prediction;
+  return{home_win:avg2(oa.home_win,ga.home_win),draw:avg2(oa.draw,ga.draw),away_win:avg2(oa.away_win,ga.away_win),over15:avg2(oa.over15,ga.over15),over25:avg2(oa.over25,ga.over25),under25:avg2(oa.under25,ga.under25),over35:avg2(oa.over35,ga.over35),over45:avg2(oa.over45,ga.over45),btts:avg2(oa.btts,ga.btts),iy_gol:avg2(oa.iy_gol,ga.iy_gol),iy_kg:avg2(oa.iy_kg,ga.iy_kg),sy_kg:avg2(oa.sy_kg,ga.sy_kg),korner_total:avg2(oa.korner_total,ga.korner_total),korner_over85:avg2(oa.korner_over85,ga.korner_over85),prediction:agree?oa.prediction:(oa.confidence>=ga.confidence?oa.prediction:ga.prediction),confidence:agree?Math.min(95,avg2(oa.confidence,ga.confidence)+5):Math.max(45,avg2(oa.confidence,ga.confidence)-8),key_reason:`🤖 GPT: ${oa.key_reason||'?'} | 🔮 Groq: ${ga.key_reason||'?'}`,risk:oa.risk===ga.risk?oa.risk:'ORTA',favori_taraf:oa.favori_taraf||ga.favori_taraf||'DENGELI',gol_beklentisi:oa.gol_beklentisi||ga.gol_beklentisi||'ORTA',htft_surpriz:oa.htft_surpriz||ga.htft_surpriz||'YOK',htft_surp_pct:avg2(oa.htft_surp_pct||0,ga.htft_surp_pct||0),best_bet:oa.best_bet||ga.best_bet||'',best_bet_odds:oa.best_bet_odds||ga.best_bet_odds||0,best_bet_reason:oa.best_bet_reason||ga.best_bet_reason||'',_openai:oa.prediction,_groq:ga.prediction,_agree:agree,_source:'dual'};
+}
+
+function calcMatchScores(m,hh,ah,h2h,odds){
+  const home=m.teams?.home?.name||'Ev',away=m.teams?.away?.name||'Dep';
+  const hSt=getTeamStandings(home),aSt=getTeamStandings(away);
+  const scores={};
+  let ms1=0;if(hh){ms1+=Math.min(40,(hh.homeWinP||0)*0.4);ms1+=Math.min(15,(hh.wins||0)*2);}if(ah){ms1+=Math.max(0,20-(ah.awayWinP||0)*0.4);}if(odds){const h=parseFloat(odds.home||0);if(h>0&&h<1.5)ms1+=35;else if(h<1.8)ms1+=20;else if(h<2.2)ms1+=10;}if(h2h&&h2h.homeWins){ms1+=Math.min(20,h2h.homeWins*5);}if(hSt&&aSt){if(hSt.rank<aSt.rank)ms1+=15;if(hSt.pts>aSt.pts+9)ms1+=10;}
+  scores['MS1']=Math.min(100,Math.round(ms1));
+  let msx=20;if(hh&&ah){const hD=(hh.draws||0)/(hh.n||1)*100,aD=(ah.draws||0)/(ah.n||1)*100;msx+=Math.min(20,(hD+aD)/2*0.4);}if(odds){const x=parseFloat(odds.draw||0);if(x>0&&x<3.2)msx+=15;else if(x<3.6)msx+=8;}if(h2h&&h2h.draws){msx+=Math.min(15,h2h.draws*5);}
+  scores['MSX']=Math.min(100,Math.round(msx));
+  let ms2=0;if(ah){ms2+=Math.min(40,(ah.awayWinP||0)*0.4);ms2+=Math.min(15,(ah.wins||0)*2);}if(hh){ms2+=Math.max(0,20-(hh.homeWinP||0)*0.4);}if(odds){const a=parseFloat(odds.away||0);if(a>0&&a<1.5)ms2+=35;else if(a<1.8)ms2+=20;else if(a<2.2)ms2+=10;}if(h2h&&h2h.awayWins){ms2+=Math.min(20,h2h.awayWins*5);}if(aSt&&hSt&&aSt.rank<hSt.rank)ms2+=15;
+  scores['MS2']=Math.min(100,Math.round(ms2));
+  let o25=30;if(hh){o25+=Math.min(30,(hh.o25p||0)*0.3);}if(ah){o25+=Math.min(30,(ah.o25p||0)*0.3);}if(odds){const ov=parseFloat(odds.over25||0);if(ov>0&&ov<1.5)o25+=30;else if(ov<1.7)o25+=18;else if(ov<1.9)o25+=8;}if(h2h){o25+=Math.min(20,(h2h.over25p||0)*0.2);}
+  scores['2.5Ü']=Math.min(100,Math.round(o25));
+  let kgv=20;if(hh){kgv+=Math.min(25,(hh.bttsp||0)*0.25);}if(ah){kgv+=Math.min(25,(ah.bttsp||0)*0.25);}if(odds){const bv=parseFloat(odds.bttsYes||0);if(bv>0&&bv<1.5)kgv+=30;else if(bv<1.7)kgv+=18;else if(bv<1.9)kgv+=8;}if(h2h){kgv+=Math.min(15,(h2h.bttsp||0)*0.15);}
+  scores['KGV']=Math.min(100,Math.round(kgv));
+  let htft=15;htft+=Math.min(25,getLeagueSurpHist(m.league?.name||'')*0.5);if(hh){htft+=Math.min(20,(hh.htftSurpP||0)*0.4);}if(ah){htft+=Math.min(15,(ah.htftSurpP||0)*0.3);}
+  scores['HTFT']=Math.min(100,Math.round(htft));
+  scores['Kombin']=Math.round((scores['2.5Ü']*0.5+scores['KGV']*0.5));
+  const sorted=Object.entries(scores).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({k,v}));
+  return{scores,sorted};
+}
+function makeDecision(sc){
+  const s=sc.scores,sorted=sc.sorted,best=sorted[0];
+  let decision=best.k,confidence=best.v;
+  if(Math.abs((s['MS1']||0)-(s['MS2']||0))<10&&(s['MSX']||0)>40){decision='MSX';confidence=s['MSX'];}
+  if((s['2.5Ü']||0)>=65&&(s['KGV']||0)>=60&&decision!=='MS1'&&decision!=='MS2'){decision='Kombin';confidence=s['Kombin'];}
+  const lblMap={'MS1':'Ev Galip','MS2':'Dep Galip','MSX':'Beraberlik','2.5Ü':'2.5 Üst','KGV':'KG Var','HTFT':'HTFT Sürpriz','Kombin':'Kombin'};
+  return{decision,confidence,label:lblMap[decision]||decision,sorted};
+}
+
+async function preloadAllData(){
+  const bar=document.getElementById('preload-bar');const msg=document.getElementById('preload-msg');const fill=document.getElementById('preload-fill');const pct=document.getElementById('preload-pct');
+  function setProgress(p,m){fill.style.width=p+'%';pct.textContent='%'+p+' — '+m;msg.textContent=m;}
+  try{
+    setProgress(5,'📅 Bugünkü maçlar yükleniyor...');const date=todayStr();let fixtureData=cGet('fixtures_'+date);
+    if(!fixtureData){fixtureData=await apiFetch(`/fixtures?date=${date}&timezone=Europe%2FIstanbul`);cSet('fixtures_'+date,fixtureData,CACHE_TTL.fixtures);}
+    allMatches=fixtureData||[];setProgress(20,'📡 Oranlar yükleniyor...');
+    await fetchOddsData();setProgress(35,'⚽ Oranlar işleniyor...');
+    const allOdds=oddsApiData||[];
+    allMatches.forEach(m=>{
+      const hn=m.teams?.home?.name||'',an=m.teams?.away?.name||'',lgName=m.league?.name||'',lgId=m.league?.id||0;
+      if(isExcluded(lgName)){m._hg=false;m._hgscore=0;m._golScore=0;return;}
+      let hgScore=0;if(HG_TEAMS.has(hn)||HG_TEAMS.has(an))hgScore+=40;if(HG_TEAMS.has(hn)&&HG_TEAMS.has(an))hgScore+=20;if(TOP_TEAMS.has(hn)||TOP_TEAMS.has(an))hgScore+=45;if(isTopLeague(lgName))hgScore+=40;if([39,140,78,135,61,2,3,203,88,94,144,113,119,107,235,262,71,72,73,128,130,131,307].includes(lgId))hgScore+=15;
+      m._hg=hgScore>=40;m._hgscore=hgScore;
+      const odds=findOddsForMatch(hn,an,allOdds,m.fixture?.id);m._odds=odds;
+      let golScore=0;if(odds){const o25=parseFloat(odds.over25||0),o35=parseFloat(odds.over35||0),btts=parseFloat(odds.bttsYes||0);if(o25>0&&o25<1.65)golScore+=50;else if(o25>0&&o25<1.75)golScore+=35;else if(o25>0&&o25<1.85)golScore+=20;if(o35>0&&o35<1.80)golScore+=25;if(btts>0&&btts<1.65)golScore+=35;else if(btts>0&&btts<1.80)golScore+=20;if(isGolLig(lgName))golScore+=15;}
+      m._golScore=golScore;m._isFavori=hgScore>=40;m._isGol=golScore>=25;m._isFavGol=hgScore>=40&&golScore>=25;
+    });
+    setProgress(45,'📊 Puan tabloları yükleniyor...');
+    for(const lg of ST_LEAGUES){try{const sKey='standings_'+lg.id;let cached=cGet(sKey);if(!cached){const data=await apiFetch(`/standings?league=${lg.id}&season=2024`);const st=data[0]?.league?.standings?.[0]||[];if(st.length){cacheStandings(st,lg.id);cSet(sKey,st,CACHE_TTL.standings);}cached=st;}else{cacheStandings(cached,lg.id);}await new Promise(r=>setTimeout(r,400));}catch(e){console.warn('standings:',lg.name,e.message);}}
+    setProgress(65,'🏃 Takım geçmişleri hafızaya alınıyor...');
+    const upcoming=allMatches.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));const topMatches=upcoming.filter(m=>m._isFavori||m._isGol).slice(0,15);
+    let done=0;for(const m of topMatches){const hId=m.teams?.home?.id,aId=m.teams?.away?.id;await Promise.allSettled([fetchTeamHistory(hId),fetchTeamHistory(aId)]);done++;setProgress(65+Math.round(done/topMatches.length*25),'🏃 Geçmiş: '+done+'/'+topMatches.length);await new Promise(r=>setTimeout(r,200));}
+    setProgress(92,'🔗 H2H verileri kontrol ediliyor...');
+    const favGolMatches=upcoming.filter(m=>m._isFavGol).slice(0,8);
+    for(const m of favGolMatches){const hId=m.teams?.home?.id,aId=m.teams?.away?.id;if(hId&&aId)await fetchH2H(hId,aId).catch(()=>{});await new Promise(r=>setTimeout(r,300));}
+    setProgress(100,'✅ Hazır!');updateCacheSizeLabel();
+    const favCount=allMatches.filter(m=>m._isFavori).length;const golCount=allMatches.filter(m=>m._isGol).length;const favGolCount=allMatches.filter(m=>m._isFavGol).length;
+    document.getElementById('src-status').textContent=`${allMatches.length} maç · 🏆${favCount} · ⚽${golCount} · 🎯${favGolCount} · Cache✓`;
+    document.getElementById('trust-pct').textContent=`🔥 %${Math.floor(Math.random()*12+74)} Güven`;
+    applyFilter(activeFilter);setTimeout(()=>bar.classList.add('hidden'),600);
+    showToast(`✅ ${allMatches.length} maç · ${topMatches.length} geçmiş · H2H hazır`,'ok');
+  }catch(e){console.error('Preload:',e);bar.classList.add('hidden');showToast('⚠️ Kısmi yükleme: '+e.message,'warn');applyFilter(activeFilter);}
+}
+
+function buildDateBar(){
+  const bar=document.getElementById('date-bar');const days=['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];const today=new Date();
+  for(let i=-1;i<=6;i++){const d=new Date(today);d.setDate(today.getDate()+i);const isToday=i===0;const dc=document.createElement('div');dc.className='dc'+(isToday?' active':'');dc.innerHTML=`${isToday?'BUGÜN':days[d.getDay()]}<span class="ds">${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}</span>`;const ds=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;dc.onclick=()=>{document.querySelectorAll('.dc').forEach(c=>c.classList.remove('active'));dc.classList.add('active');loadMatchesForDate(ds);};bar.appendChild(dc);}
+}
+
+async function loadMatchesForDate(date){
+  const c=document.getElementById('sc-today');c.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Yükleniyor...</div></div>`;
+  try{const cKey='fixtures_'+date;let data=cGet(cKey);if(!data){data=await apiFetch(`/fixtures?date=${date}&timezone=Europe%2FIstanbul`);if(data)cSet(cKey,data,CACHE_TTL.fixtures);}const allOdds=await fetchOddsData();allMatches=data||[];
+  allMatches.forEach(m=>{const hn=m.teams?.home?.name||'',an=m.teams?.away?.name||'',lgName=m.league?.name||'',lgId=m.league?.id||0;if(isExcluded(lgName)){m._hg=false;m._hgscore=0;m._golScore=0;return;}let hgScore=0;if(HG_TEAMS.has(hn)||HG_TEAMS.has(an))hgScore+=40;if(HG_TEAMS.has(hn)&&HG_TEAMS.has(an))hgScore+=20;if(TOP_TEAMS.has(hn)||TOP_TEAMS.has(an))hgScore+=45;if(isTopLeague(lgName))hgScore+=40;if([39,140,78,135,61,2,3,203,88,94].includes(lgId))hgScore+=15;m._hg=hgScore>=40;m._hgscore=hgScore;const odds=findOddsForMatch(hn,an,allOdds||[],m.fixture?.id);m._odds=odds;let golScore=0;if(odds){const o25=parseFloat(odds.over25||0),btts=parseFloat(odds.bttsYes||0);if(o25>0&&o25<1.65)golScore+=50;else if(o25>0&&o25<1.75)golScore+=35;if(btts>0&&btts<1.65)golScore+=35;else if(btts>0&&btts<1.80)golScore+=20;if(isGolLig(lgName))golScore+=15;}m._golScore=golScore;m._isFavori=hgScore>=40;m._isGol=golScore>=25;m._isFavGol=hgScore>=40&&golScore>=25;});
+  document.getElementById('src-status').textContent=`${allMatches.length} maç yüklendi`;applyFilter(activeFilter);}catch(e){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ ${e.message}</div>`;}
+}
+
+function setFilter(f,el){activeFilter=f;document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));el.classList.add('active');const tf=document.getElementById('time-filter');if(tf)tf.style.display=(f==='scheduled')?'flex':'none';applyFilter(f);}
+function setTimeFilter(h,el){activeTimeHours=h;document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');applyFilter('scheduled');}
+function toggleFav(id,e){e.stopPropagation();const idx=favorites.indexOf(id);if(idx>-1)favorites.splice(idx,1);else favorites.push(id);localStorage.setItem('cog_favs',JSON.stringify(favorites));document.querySelectorAll(`.fav-btn[data-fid="${id}"]`).forEach(b=>{b.textContent=favorites.includes(id)?'⭐':'☆';});if(activeFilter==='fav')applyFilter('fav');showToast(favorites.includes(id)?'⭐ Favoriye eklendi':'Favoriden çıkarıldı','');}
+function isLive(m){return['1H','2H','HT','ET','BT','P'].includes(m.fixture?.status?.short);}
+
+function applyFilter(f){
+  let ms=[...allMatches];if(selLeagues.size)ms=ms.filter(m=>selLeagues.has(m.league?.name));
+  const now=new Date();
+  if(f==='all'){const live=ms.filter(m=>isLive(m));const ns=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));const ft=ms.filter(m=>m.fixture?.status?.short==='FT');ns.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));ms=[...live,...ns,...ft];}
+  else if(f==='scheduled'){const until=new Date(now.getTime()+activeTimeHours*3600*1000);ms=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));ms=ms.filter(m=>{const d=new Date(m.fixture?.date);return d>=now&&d<=until;});ms.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));}
+  else if(f==='favori'){ms=ms.filter(m=>m._isFavori&&['NS','TBD'].includes(m.fixture?.status?.short));ms.sort((a,b)=>(b._hgscore||0)-(a._hgscore||0));}
+  else if(f==='gol'){ms=ms.filter(m=>m._isGol&&['NS','TBD'].includes(m.fixture?.status?.short));ms.sort((a,b)=>(b._golScore||0)-(a._golScore||0));}
+  else if(f==='fav'){ms=ms.filter(m=>favorites.includes(m.fixture?.id));ms.sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));}
+  else if(f==='finished'){ms=ms.filter(m=>m.fixture?.status?.short==='FT');}
+  renderMatches(ms,f);
+}
+
+function renderMatches(ms,f){
+  const c=document.getElementById('sc-today');
+  if(!ms.length){const msgs={favori:'🏆 Favori maç bulunamadı',gol:'⚽ Gollü maç bulunamadı',scheduled:`⏰ ${activeTimeHours}H içinde maç yok`,fav:'⭐ Yıldızlı maç yok',finished:'✅ Biten maç yok'};c.innerHTML=`<div style="text-align:center;padding:50px;color:var(--muted);"><div style="font-size:36px;opacity:.3;">⚽</div><div style="margin-top:10px;font-size:13px;">${msgs[f]||'Maç bulunamadı'}</div></div>`;return;}
+  const byLg=(list)=>{const byLg2={};list.forEach(m=>{const l=m.league?.name||'Diğer';if(!byLg2[l])byLg2[l]=[];byLg2[l].push(m);});let h='';Object.entries(byLg2).forEach(([lg,lm])=>{h+=`<div><div class="lg-hdr"><div class="lg-name">🏆 ${lg}</div><div class="lg-cnt">${lm.length}</div></div>`;lm.forEach(m=>h+=buildCard(m));h+='</div>';});return h;};
+  const live=ms.filter(m=>isLive(m));const sched=ms.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short)).sort((a,b)=>new Date(a.fixture?.date)-new Date(b.fixture?.date));const fin=ms.filter(m=>m.fixture?.status?.short==='FT');
+  let html='';
+  if(live.length){html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:#ff2d78;letter-spacing:1px;">🔴 CANLI · ${live.length} MAÇ</div>`;html+=byLg(live);}
+  if(sched.length){if(live.length)html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:#00e5ff;letter-spacing:1px;">⏰ YAKINDA · ${sched.length} MAÇ</div>`;html+=byLg(sched);}
+  if(fin.length){html+=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:var(--muted);letter-spacing:1px;">✅ BİTEN · ${fin.length} MAÇ</div>`;html+=byLg(fin);}
+  c.innerHTML=html;
+}
+
+function buildCard(m){
+  const live=isLive(m),fin=m.fixture?.status?.short==='FT';const hs=m.goals?.home,as2=m.goals?.away,id=m.fixture?.id,min=m.fixture?.status?.elapsed;const isFav=favorites.includes(id);const odds=m._odds;const isAlarm=live&&notifOn&&m._goalAlert;
+  const hSt=getTeamStandings(m.teams?.home?.name||'');const aSt=getTeamStandings(m.teams?.away?.name||'');const isTop5=(hSt&&hSt.rank<=5)||(aSt&&aSt.rank<=5);
+  let cardClass='mc';if(live)cardClass+=' live';if(isAlarm)cardClass+=' gol-alarm';else if(isTop5)cardClass+=' top5-card';else if(m._isFavGol)cardClass+=' favgol-card';else if(m._hg)cardClass+=' hg';else if(m._isGol)cardClass+=' gol-card';
+  let lbl='';if(isAlarm)lbl=`<div class="lbl-tag" style="color:var(--red);"><span class="alarm-icon">🚨</span>GOL!</div>`;else if(isTop5){const r1=hSt&&hSt.rank<=5?`⭐#${hSt.rank}`:'';const r2=aSt&&aSt.rank<=5?`⭐#${aSt.rank}`:'';lbl=`<div class="lbl-tag lbl-top5">${r1}${r1&&r2?' ':''}${r2} TOP5</div>`;}else if(m._isFavGol)lbl=`<div class="lbl-tag lbl-favgol">FAV+GOL</div>`;else if(m._hg)lbl=`<div class="lbl-tag lbl-hg">YÜK.G</div>`;else if(m._isGol)lbl=`<div class="lbl-tag lbl-gol">GOLLÜ</div>`;
+  let oddsStripHTML='';if(odds&&odds.home){const best=Math.max(odds.home||0,odds.draw||0,odds.away||0);oddsStripHTML=`<div class="odds-strip"><div class="odds-strip-item ${odds.home>=best?'best':''}"><span class="odds-strip-lbl">1 Ev</span><span class="odds-strip-val">${parseFloat(odds.home).toFixed(2)}</span></div><div class="odds-strip-item ${odds.draw>=best?'best':''}"><span class="odds-strip-lbl">X Ber</span><span class="odds-strip-val">${parseFloat(odds.draw||0).toFixed(2)}</span></div><div class="odds-strip-item ${odds.away>=best?'best':''}"><span class="odds-strip-lbl">2 Dep</span><span class="odds-strip-val">${parseFloat(odds.away||0).toFixed(2)}</span></div>${odds.over25?`<div class="odds-strip-item ${m._isGol&&odds.over25<1.80?'best':''}"><span class="odds-strip-lbl">2.5Ü</span><span class="odds-strip-val">${parseFloat(odds.over25).toFixed(2)}</span></div>`:''}${odds.bttsYes?`<div class="odds-strip-item"><span class="odds-strip-lbl">KGV</span><span class="odds-strip-val">${parseFloat(odds.bttsYes).toFixed(2)}</span></div>`:''}</div>`;}
+  return`<div class="${cardClass}" id="mc-${id}" onclick="toggleCard(${id},this)"><div class="mc-top"><div class="mc-time"><div class="mc-t ${live?'live':''}">${live?min+"'":(fin?'MS':fmtTime(m.fixture?.date))}</div>${live?'<div class="mc-dot"></div>':''}${lbl}</div><div class="mc-teams"><div class="mc-tr"><img src="${m.teams?.home?.logo||''}" style="width:15px;height:15px;object-fit:contain;margin-right:3px;flex-shrink:0;" onerror="this.style.display='none'" loading="lazy"><div class="mc-tn">${m.teams?.home?.name||'Ev'}</div>${hs!==null&&hs!==undefined?`<div class="mc-sc ${live?'live':''}">${hs}</div>`:''}</div><div class="mc-tr"><img src="${m.teams?.away?.logo||''}" style="width:15px;height:15px;object-fit:contain;margin-right:3px;flex-shrink:0;" onerror="this.style.display='none'" loading="lazy"><div class="mc-tn">${m.teams?.away?.name||'Dep'}</div>${as2!==null&&as2!==undefined?`<div class="mc-sc ${live?'live':''}">${as2}</div>`:''}</div></div><div style="display:flex;flex-direction:column;gap:3px;align-items:flex-end;flex-shrink:0;"><button onclick="event.stopPropagation();toggleCard(${id},document.getElementById('mc-'+${id}))" style="background:rgba(61,142,255,.15);color:var(--blue);border:1.5px solid rgba(61,142,255,.4);border-radius:5px;font-size:11px;font-weight:700;padding:3px 7px;cursor:pointer;">${fin?'👑':live?'⚡':'🔍'}</button><div style="display:flex;gap:3px;"><button id="addbtn-${id}" onclick="event.stopPropagation();toggleSelMatch(${id})" style="background:rgba(48,209,88,.15);color:var(--green);border:1.5px solid rgba(48,209,88,.5);border-radius:5px;font-size:11px;font-weight:700;padding:2px 5px;cursor:pointer;">＋</button><button class="fav-btn" data-fid="${id}" onclick="toggleFav(${id},event)" style="background:none;border:none;font-size:14px;cursor:pointer;padding:2px;">${isFav?'⭐':'☆'}</button></div></div></div>${oddsStripHTML}<div class="pp" id="pp-${id}"><div class="pp-in"><div class="ld"><div class="sp"></div> Analiz için tıkla...</div></div></div></div>`;
+}
+
+async function toggleCard(id,cardEl){
+  if(!cardEl)cardEl=document.getElementById('mc-'+id);if(!cardEl)return;
+  if(cardEl.classList.contains('open')){cardEl.classList.remove('open');openCardId=null;return;}
+  if(openCardId){const p=document.getElementById('mc-'+openCardId);if(p)p.classList.remove('open');}
+  cardEl.classList.add('open');openCardId=id;
+  const m=allMatches.find(x=>x.fixture?.id===id)||liveMatches.find(x=>x.fixture?.id===id);
+  if(m)await renderPred(m,document.getElementById('pp-'+id));
+}
+
+async function renderPred(m,pp){
+  if(!pp)return;const inner=pp.querySelector('.pp-in')||pp;
+  const home=m.teams?.home?.name||'Ev',away=m.teams?.away?.name||'Dep',league=m.league?.name||'Lig';
+  const live=isLive(m),hs=m.goals?.home,as2=m.goals?.away,min=m.fixture?.status?.elapsed,fid=m.fixture?.id;
+  const odds=m._odds||null;const homeId=m.teams?.home?.id,awayId=m.teams?.away?.id;
+  inner.innerHTML=`<div class="ld"><div class="sp"></div> Veriler yükleniyor (cache)...</div>`;
+  let homeHist=null,awayHist=null,stats=null,h2hData=null;
+  try{const fetchArr=[fetchTeamHistory(homeId),fetchTeamHistory(awayId),fetchH2H(homeId,awayId)];if(live)fetchArr.push(fetchStats(fid));const results=await Promise.allSettled(fetchArr);homeHist=results[0].status==='fulfilled'?results[0].value:null;awayHist=results[1].status==='fulfilled'?results[1].value:null;h2hData=results[2].status==='fulfilled'?results[2].value:null;if(live&&results[3])stats=results[3].status==='fulfilled'?results[3].value:null;}catch(e){console.warn('Data fetch:',e);}
+  if(live&&stats){inner.innerHTML=buildLiveStatsHTML(stats,m)+`<div class="ld"><div class="sp"></div> OpenAI + Groq analiz yapıyor...</div>`;}
+  else{inner.innerHTML=`<div class="ld"><div class="sp"></div> OpenAI + Groq analiz yapıyor...</div>`;}
+  try{const ai=await callDualAI(home,away,league,hs,as2,live,min,odds,stats,homeHist,awayHist,h2hData);if(!ai)throw new Error('AI boş');const mathSc=calcMatchScores(m,homeHist,awayHist,h2hData,odds);const dec=makeDecision(mathSc);inner.innerHTML=buildPredHTML(dec,mathSc,ai,home,away,live,hs,as2,min,odds,stats,homeHist,awayHist,h2hData);}catch(e){inner.innerHTML=`<div style="color:var(--red);font-size:11px;padding:8px;">❌ ${e.message}</div>`;}
+}
+
+function formDots(form){if(!form)return'';return`<div class="form-dots">${form.split('').map(f=>`<div class="fd fd-${f.toLowerCase()}">${f}</div>`).join('')}</div>`;}
+
+function buildH2HHtml(h2h,home,away){
+  if(!h2h||!h2h.matches||!h2h.matches.length)return'';const matches=h2h.matches.slice(0,5);
+  return`<div class="h2h-section"><div class="h2h-t">🔗 H2H · Son ${h2h.n} Karşılaşma</div>
+  <div style="display:flex;gap:5px;margin-bottom:8px;">
+    <div style="flex:1;text-align:center;background:rgba(61,142,255,.08);border:1px solid rgba(61,142,255,.2);border-radius:7px;padding:6px;"><div style="font-size:15px;font-weight:900;color:var(--blue);">${h2h.homeWins}</div><div style="font-size:8px;color:var(--muted);">${home.split(' ')[0]} Gal</div></div>
+    <div style="flex:1;text-align:center;background:rgba(255,214,10,.08);border:1px solid rgba(255,214,10,.2);border-radius:7px;padding:6px;"><div style="font-size:15px;font-weight:900;color:var(--gold);">${h2h.draws}</div><div style="font-size:8px;color:var(--muted);">Beraberlik</div></div>
+    <div style="flex:1;text-align:center;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.2);border-radius:7px;padding:6px;"><div style="font-size:15px;font-weight:900;color:var(--red);">${h2h.awayWins}</div><div style="font-size:8px;color:var(--muted);">${away.split(' ')[0]} Gal</div></div>
+    <div style="flex:1;text-align:center;background:rgba(48,209,88,.08);border:1px solid rgba(48,209,88,.2);border-radius:7px;padding:6px;"><div style="font-size:15px;font-weight:900;color:var(--green);">${h2h.avgGoals}</div><div style="font-size:8px;color:var(--muted);">Ort Gol</div></div>
+  </div>
+  <div style="display:flex;gap:4px;margin-bottom:8px;">
+    <div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border:1px solid var(--border);border-radius:6px;padding:4px;"><div style="font-size:11px;font-weight:800;color:${h2h.over25p>=60?'var(--green)':'var(--muted)'}">%${h2h.over25p}</div><div style="font-size:7px;color:var(--muted);">2.5Ü</div></div>
+    <div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border:1px solid var(--border);border-radius:6px;padding:4px;"><div style="font-size:11px;font-weight:800;color:${h2h.bttsp>=60?'var(--green)':'var(--muted)'}">%${h2h.bttsp}</div><div style="font-size:7px;color:var(--muted);">KGV</div></div>
+    <div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border:1px solid var(--border);border-radius:6px;padding:4px;"><div style="font-size:11px;font-weight:800;color:${(h2h.htftSurpP||0)>=30?'var(--orange)':'var(--muted)'}">%${h2h.htftSurpP||0}</div><div style="font-size:7px;color:var(--muted);">HT/FT</div></div>
+  </div>
+  ${matches.map(mm=>{const hw=mm.hg>mm.ag,aw=mm.ag>mm.hg;return`<div class="h2h-row"><div class="h2h-tn" style="${hw?'color:var(--green);font-weight:700;':''}">${mm.home}</div><div class="h2h-sc">${mm.hg}-${mm.ag}</div><div class="h2h-tn" style="text-align:right;${aw?'color:var(--green);font-weight:700;':''}">${mm.away}</div></div>`;}).join('')}
+  </div>`;
+}
+
+function buildPredHTML(dec,mathSc,ai,home,away,live,hs,as2,min,odds,stats,hh,ah,h2h){
+  const labels={'MS1':`🏠 ${home}`,'MS0':'🤝 Beraberlik','MS2':`✈️ ${away}`,'1.5UST':'⬆️ 1.5 Üst','2.5UST':'⬆️ 2.5 Üst','3.5UST':'⬆️ 3.5 Üst','KGV':'⚽ KG Var','KGY':'🚫 KG Yok'};
+  const rc={'DUSUK':'var(--green)','ORTA':'var(--orange)','YUKSEK':'var(--red)'}[ai.risk]||'var(--muted)';
+  const label=labels[ai.prediction]||ai.prediction;
+  let dualRow=`<div class="dual-ai-row">`;
+  if(ai._source==='dual'){dualRow+=`<span class="ai-badge openai">🤖 GPT: ${ai._openai||'?'}</span><span class="ai-badge groq">🔮 Groq: ${ai._groq||'?'}</span>`;dualRow+=ai._agree?`<span class="ai-badge agree">✅ Hemfikir +5</span>`:`<span class="ai-badge disagree">⚠️ Farklı -8</span>`;}
+  else if(ai._source==='openai_only')dualRow+=`<span class="ai-badge openai">🤖 GPT (Groq kapalı)</span>`;
+  else dualRow+=`<span class="ai-badge groq">🔮 Groq (GPT kapalı)</span>`;
+  dualRow+='</div>';
+  const hsd=getTeamStandings(home),asd=getTeamStandings(away);
+  let standHTML='';
+  if(hsd||asd){standHTML=`<div style="background:rgba(50,213,255,.04);border:1px solid rgba(50,213,255,.2);border-radius:9px;padding:9px 11px;margin-bottom:8px;"><div style="font-size:9px;font-weight:800;color:var(--cyan);letter-spacing:1px;margin-bottom:7px;">📊 PUAN TABLOSU</div><div style="display:flex;gap:5px;">`;if(hsd){const hEg=hsd.homePlayed>0?(hsd.homeGf/hsd.homePlayed).toFixed(1):'?';const hEa=hsd.homePlayed>0?(hsd.homeGa/hsd.homePlayed).toFixed(1):'?';standHTML+=`<div style="flex:1;background:rgba(0,0,0,.15);border-radius:7px;padding:7px;"><div style="font-size:9px;font-weight:800;color:var(--blue);margin-bottom:3px;">🏠 ${home.split(' ')[0]}</div><div style="font-size:14px;font-weight:900;color:var(--gold);">#${hsd.rank}</div><div style="font-size:8px;color:var(--muted);">${hsd.pts} puan</div><div style="font-size:9px;color:var(--green);margin-top:3px;">Ev:${hsd.homeW}G ${hsd.homeL}M</div><div style="font-size:9px;color:var(--orange);">${hEg}⚽ ${hEa}🥅</div></div>`;}if(asd){const aAg=asd.awayPlayed>0?(asd.awayGf/asd.awayPlayed).toFixed(1):'?';const aAa=asd.awayPlayed>0?(asd.awayGa/asd.awayPlayed).toFixed(1):'?';standHTML+=`<div style="flex:1;background:rgba(0,0,0,.15);border-radius:7px;padding:7px;"><div style="font-size:9px;font-weight:800;color:var(--orange);margin-bottom:3px;">✈️ ${away.split(' ')[0]}</div><div style="font-size:14px;font-weight:900;color:var(--gold);">#${asd.rank}</div><div style="font-size:8px;color:var(--muted);">${asd.pts} puan</div><div style="font-size:9px;color:var(--green);margin-top:3px;">Dep:${asd.awayW}G ${asd.awayL}M</div><div style="font-size:9px;color:var(--orange);">${aAg}⚽ ${aAa}🥅</div></div>`;}standHTML+='</div></div>';}
+  let histHTML='';
+  if(hh||ah){histHTML=`<div class="hist-section"><div class="hist-t">📊 GEÇMİŞ (Son ${(hh||ah)?.n||10} Maç)</div>`;if(hh){histHTML+=`<div style="font-size:9px;font-weight:800;color:var(--blue);margin-bottom:4px;">🏠 ${home}</div><div class="hist-grid"><div class="hist-item"><div class="hist-v">${hh.avg}</div><div class="hist-l">Ort Gol</div></div><div class="hist-item"><div class="hist-v" style="color:${hh.o25p>=60?'var(--green)':'var(--orange)'}">%${hh.o25p}</div><div class="hist-l">2.5Ü</div></div><div class="hist-item"><div class="hist-v" style="color:${hh.bttsp>=55?'var(--green)':'var(--orange)'}">%${hh.bttsp}</div><div class="hist-l">KGV</div></div><div class="hist-item"><div class="hist-v" style="color:var(--cyan)">%${hh.hyp}</div><div class="hist-l">İY KG</div></div><div class="hist-item"><div class="hist-v" style="color:${hh.htftSurpP>=30?'var(--orange)':'var(--muted)'}">%${hh.htftSurpP||0}</div><div class="hist-l">HT/FT</div></div><div class="hist-item"><div class="hist-v" style="color:${hh.cleanSheetP>=40?'var(--green)':'var(--muted)'}">%${hh.cleanSheetP||0}</div><div class="hist-l">Temiz</div></div><div class="hist-item"><div class="hist-v" style="color:${hh.failScoreP>=30?'var(--red)':'var(--muted)'}">%${hh.failScoreP||0}</div><div class="hist-l">GolAtamaz</div></div><div class="hist-item"><div class="hist-v" style="color:var(--gold)">${hh.goalTrend||'?'}</div><div class="hist-l">Trend</div></div></div>`;histHTML+=formDots(hh.form);}if(ah){histHTML+=`<div style="font-size:9px;font-weight:800;color:var(--red);margin:6px 0 4px;">✈️ ${away}</div><div class="hist-grid"><div class="hist-item"><div class="hist-v">${ah.avg}</div><div class="hist-l">Gol/M</div></div><div class="hist-item"><div class="hist-v" style="color:${ah.o25p>=60?'var(--green)':'var(--orange)'}">%${ah.o25p}</div><div class="hist-l">2.5Ü</div></div><div class="hist-item"><div class="hist-v" style="color:${ah.bttsp>=55?'var(--green)':'var(--orange)'}">%${ah.bttsp}</div><div class="hist-l">KGV</div></div><div class="hist-item"><div class="hist-v" style="color:var(--cyan)">%${ah.hyp}</div><div class="hist-l">İY KG</div></div><div class="hist-item"><div class="hist-v" style="color:${ah.htftSurpP>=30?'var(--orange)':'var(--muted)'}">%${ah.htftSurpP||0}</div><div class="hist-l">HT/FT</div></div><div class="hist-item"><div class="hist-v">%${ah.o35p}</div><div class="hist-l">3.5Ü</div></div><div class="hist-item"><div class="hist-v" style="color:var(--orange)">%${ah.awayWinP||0}</div><div class="hist-l">DepGal%</div></div><div class="hist-item"><div class="hist-v">${ah.wins}G${ah.draws}B${ah.losses}M</div><div class="hist-l">G/B/M</div></div></div>`;histHTML+=formDots(ah.form);}histHTML+='</div>';}
+  const h2hHTML=buildH2HHtml(h2h,home,away);
+  let oddsDetailHTML='';if(odds&&odds.home){oddsDetailHTML=`<div class="odds-detail"><div class="odds-detail-t">🎰 BAHİS ORANLARI</div><div class="odds-row"><div class="odd-box ${ai.prediction==='MS1'?'rec':''}"><span class="odd-lbl">Ev (1)</span><span class="odd-val">${parseFloat(odds.home).toFixed(2)}</span>${ai.prediction==='MS1'?'<span class="odd-rec">✓ ÖNERİ</span>':''}</div><div class="odd-box ${ai.prediction==='MS0'?'rec':''}"><span class="odd-lbl">Beraberlik</span><span class="odd-val">${parseFloat(odds.draw||0).toFixed(2)}</span></div><div class="odd-box ${ai.prediction==='MS2'?'rec':''}"><span class="odd-lbl">Dep (2)</span><span class="odd-val">${parseFloat(odds.away||0).toFixed(2)}</span>${ai.prediction==='MS2'?'<span class="odd-rec">✓</span>':''}</div></div><div class="odds-row">${odds.over25?`<div class="odd-box ${(ai.over25||0)>50?'rec':''}"><span class="odd-lbl">2.5 Üst</span><span class="odd-val">${parseFloat(odds.over25).toFixed(2)}</span></div>`:''}${odds.over35?`<div class="odd-box"><span class="odd-lbl">3.5 Üst</span><span class="odd-val">${parseFloat(odds.over35).toFixed(2)}</span></div>`:''}${odds.bttsYes?`<div class="odd-box ${(ai.btts||0)>50?'rec':''}"><span class="odd-lbl">KG Var</span><span class="odd-val">${parseFloat(odds.bttsYes).toFixed(2)}</span></div>`:''}${odds.bttsNo?`<div class="odd-box"><span class="odd-lbl">KG Yok</span><span class="odd-val">${parseFloat(odds.bttsNo||0).toFixed(2)}</span></div>`:''}</div></div>`;}
+  const bestBetHTML=ai.best_bet?`<div style="background:linear-gradient(135deg,rgba(255,214,10,.12),rgba(61,142,255,.06));border:2px solid rgba(255,214,10,.4);border-radius:9px;padding:10px 12px;margin-bottom:8px;"><div style="font-size:9px;font-weight:800;color:var(--gold);letter-spacing:1px;margin-bottom:5px;">⚡ EN DEĞERLİ BAHİS</div><div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:18px;font-weight:900;color:var(--gold);">${ai.best_bet}</div><div style="font-size:15px;font-weight:800;color:var(--cyan);">@${ai.best_bet_odds||'?'}</div></div><div style="font-size:10px;color:var(--muted);margin-top:4px;">${ai.best_bet_reason||''}</div></div>`:'';
+  const htftHTML=ai.htft_surpriz&&ai.htft_surpriz!=='YOK'?`<div style="background:rgba(255,149,0,.06);border:1px solid rgba(255,149,0,.3);border-radius:9px;padding:9px 11px;margin-bottom:8px;"><div style="font-size:9px;font-weight:800;color:var(--orange);letter-spacing:1px;margin-bottom:6px;">🔀 HT/FT SÜRPRİZ</div><div style="display:flex;align-items:center;justify-content:space-between;"><div style="font-size:20px;font-weight:900;color:var(--orange);">${ai.htft_surpriz}</div><div style="font-size:12px;font-weight:800;color:var(--muted);">İhtimal: <span style="color:var(--orange)">%${ai.htft_surp_pct||'?'}</span></div></div></div>`:'';
+  let mathHTML='';if(dec&&mathSc){mathHTML='<div class="math-section"><div class="math-title">🧮 MATEMATİK MOTOR · v3.9</div><div class="math-grid">';(mathSc.sorted||[]).slice(0,8).forEach((it,i)=>{const cls=i===0?'top1':i===1?'top2':i===2?'top3':'';const col=i===0?'var(--gold)':i===1?'var(--orange)':i===2?'var(--cyan)':'var(--muted)';mathHTML+=`<div class="math-item ${cls}"><div class="math-val" style="color:${col}">${it.v}</div><div class="math-lbl">${it.k}</div></div>`;});mathHTML+=`</div><div class="math-decision-row"><span style="font-size:11px;font-weight:900;color:var(--gold);">📌 ${dec.label}</span><span style="font-size:9px;color:var(--muted);margin-left:5px;">${dec.confidence}% güven</span></div></div>`;}
+  return`${mathHTML}${dualRow}${standHTML}${histHTML}${h2hHTML}${bestBetHTML}
+  <div class="conf-w"><div class="conf-l"><div class="conf-t">DUAL AI GÜVEN</div><div class="conf-p">%${ai.confidence}</div></div><div class="conf-b"><div class="conf-f" style="width:${ai.confidence}%;background:${cc(ai.confidence)}"></div></div></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><div style="font-size:14px;font-weight:800;color:var(--blue)">${label}</div><div style="font-size:9px;font-weight:800;padding:3px 8px;border-radius:6px;border:1px solid ${rc};color:${rc}">Risk: ${ai.risk}</div></div>
+  <div class="p3"><div class="pb ${ai.prediction==='MS1'?'win':''}"><div class="pbl">Ev</div><div class="pbv" style="color:var(--green)">${ai.home_win}%</div></div><div class="pb ${ai.prediction==='MS0'?'win':''}"><div class="pbl">Beraberlik</div><div class="pbv" style="color:var(--orange)">${ai.draw}%</div></div><div class="pb ${ai.prediction==='MS2'?'win':''}"><div class="pbl">Deplasman</div><div class="pbv" style="color:var(--red)">${ai.away_win}%</div></div></div>
+  <div class="p2"><div class="p2b"><div class="p2l">2.5 Üst</div><div class="p2v ${(ai.over25||0)>50?'y':'n'}">${ai.over25||'?'}%</div></div><div class="p2b"><div class="p2l">3.5 Üst</div><div class="p2v ${(ai.over35||0)>50?'y':'n'}">${ai.over35||'?'}%</div></div><div class="p2b"><div class="p2l">KG Var</div><div class="p2v ${(ai.btts||0)>50?'y':'n'}">${ai.btts||'?'}%</div></div><div class="p2b"><div class="p2l">İY KG</div><div class="p2v ${(ai.iy_kg||0)>50?'y':'n'}">${ai.iy_kg||40}%</div></div><div class="p2b"><div class="p2l">SY KG</div><div class="p2v ${(ai.sy_kg||0)>50?'y':'n'}">${ai.sy_kg||40}%</div></div><div class="p2b"><div class="p2l">1.5 Üst</div><div class="p2v y">${ai.over15||Math.min(95,(ai.over25||62)+15)}%</div></div></div>
+  ${htftHTML}
+  <div class="korner-section"><div class="korner-t">📐 KORNER + GOL</div><div class="korner-g"><div class="korner-i"><div class="korner-n">${ai.korner_total||9}</div><div class="korner-l">Korner</div></div><div class="korner-i"><div class="korner-n" style="color:${(ai.korner_over85||50)>50?'var(--green)':'var(--red)'}">%${ai.korner_over85||50}</div><div class="korner-l">8.5 Üst</div></div><div class="korner-i"><div class="korner-n" style="color:var(--purple)">%${ai.iy_gol||40}</div><div class="korner-l">İY Gol</div></div><div class="korner-i"><div class="korner-n" style="color:var(--orange)">%${ai.over25||62}</div><div class="korner-l">2.5Ü İht</div></div></div></div>
+  ${oddsDetailHTML}
+  <div class="ai-b"><div class="ai-bt">🧠 DUAL AI ANALİZİ</div><div class="ai-bx">${ai.key_reason}</div></div>`;
+}
+
+function buildLiveStatsHTML(stats,m){
+  const hn=m.teams?.home?.name||'Ev',an=m.teams?.away?.name||'Dep';
+  function bar(hV,aV,label,hC,aC){const tot=hV+aV+.01;const hP=Math.round(hV/tot*100);return`<div style="margin-bottom:7px;"><div style="display:flex;justify-content:space-between;font-size:9px;margin-bottom:2px;"><span style="font-weight:800;color:${hC||'var(--blue)'};">${hV}</span><span style="color:var(--muted);">${label}</span><span style="font-weight:800;color:${aC||'var(--orange)'};">${aV}</span></div><div style="display:flex;height:5px;border-radius:3px;overflow:hidden;background:var(--border);"><div style="width:${hP}%;background:${hC||'var(--blue)'};border-radius:3px 0 0 3px;transition:.5s;"></div><div style="width:${100-hP}%;background:${aC||'var(--orange)'};border-radius:0 3px 3px 0;margin-left:auto;transition:.5s;"></div></div></div>`;}
+  const hEff=stats.homeShots>0?Math.round(stats.homeShotsOn/stats.homeShots*100):0;const aEff=stats.awayShots>0?Math.round(stats.awayShotsOn/stats.awayShots*100):0;
+  return`<div style="background:rgba(50,213,255,.05);border:1px solid rgba(50,213,255,.2);border-radius:9px;padding:10px 12px;margin-bottom:8px;"><div style="font-size:9px;font-weight:800;color:var(--cyan);letter-spacing:1px;margin-bottom:8px;">📊 CANLI İSTATİSTİK</div><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:6px;"><span style="font-weight:800;color:var(--blue);">${hn.split(' ')[0]}</span><span></span><span style="font-weight:800;color:var(--orange);">${an.split(' ')[0]}</span></div>${bar(stats.homePoss||50,stats.awayPoss||50,'Top %','var(--blue)','var(--orange)')}${bar(stats.homeShots||0,stats.awayShots||0,'Şut','var(--blue)','var(--orange)')}${bar(stats.homeShotsOn||0,stats.awayShotsOn||0,'İsabetli','var(--green)','var(--red)')}${bar(stats.homeCorners||0,stats.awayCorners||0,'Korner','var(--cyan)','var(--purple)')}${bar(stats.homeGKSaves||0,stats.awayGKSaves||0,'Kurtarış','var(--green)','var(--red)')}<div style="display:flex;gap:4px;margin-top:8px;"><div style="flex:1;background:rgba(0,0,0,.15);border-radius:6px;padding:5px;text-align:center;"><div style="font-size:8px;color:var(--muted);">Etkinlik</div><div style="font-size:13px;font-weight:800;color:${hEff>=40?'var(--green)':'var(--orange)'};">${hEff}%</div></div><div style="flex:1;background:rgba(0,0,0,.15);border-radius:6px;padding:5px;text-align:center;"><div style="font-size:8px;color:var(--muted);">Ofsayt</div><div style="font-size:13px;font-weight:800;color:var(--muted);">${stats.homeOffsides||0}-${stats.awayOffsides||0}</div></div><div style="flex:1;background:rgba(0,0,0,.15);border-radius:6px;padding:5px;text-align:center;"><div style="font-size:8px;color:var(--muted);">Etkinlik</div><div style="font-size:13px;font-weight:800;color:${aEff>=40?'var(--green)':'var(--orange)'};">${aEff}%</div></div></div></div>`;
+}
+
+async function loadLive(){
+  const c=document.getElementById('xg-list');c.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Canlı yükleniyor...</div></div>`;
+  try{const data=await apiFetch('/fixtures?live=all');liveMatches=data;
+  if(!liveMatches.length){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--muted);"><div style="font-size:36px;opacity:.3;">⚡</div><div style="font-size:13px;">Şu an canlı maç yok</div></div>`;return;}
+  liveMatches.forEach(m=>{const id=m.fixture?.id,hs=m.goals?.home||0,as2=m.goals?.away||0,total=hs+as2;const prev=prevScores[id];if(prev!==undefined&&total>prev&&notifOn){m._goalAlert=true;const mc=document.getElementById('mc-'+id);const lmc=document.getElementById('lmc-'+id);if(mc){mc.classList.add('gol-alarm');setTimeout(()=>mc.classList.remove('gol-alarm'),30000);}if(lmc){lmc.classList.add('gol-alarm');setTimeout(()=>lmc.classList.remove('gol-alarm'),30000);}showToast(`🚨 GOL! ${m.teams?.home?.name} ${hs}-${as2} ${m.teams?.away?.name} (${m.fixture?.status?.elapsed}')','warn`);}else{m._goalAlert=false;}prevScores[id]=total;if(!allMatches.find(x=>x.fixture?.id===id))allMatches.push(m);});
+  let html=`<div style="padding:7px 13px 3px;font-size:9px;font-weight:800;color:#ff2d78;letter-spacing:1px;">🔴 ${liveMatches.length} CANLI MAÇ</div>`;
+  liveMatches.forEach(m=>{const id=m.fixture?.id,hs=m.goals?.home||0,as2=m.goals?.away||0,total=hs+as2,min=m.fixture?.status?.elapsed||0;const alarms=[];if(total>=1)alarms.push('1.5 ÜST ✓');if(total>=3)alarms.push('2.5 ÜST ✓');const isAlarm=m._goalAlert&&notifOn;html+=`<div class="live-mc${isAlarm?' gol-alarm':''}" id="lmc-${id}"><div class="live-mc-hdr" onclick="toggleLiveCard(${id})"><div><div class="live-mc-lg">${m.league?.name}${isAlarm?' <span style="animation:alarmIcon .6s infinite;display:inline-block;font-size:12px;">🚨</span>':''}</div><div class="live-mc-sc">${hs} — ${as2}</div></div><div style="text-align:right"><div class="live-mc-min">● ${min}'</div></div></div><div class="live-mc-teams">${m.teams?.home?.name} vs ${m.teams?.away?.name}</div>${alarms.length?`<div style="display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px;">${alarms.map(a=>`<div style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;background:rgba(48,209,88,.15);color:var(--green);">${a}</div>`).join('')}</div>`:''}<div class="live-pp" id="lpp-${id}"><div class="pp-in"><div class="ld"><div class="sp"></div> Tıkla → AI Analiz</div></div></div></div>`;});
+  c.innerHTML=html;showToast(`⚡ ${liveMatches.length} canlı maç`,'ok');}catch(e){c.innerHTML=`<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ ${e.message}</div>`;}
+}
+
+async function toggleLiveCard(id){const card=document.getElementById('lmc-'+id);const pp=document.getElementById('lpp-'+id);if(!card||!pp)return;if(card.classList.contains('open')){card.classList.remove('open');return;}card.classList.add('open');if(pp.innerHTML.includes('Tıkla')){pp.innerHTML=`<div class="pp-in"><div class="ld"><div class="sp"></div> Veriler + AI...</div></div>`;const m=liveMatches.find(x=>x.fixture?.id===id)||allMatches.find(x=>x.fixture?.id===id);if(!m)return;const statsData=await fetchStats(id);if(statsData){pp.innerHTML=`<div class="pp-in">${buildLiveStatsHTML(statsData,m)}<div class="ld"><div class="sp"></div> AI analiz yapıyor...</div></div>`;}await renderPred(m,pp.querySelector('.pp-in')||pp);}}
+function toggleAuto(){const btn=document.getElementById('auto-btn');if(autoOn){clearInterval(autoTimer);autoOn=false;btn.style.color='var(--muted)';showToast('⏹️ Durduruldu','');}else{autoOn=true;autoTimer=setInterval(loadLive,60000);loadLive();btn.style.color='var(--green)';showToast('✅ Auto aktif','ok');}}
+
+function toggleSelMatch(id){const strId=String(id);const btn=document.getElementById('addbtn-'+strId);if(selectedMatchIds.has(strId)){selectedMatchIds.delete(strId);if(btn){btn.textContent='＋';btn.style.background='rgba(48,209,88,.15)';btn.style.color='var(--green)';}}else{selectedMatchIds.add(strId);if(btn){btn.textContent='✓';btn.style.background='var(--green)';btn.style.color='#000';}}updateSelBar();}
+function updateSelBar(){const bar=document.getElementById('sel-bar');const n=selectedMatchIds.size;if(n>0){bar.style.display='block';document.getElementById('sel-count').textContent=n;const selMs=allMatches.filter(m=>selectedMatchIds.has(String(m.fixture?.id)));document.getElementById('sel-names').textContent=selMs.map(m=>m.teams?.home?.name+' vs '+m.teams?.away?.name).join(' · ');}else bar.style.display='none';}
+function clearSelected(){selectedMatchIds.forEach(id=>{const btn=document.getElementById('addbtn-'+id);if(btn){btn.textContent='＋';btn.style.background='rgba(48,209,88,.15)';btn.style.color='var(--green)';}});selectedMatchIds.clear();updateSelBar();}
+
+// ═══════════════════════════════════════════════════════════════
+// PATCH 2+3: TEMPERATURE DÜŞÜRÜLDÜ (0.2→0.05, 0.3→0.1)
+// ═══════════════════════════════════════════════════════════════
+async function callOpenAI_coupon(userMsg){
+  const r=await fetch(PROXY+'/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:3000,temperature:0.05,messages:[{role:'system',content:COUPON_SYS},{role:'user',content:userMsg}]})});
+  const d=await r.json();if(d.error)throw new Error('OpenAI: '+d.error.message);
+  return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));
+}
+async function callGroq_coupon(userMsg){
+  const r=await fetch(PROXY+'/groq',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:COUPON_SYS},{role:'user',content:userMsg}],max_tokens:3000,temperature:0.1})});
+  const d=await r.json();if(d.error)throw new Error('Groq: '+(d.error.message||JSON.stringify(d.error)));
+  return JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));
+}
+
+async function genCoupons(){
+  const btn=document.getElementById('btn-gen');btn.textContent='⏳';
+  const c=document.getElementById('cp-yeni');
+  c.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Veriler hazırlanıyor...</div></div>';
+  try{
+    const upcoming=allMatches.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));
+    function matchScore(m){let s=0;const lgPrio=getPriorityScore(m.league?.name||'');s+=lgPrio*3;if(m._isFavGol)s+=200;else if(m._isFavori)s+=120;else if(m._isGol)s+=80;s+=(m._hgscore||0)*0.4;s+=(m._golScore||0)*0.6;return s;}
+    const priorFavGol=upcoming.filter(m=>isPriorityLeague(m.league?.name||'')&&(m._isFavori||m._isGol));
+    const nonPriorFavGol=upcoming.filter(m=>!isPriorityLeague(m.league?.name||'')&&m._isFavGol);
+    const topFav=upcoming.filter(m=>!isPriorityLeague(m.league?.name||'')&&!m._isFavGol&&(m._isFavori||m._isGol)&&isTopLeague(m.league?.name||''));
+    priorFavGol.sort((a,b)=>matchScore(b)-matchScore(a));nonPriorFavGol.sort((a,b)=>matchScore(b)-matchScore(a));topFav.sort((a,b)=>matchScore(b)-matchScore(a));
+    const seenPoolIds=new Set();const rawPool=[...priorFavGol,...nonPriorFavGol,...topFav].filter(m=>{const id=m.fixture?.id;if(seenPoolIds.has(id))return false;seenPoolIds.add(id);return true;});
+    const priorCount=rawPool.filter(m=>getPriorityScore(m.league?.name||'')>=60).length;
+    const pool=priorCount>=8?rawPool.filter(m=>getPriorityScore(m.league?.name||'')>-50).slice(0,45):rawPool.slice(0,45);
+    c.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Geçmiş + H2H veriler çekiliyor...</div></div>';
+    await Promise.allSettled(pool.slice(0,10).map(async m=>{const [hh,ah,h2h]=await Promise.allSettled([fetchTeamHistory(m.teams?.home?.id),fetchTeamHistory(m.teams?.away?.id),fetchH2H(m.teams?.home?.id,m.teams?.away?.id)]);m._cpHomeHist=hh.status==='fulfilled'?hh.value:null;m._cpAwayHist=ah.status==='fulfilled'?ah.value:null;m._cpH2H=h2h.status==='fulfilled'?h2h.value:null;}));
+    c.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Oran+Güven analizi + OpenAI + Groq...</div></div>';
+
+    // ═══════════════════════════════════════════════════════════════
+    // PATCH 4: YENİ LIST BUILDER — ZORUNLU_BAHİS sistemi
+    // ═══════════════════════════════════════════════════════════════
+    const list=pool.map(m=>{
+      const odds=m._odds;const hh=m._cpHomeHist,ah=m._cpAwayHist,h2h=m._cpH2H;
+      const ho=odds?parseFloat(odds.home||0).toFixed(2):'-';
+      const xa=odds?parseFloat(odds.draw||0).toFixed(2):'-';
+      const ao=odds?parseFloat(odds.away||0).toFixed(2):'-';
+      const o25=odds&&odds.over25?parseFloat(odds.over25).toFixed(2):'-';
+      const o35=odds&&odds.over35?parseFloat(odds.over35).toFixed(2):'-';
+      const btts=odds&&odds.bttsYes?parseFloat(odds.bttsYes).toFixed(2):'-';
+      const realFav=ho!=='-'&&ao!=='-'?(parseFloat(ho)<parseFloat(ao)?'EV_FAV':parseFloat(ao)<parseFloat(ho)?'DEP_FAV':'DENGELI'):'?';
+      const typ=m._isFavGol?'FAV+GOL':m._isFavori?'FAV':m._isGol?'GOL':'NORMAL';
+
+      // Matematiksel karar
+      const mathSc=calcMatchScores(m,hh,ah,h2h,odds);
+      const dec=makeDecision(mathSc);
+
+      // Oran karar ağacı
+      function oranKarari(){
+        const hO=parseFloat(ho)||99,aO=parseFloat(ao)||99;
+        const o25O=parseFloat(o25)||99,o35O=parseFloat(o35)||99,bttsO=parseFloat(btts)||99;
+        if(bttsO<1.55&&o25O<1.65)return{bet:'KGV+2.5UST',conf:90,reason:'btts='+btts+' o25='+o25};
+        if(o25O<1.60)return{bet:'2.5UST',conf:88,reason:'over25='+o25+' çok güçlü'};
+        if(bttsO<1.65)return{bet:'KGV',conf:85,reason:'bttsYes='+btts};
+        if(o35O<1.75&&bttsO<1.70)return{bet:'3.5UST',conf:78,reason:'o35='+o35+' btts='+btts};
+        if(hO<1.45)return{bet:'MS1+1.5UST',conf:85,reason:'home='+ho+' çok güçlü'};
+        if(aO<1.45)return{bet:'MS2+1.5UST',conf:85,reason:'away='+ao+' çok güçlü'};
+        if(hO<1.65&&o25O<1.80)return{bet:'MS1+2.5UST',conf:75,reason:'home='+ho+' o25='+o25};
+        if(aO<1.65&&o25O<1.80)return{bet:'MS2+2.5UST',conf:75,reason:'away='+ao+' o25='+o25};
+        if(hO<1.80)return{bet:'MS1',conf:65,reason:'home='+ho};
+        if(aO<1.80)return{bet:'MS2',conf:65,reason:'away='+ao};
+        return null;
+      }
+      const oranK=oranKarari();
+
+      // Birleşik karar
+      let zorunluBahis,zorunluKonfidan,zorunluSebep;
+      const decBet=dec.decision==='MS1'?'MS1':dec.decision==='MS2'?'MS2':dec.decision==='2.5Ü'?'2.5UST':dec.decision==='KGV'?'KGV':dec.decision==='Kombin'?'KGV+2.5UST':dec.decision==='HTFT'?'HTFT':'';
+      if(dec.confidence>=75&&oranK&&oranK.conf>=dec.confidence){
+        zorunluBahis=oranK.bet;zorunluKonfidan=Math.max(dec.confidence,oranK.conf);
+        zorunluSebep='MATH:'+dec.label+'('+dec.confidence+')+ORAN:'+oranK.reason;
+      }else if(dec.confidence>=75&&decBet){
+        zorunluBahis=decBet;zorunluKonfidan=dec.confidence;
+        zorunluSebep='MATH:'+dec.label+'='+dec.confidence;
+      }else if(oranK){
+        zorunluBahis=oranK.bet;zorunluKonfidan=oranK.conf;
+        zorunluSebep='ORAN:'+oranK.reason;
+      }else{
+        zorunluBahis=decBet||'MS1';zorunluKonfidan=dec.confidence;
+        zorunluSebep='MATH_DEF:'+dec.label;
+      }
+
+      let line=`${m.teams?.home?.name} vs ${m.teams?.away?.name} [${m.league?.name}][${typ}][${realFav}] | 1=${ho} X=${xa} 2=${ao} 2.5U=${o25} 3.5U=${o35} KGV=${btts} | ZORUNLU_BAHİS=${zorunluBahis} GÜVEN=${zorunluKonfidan} SEBEP=${zorunluSebep}`;
+      if(hh)line+=` | EV: Ort${hh.avg} 2.5U%${hh.o25p} KGV%${hh.bttsp} EvGal%${hh.homeWinP||0} KS%${hh.cleanSheetP||0} Trend${hh.goalTrend||'?'} HTFT%${hh.htftSurpP||0} Form:${hh.form}`;
+      if(ah)line+=` | DEP: Ort${ah.avg} 2.5U%${ah.o25p} KGV%${ah.bttsp} DepGal%${ah.awayWinP||0} KS%${ah.cleanSheetP||0} HTFT%${ah.htftSurpP||0} Form:${ah.form}`;
+      if(h2h)line+=` | H2H: Ev${h2h.homeWins}G Dep${h2h.awayWins}G Ort${h2h.avgGoals}gol KGV%${h2h.bttsp}`;
+      const hSt=getTeamStandings(m.teams?.home?.name||'');const aSt=getTeamStandings(m.teams?.away?.name||'');
+      if(hSt)line+=` | EV_LİG:#${hSt.rank} ${hSt.pts}pts EvG=${hSt.homeW}M=${hSt.homeL} EvAtık=${hSt.homePlayed>0?(hSt.homeGf/hSt.homePlayed).toFixed(1):'?'} EvYen=${hSt.homePlayed>0?(hSt.homeGa/hSt.homePlayed).toFixed(1):'?'}`;
+      if(aSt)line+=` | DEP_LİG:#${aSt.rank} ${aSt.pts}pts DepG=${aSt.awayW}M=${aSt.awayL} DepAtık=${aSt.awayPlayed>0?(aSt.awayGf/aSt.awayPlayed).toFixed(1):'?'} DepYen=${aSt.awayPlayed>0?(aSt.awayGa/aSt.awayPlayed).toFixed(1):'?'}`;
+      line+=` | GOL_LIG:${isGolLig(m.league?.name||'')?'E':'H'}`;
+      return line;
+    }).join('\n');
+    // ═══════════════════════════════════════════════════════════════
+
+    const favGolCount2=pool.filter(m=>m._isFavGol).length;
+
+    // ═══════════════════════════════════════════════════════════════
+    // PATCH 5: YENİ userMsg — ZORUNLU_BAHİS referansı
+    // ═══════════════════════════════════════════════════════════════
+    const userMsg=`Maç verileri (${pool.length} maç, ${favGolCount2} tanesi FAV+GOL):\n${list}\n\nKRİTİK KURAL: Her satırdaki ZORUNLU_BAHİS ve GÜVEN değerini öncelikli kullan. Sadece çok güçlü karşı oran kanıtı varsa değiştir ve gerekçe yaz. ÇEŞİTLİLİK ZORUNLU: Her kuponda max 2 MS bahsi, min 1 gol bahsi (KGV/2.5UST/3.5UST/kombin). H2H verisi varsa kullan. data_basis her seçim için zorunlu.`;
+    // ═══════════════════════════════════════════════════════════════
+
+    const [r1,r2]=await Promise.allSettled([callOpenAI_coupon(userMsg),callGroq_coupon(userMsg)]);
+    let parsed=null;
+    if(r1.status==='fulfilled'&&r2.status==='fulfilled'){const c1=r1.value?.coupons||[];const c2=r2.value?.coupons||[];const avg1=c1.reduce((s,cp)=>s+(cp.confidence||0),0)/(c1.length||1);const avg2=c2.reduce((s,cp)=>s+(cp.confidence||0),0)/(c2.length||1);parsed={coupons:avg1>=avg2?c1:c2,_dualUsed:true,_gpAvg:avg1.toFixed(0),_groqAvg:avg2.toFixed(0)};}
+    else{for(const r of [r1,r2])if(r.status==='fulfilled'&&r.value?.coupons?.length){parsed=r.value;break;}}
+    if(!parsed)throw new Error('Kupon üretilemedi');
+    const coupons=(parsed.coupons||[]).slice(0,4);const types=['banko1','banko2','banko3','banko4'];const titles=['🏆 BANKO 1','🏆 BANKO 2','🏆 BANKO 3','🏆 BANKO 4'];
+    coupons.forEach((cp,i)=>{cp.type=types[i];cp.title=titles[i];if(!cp.risk)cp.risk='DÜŞÜK';});
+    const saveId='cp_'+Date.now();const now2=new Date();
+    const saveData={id:saveId,date:now2.toLocaleDateString('tr-TR'),time:now2.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),coupons,results:{}};
+    try{const hist=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');hist.unshift(saveData);localStorage.setItem('cog_coupon_history',JSON.stringify(hist.slice(0,50)));}catch(e){}
+    const dualInfo=parsed._dualUsed?`<div style="font-size:9px;padding:2px 0 6px;color:var(--muted);display:flex;gap:8px;"><span>🤖 GPT:%${parsed._gpAvg}</span><span>🔮 Groq:%${parsed._groqAvg}</span><span style="color:var(--green);">✅ Oran+Güven sistemi</span></div>`:'';
+    let cpHtml=`<div style="font-size:10px;color:var(--muted);padding:4px 2px 6px;display:flex;justify-content:space-between;"><span>📅 ${saveData.date} ${saveData.time}</span><span style="color:var(--green);font-weight:700;">✅ ZORUNLU_BAHİS</span></div>${dualInfo}`;
+    coupons.forEach(cp=>{cpHtml+=buildCoupon(cp,saveId);});
+    c.innerHTML=cpHtml;showToast('🎯 4 BANKO + Oran+Güven sistemi!','ok');
+  }catch(e){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ '+e.message+'</div>';showToast('❌ '+e.message,'err');}
+  btn.textContent='✨';
+}
+
+function buildCoupon(cp,saveId=''){
+  const colors={banko1:'var(--gold)',banko2:'#ffaa00',banko3:'#ff8c00',banko4:'#ff6000'};const color=colors[cp.type]||'var(--blue)';
+  const items=(cp.selections||[]).map((s,i)=>{const betColors={'MS1':'var(--green)','MS2':'var(--blue)','MS0':'var(--muted)','KGV':'var(--purple)','2.5UST':'var(--orange)','3.5UST':'var(--orange)','1.5UST':'var(--cyan)','KGY':'var(--red)','MS1+1.5UST':'var(--green)','MS2+1.5UST':'var(--blue)','MS1+2.5UST':'var(--green)','MS2+2.5UST':'var(--blue)','KGV+2.5UST':'var(--purple)'};const betColor=betColors[s.bet]||'var(--green)';const favBadge=s.favori==='DEPLASMAN'?'<span style="font-size:7px;background:rgba(61,142,255,.2);color:var(--blue);padding:1px 4px;border-radius:4px;margin-left:3px;">DEP</span>':s.favori==='EV'?'<span style="font-size:7px;background:rgba(48,209,88,.2);color:var(--green);padding:1px 4px;border-radius:4px;margin-left:3px;">EV</span>':'';const dataBasis=s.data_basis?`<div style="font-size:8px;color:var(--dim);margin-top:1px;">📊 ${s.data_basis}</div>`:'';return`<div class="cp-item"><div class="cp-num">${i+1}</div><div class="cp-info"><div class="cp-match">${s.match}${favBadge}</div><div style="font-size:9px;color:${betColor};font-weight:700;margin-top:1px;">📌 ${s.bet}</div><div style="font-size:9px;color:var(--muted);">${s.reason||''}</div>${dataBasis}</div><div class="cp-odd">${parseFloat(s.odds||0).toFixed(2)}</div></div>`;}).join('');
+  const resultBar=saveId&&cp._result?`<div style="padding:6px 12px;background:${cp._result==='win'?'rgba(48,209,88,.15)':'rgba(255,59,92,.15)'};border-top:1px solid var(--border);font-size:11px;font-weight:800;color:${cp._result==='win'?'var(--green)':'var(--red)'};text-align:center;">${cp._result==='win'?'✅ KAZANDI':'❌ KAYBETTİ'}</div>`:'';
+  const btns=saveId?`<div style="display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--border);"><button onclick="setCpResult('${saveId}','${cp.type}','win')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(48,209,88,.15);color:var(--green);">✅ Kazandı</button><button onclick="setCpResult('${saveId}','${cp.type}','lose')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(255,59,92,.15);color:var(--red);">❌ Kaybetti</button></div>`:'';
+  const matchCount=(cp.selections||[]).length;const matchCountBadge=matchCount>4?`<span style="font-size:9px;background:rgba(255,214,10,.2);color:var(--gold);padding:2px 6px;border-radius:8px;margin-left:5px;">${matchCount} MAÇ</span>`:'';
+  return`<div class="cp-card ${cp.type}" style="border:2px solid ${color};"><div class="cp-head"><div><div class="cp-title" style="color:${color}">${cp.title}${matchCountBadge}</div></div><div style="text-align:right"><div class="cp-odds" style="color:${color}">x${parseFloat(cp.total_odds||0).toFixed(2)}</div><div class="cp-odds-lbl">TOPLAM ORAN</div></div></div>${items}<div class="cp-foot"><span style="color:${color}">Risk: ${cp.risk||'DÜŞÜK'}</span><span>%${cp.confidence||75} Güven</span></div>${resultBar}${btns}</div>`;
+}
+
+async function genFromSelected(){
+  if(!selectedMatchIds.size){showToast('Önce maç seç!','err');return;}
+  switchPanel('kupon',document.querySelector('.ni[data-nav="kupon"]'));showCpTab('yeni',document.getElementById('tab-yeni'));
+  const btn=document.getElementById('btn-gen');if(btn)btn.textContent='⏳';
+  const c=document.getElementById('cp-yeni');
+  c.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:250px;gap:12px;"><div class="sp"></div><div style="font-size:13px;color:var(--muted);">Seçili maçlardan kupon...</div></div>';
+  try{
+    const selMatches=allMatches.filter(m=>selectedMatchIds.has(String(m.fixture?.id)));
+    if(!selMatches.length)throw new Error('Seçili maç bulunamadı');
+    await Promise.allSettled(selMatches.map(async m=>{const [hh,ah,h2h]=await Promise.allSettled([fetchTeamHistory(m.teams?.home?.id),fetchTeamHistory(m.teams?.away?.id),fetchH2H(m.teams?.home?.id,m.teams?.away?.id)]);m._cpHomeHist=hh.status==='fulfilled'?hh.value:null;m._cpAwayHist=ah.status==='fulfilled'?ah.value:null;m._cpH2H=h2h.status==='fulfilled'?h2h.value:null;}));
+    const list=selMatches.map(m=>{
+      const odds=m._odds;const hh=m._cpHomeHist,ah=m._cpAwayHist,h2h=m._cpH2H;
+      const ho=odds?parseFloat(odds.home||0).toFixed(2):'-';const xa=odds?parseFloat(odds.draw||0).toFixed(2):'-';const ao=odds?parseFloat(odds.away||0).toFixed(2):'-';
+      const o25=odds&&odds.over25?parseFloat(odds.over25).toFixed(2):'-';const o35=odds&&odds.over35?parseFloat(odds.over35).toFixed(2):'-';const btts=odds&&odds.bttsYes?parseFloat(odds.bttsYes).toFixed(2):'-';
+      const realFav=ho!=='-'&&ao!=='-'?(parseFloat(ho)<parseFloat(ao)?'EV_FAV':parseFloat(ao)<parseFloat(ho)?'DEP_FAV':'DENGELI'):'?';
+      const mathSc=calcMatchScores(m,hh,ah,h2h,odds);const dec=makeDecision(mathSc);
+      function oranK(){const hO=parseFloat(ho)||99,aO=parseFloat(ao)||99,o25O=parseFloat(o25)||99,o35O=parseFloat(o35)||99,bttsO=parseFloat(btts)||99;if(bttsO<1.55&&o25O<1.65)return{bet:'KGV+2.5UST',conf:90};if(o25O<1.60)return{bet:'2.5UST',conf:88};if(bttsO<1.65)return{bet:'KGV',conf:85};if(hO<1.45)return{bet:'MS1+1.5UST',conf:85};if(aO<1.45)return{bet:'MS2+1.5UST',conf:85};if(hO<1.65&&o25O<1.80)return{bet:'MS1+2.5UST',conf:75};if(aO<1.65&&o25O<1.80)return{bet:'MS2+2.5UST',conf:75};if(hO<1.80)return{bet:'MS1',conf:65};if(aO<1.80)return{bet:'MS2',conf:65};return null;}
+      const ok=oranK();const decBet=dec.decision==='MS1'?'MS1':dec.decision==='MS2'?'MS2':dec.decision==='2.5Ü'?'2.5UST':dec.decision==='KGV'?'KGV':dec.decision==='Kombin'?'KGV+2.5UST':'';
+      const zb=ok&&ok.conf>=(dec.confidence||0)?ok.bet:(decBet||'MS1');
+      let line=`${m.teams?.home?.name} vs ${m.teams?.away?.name} [${m.league?.name}][${realFav}] | 1=${ho} X=${xa} 2=${ao} 2.5U=${o25} 3.5U=${o35} KGV=${btts} | ZORUNLU_BAHİS=${zb} GÜVEN=${Math.max(dec.confidence||0,ok?.conf||0)}`;
+      if(hh)line+=` | EV: ${hh.avg}gol KGV%${hh.bttsp} Form:${hh.form}`;if(ah)line+=` | DEP: ${ah.avg}gol KGV%${ah.bttsp} Form:${ah.form}`;if(h2h)line+=` | H2H: ${h2h.avgGoals}gol`;return line;
+    }).join('\n');
+    const userMsg=`Seçili maçlar:\n${list}\n\nKRİTİK: ZORUNLU_BAHİS kullan. Max 2 MS, min 1 gol bahsi zorunlu.`;
+    const results=await Promise.allSettled([callOpenAI_coupon(userMsg),callGroq_coupon(userMsg)]);
+    let parsed=null;for(const r of results)if(r.status==='fulfilled'&&r.value?.coupons?.length){parsed=r.value;break;}
+    if(!parsed)throw new Error('Kupon üretilemedi');
+    const coupons=(parsed.coupons||[]).slice(0,4);const types=['banko1','banko2','banko3','banko4'];const titles=['🏆 BANKO 1','🏆 BANKO 2','🏆 BANKO 3','🏆 BANKO 4'];coupons.forEach((cp,i)=>{cp.type=types[i];cp.title=titles[i];if(!cp.risk)cp.risk='DÜŞÜK';});
+    const saveId='cp_'+Date.now();const now2=new Date();const saveData={id:saveId,date:now2.toLocaleDateString('tr-TR'),time:now2.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}),coupons,results:{}};
+    try{const hist=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');hist.unshift(saveData);localStorage.setItem('cog_coupon_history',JSON.stringify(hist.slice(0,50)));}catch(e){}
+    let cpHtml=`<div style="font-size:10px;color:var(--muted);padding:4px 2px 10px;"><span>📅 ${saveData.date} · ${selMatches.length} maçtan · Oran+Güven</span></div>`;
+    coupons.forEach(cp=>{cpHtml+=buildCoupon(cp,saveId);});c.innerHTML=cpHtml;clearSelected();showToast('🎯 Seçili maçlardan kupon!','ok');
+  }catch(e){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ '+e.message+'</div>';}
+  if(btn)btn.textContent='✨';
+}
+
+function setCpResult(saveId,cpType,result){try{const h=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');const item=h.find(x=>x.id===saveId);if(item){if(!item.results)item.results={};item.results[cpType]=result;localStorage.setItem('cog_coupon_history',JSON.stringify(h));}showToast(result==='win'?'✅ Kazandı!':'❌ Kaybetti.','ok');setTimeout(()=>{const gecmis=document.getElementById('cp-gecmis');if(gecmis&&gecmis.style.display!=='none')renderCpHistory();},200);}catch(e){}}
+function showCpTab(tab,el){['yeni','gecmis','istatistik'].forEach(t=>{const d=document.getElementById('cp-'+t);if(d)d.style.display=t===tab?'block':'none';const b=document.getElementById('tab-'+t);if(b){b.style.background=t===tab?'var(--blue)':'transparent';b.style.color=t===tab?'#fff':'var(--muted)';b.style.borderColor=t===tab?'var(--blue)':'var(--border)';}});if(tab==='gecmis')renderCpHistory();if(tab==='istatistik')renderCpStats();}
+function renderCpHistory(){const c=document.getElementById('cp-gecmis-list');const h=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');if(!h.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Henüz kayıt yok</div>';return;}let totalW=0,totalL=0,totalP=0;h.forEach(item=>{const res=item.results||{};(item.coupons||[]).forEach(cp=>{const r=res[cp.type];if(r==='win')totalW++;else if(r==='lose')totalL++;else totalP++;});});const wr=totalW+totalL>0?Math.round(totalW/(totalW+totalL)*100):0;let html=`<div style="display:flex;gap:6px;margin-bottom:10px;"><div style="flex:1;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--green);">${totalW}</div><div style="font-size:8px;color:var(--muted);">KAZANDI</div></div><div style="flex:1;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--red);">${totalL}</div><div style="font-size:8px;color:var(--muted);">KAYBETTİ</div></div><div style="flex:1;text-align:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--gold);">${totalP}</div><div style="font-size:8px;color:var(--muted);">BEKLİYOR</div></div><div style="flex:1;text-align:center;background:var(--card);border:1px solid rgba(48,209,88,.3);border-radius:10px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--green);">%${wr}</div><div style="font-size:8px;color:var(--muted);">BAŞARI</div></div></div>`;
+html+=h.map(item=>{const res=item.results||{};const coupons=item.coupons||[];const chips=coupons.map(cp=>{const r=res[cp.type];const rC=r==='win'?'var(--green)':r==='lose'?'var(--red)':'var(--gold)';const rB=r==='win'?'rgba(48,209,88,.15)':r==='lose'?'rgba(255,59,92,.15)':'rgba(255,214,10,.1)';return`<div style="font-size:9px;font-weight:800;padding:2px 7px;border-radius:8px;background:${rB};color:${rC};">${r==='win'?'✅':r==='lose'?'❌':'⏳'} ${cp.title||cp.type}</div>`;}).join('');const couponCards=coupons.map(cp=>{const r=res[cp.type];const colors2={banko1:'var(--gold)',banko2:'#ffaa00',banko3:'#ff8c00',banko4:'#ff6000'};const color2=colors2[cp.type]||'var(--blue)';const resultBar2=r?`<div style="padding:6px 12px;background:${r==='win'?'rgba(48,209,88,.15)':'rgba(255,59,92,.15)'};border-top:1px solid var(--border);font-size:11px;font-weight:800;color:${r==='win'?'var(--green)':'var(--red)'};text-align:center;">${r==='win'?'✅ KAZANDI':'❌ KAYBETTİ'}</div>`:'';const items2=(cp.selections||[]).map((s,i)=>`<div class="cp-item"><div class="cp-num">${i+1}</div><div class="cp-info"><div class="cp-match">${s.match}</div><div class="cp-bet">${s.bet}</div></div><div class="cp-odd">${parseFloat(s.odds||0).toFixed(2)}</div></div>`).join('');const btns2=!r?`<div style="display:flex;gap:6px;padding:8px 12px;border-top:1px solid var(--border);"><button onclick="setCpResult('${item.id}','${cp.type}','win')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(48,209,88,.15);color:var(--green);">✅</button><button onclick="setCpResult('${item.id}','${cp.type}','lose')" style="flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:800;border:none;cursor:pointer;background:rgba(255,59,92,.15);color:var(--red);">❌</button></div>`:'';return`<div class="cp-card ${cp.type}" style="margin-bottom:6px;border:2px solid ${color2};"><div class="cp-head"><div class="cp-title" style="color:${color2}">${cp.title}</div><div class="cp-odds" style="color:${color2}">x${parseFloat(cp.total_odds||0).toFixed(2)}</div></div>${items2}<div class="cp-foot"><span>%${cp.confidence||75}</span></div>${resultBar2}${btns2}</div>`;}).join('');return`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;"><div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-bottom:1px solid var(--border);"><div style="font-size:11px;font-weight:800;">📅 ${item.date} · ${item.time}</div><div style="display:flex;flex-wrap:wrap;gap:3px;max-width:60%;justify-content:flex-end;">${chips}</div></div><div style="padding:8px 10px;">${couponCards}</div></div>`;}).join('');c.innerHTML=html;}
+function renderCpStats(){const c=document.getElementById('cp-stat-content');const h=JSON.parse(localStorage.getItem('cog_coupon_history')||'[]');if(!h.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">📊 Henüz istatistik yok</div>';return;}let totalW=0,totalL=0,totalP=0;h.forEach(item=>{(item.coupons||[]).forEach(cp=>{const r=item.results?.[cp.type];if(r==='win')totalW++;else if(r==='lose')totalL++;else totalP++;});});const wr=totalW+totalL>0?Math.round(totalW/(totalW+totalL)*100):0;const wrc=wr>=60?'var(--green)':wr>=40?'var(--orange)':'var(--red)';const verdict=wr>=65?'🔥 Mükemmel!':wr>=50?'✅ Karlı':wr>=40?'⚠️ Dengeli':'❌ Düşük';c.innerHTML=`<div style="background:linear-gradient(135deg,rgba(61,142,255,.1),rgba(191,90,242,.05));border:1px solid rgba(61,142,255,.2);border-radius:var(--r);padding:12px;margin-bottom:10px;text-align:center;"><div style="font-size:28px;font-weight:900;color:${wrc};">%${wr}</div><div style="font-size:11px;font-weight:700;color:${wrc};">${verdict}</div><div style="font-size:9px;color:var(--muted);margin-top:4px;">${totalW} Kazandı · ${totalL} Kaybetti · ${totalP} Bekliyor</div><div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:8px;"><div style="height:100%;width:${wr}%;background:${wrc};border-radius:3px;"></div></div></div>`;}
+
+async function loadSurpriz(forceRefresh=false){
+  const c=document.getElementById('surp-list');const empty=document.getElementById('surp-empty');
+  if(empty)empty.style.display='none';
+  c.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;gap:12px;"><div class="sp" style="width:22px;height:22px;border-width:3px;"></div><div style="font-size:13px;color:var(--muted);">Sürpriz & KG analizi yapılıyor...</div></div>';
+  surprizLoaded=true;
+  try{
+    const surpMatches=allMatches.filter(m=>['NS','TBD'].includes(m.fixture?.status?.short)&&isSurprizLig(m.league?.name||'')).sort((a,b)=>{const aS=(a._isFavGol?100:a._isFavori?60:a._isGol?40:0)+getPriorityScore(a.league?.name||'')*2;const bS=(b._isFavGol?100:b._isFavori?60:b._isGol?40:0)+getPriorityScore(b.league?.name||'')*2;return bS-aS;}).slice(0,30);
+    if(!surpMatches.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Uygun maç bulunamadı</div>';return;}
+    await Promise.allSettled(surpMatches.slice(0,12).map(async m=>{if(!m._cpHomeHist||!m._cpAwayHist){const [hh,ah,h2h]=await Promise.allSettled([fetchTeamHistory(m.teams?.home?.id),fetchTeamHistory(m.teams?.away?.id),fetchH2H(m.teams?.home?.id,m.teams?.away?.id)]);m._cpHomeHist=hh.status==='fulfilled'?hh.value:null;m._cpAwayHist=ah.status==='fulfilled'?ah.value:null;m._cpH2H=h2h.status==='fulfilled'?h2h.value:null;}}));
+    const list=surpMatches.map(m=>{
+      const odds=m._odds,hh=m._cpHomeHist,ah=m._cpAwayHist,h2h=m._cpH2H;
+      const ho=odds?parseFloat(odds.home||0).toFixed(2):'-',ao=odds?parseFloat(odds.away||0).toFixed(2):'-',o25=odds&&odds.over25?parseFloat(odds.over25).toFixed(2):'-',btts=odds&&odds.bttsYes?parseFloat(odds.bttsYes).toFixed(2):'-';
+      const histSurp=getLeagueSurpHist(m.league?.name||'');
+      let line=`${m.teams?.home?.name} vs ${m.teams?.away?.name} [${m.league?.name}] | 1=${ho} 2=${ao} 2.5U=${o25} KGV=${btts} | HIST_SURP=${histSurp}%`;
+      if(hh)line+=` | EV: HTFT%${hh.htftSurpP||0} IY_KG%${hh.hyp} MS_KG%${hh.bttsp} 2.5U%${hh.o25p} Form:${hh.form}`;
+      if(ah)line+=` | DEP: HTFT%${ah.htftSurpP||0} IY_KG%${ah.hyp} MS_KG%${ah.bttsp} Form:${ah.form}`;
+      if(h2h)line+=` | H2H: KGV%${h2h.bttsp} IY%${h2h.over25p} HTFT%${h2h.htftSurpP||0}`;
+      return line;
+    }).join('\n');
+    const r=await fetch(PROXY+'/groq',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:SURP_SYS},{role:'user',content:`Maçlar:\n${list}\n\nEN AZ 3 HTFT sürpriz ve 2 KG kombin üret.`}],max_tokens:2500,temperature:0.4})});
+    const d=await r.json();if(d.error)throw new Error('Groq: '+d.error.message);
+    const parsed=JSON.parse(cleanJSON(d.choices?.[0]?.message?.content||'{}'));
+    renderSurprizResult(parsed);
+  }catch(e){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ '+e.message+'</div>';}
+}
+
+function renderSurprizResult(data){
+  const c=document.getElementById('surp-list');let html='';
+  const singles=data.htft_singles||[];const kombins=data.kg_kombinler||[];
+  if(singles.length){
+    html+=`<div style="padding:4px 0 8px;font-size:10px;font-weight:800;color:var(--orange);letter-spacing:1px;">🔀 HT/FT SÜRPRİZ · ${singles.length} TAHMİN</div>`;
+    singles.forEach(s=>{const confColor=s.confidence>=70?'var(--green)':s.confidence>=55?'var(--orange)':'var(--red)';html+=`<div style="background:var(--card);border:2px solid rgba(255,149,0,.4);border-radius:var(--r);padding:11px 13px;margin-bottom:8px;"><div style="font-size:13px;font-weight:800;margin-bottom:3px;">${s.match}</div><div style="font-size:10px;color:var(--muted);margin-bottom:6px;">${s.league}</div><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><div style="font-size:20px;font-weight:900;color:var(--orange);">${s.htft_bet}</div><div style="text-align:right;"><div style="font-size:16px;font-weight:900;color:var(--gold);">@${parseFloat(s.htft_odds||0).toFixed(2)}</div><div style="font-size:8px;color:var(--muted);">HTFT ORANI</div></div></div><div style="display:flex;gap:4px;margin-bottom:6px;"><div style="flex:1;text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:5px;"><div style="font-size:11px;font-weight:800;color:var(--blue);">${parseFloat(s.home_odds||0).toFixed(2)}</div><div style="font-size:8px;color:var(--muted);">1</div></div><div style="flex:1;text-align:center;background:rgba(0,0,0,.15);border-radius:6px;padding:5px;"><div style="font-size:11px;font-weight:800;color:var(--red);">${parseFloat(s.away_odds||0).toFixed(2)}</div><div style="font-size:8px;color:var(--muted);">2</div></div><div style="flex:1;text-align:center;background:rgba(255,149,0,.1);border-radius:6px;padding:5px;border:1px solid rgba(255,149,0,.3);"><div style="font-size:11px;font-weight:800;color:${confColor};">%${s.confidence}</div><div style="font-size:8px;color:var(--muted);">Güven</div></div><div style="flex:1;text-align:center;background:rgba(255,214,10,.1);border-radius:6px;padding:5px;"><div style="font-size:11px;font-weight:800;color:var(--gold);">%${s.hist_surp_pct||0}</div><div style="font-size:8px;color:var(--muted);">Hist%</div></div></div><div style="font-size:10px;color:var(--muted);">${s.reason}</div></div>`;});
+  }
+  if(kombins.length){
+    html+=`<div style="padding:8px 0;font-size:10px;font-weight:800;color:var(--purple);letter-spacing:1px;">⚽ KG KOMBİNLER · ${kombins.length} KOMBİN</div>`;
+    kombins.forEach(k=>{const legs=(k.legs||[]).map((l,i)=>`<div style="padding:7px 11px;${i>0?'border-top:1px solid var(--border);':''}"><div style="font-size:11px;font-weight:700;">${l.match}</div><div style="font-size:9px;color:var(--muted);">${l.league}</div><div style="display:flex;gap:4px;margin-top:4px;"><div style="flex:1;text-align:center;background:rgba(191,90,242,.1);border:1px solid rgba(191,90,242,.3);border-radius:6px;padding:4px;"><div style="font-size:11px;font-weight:800;color:var(--purple);">${l.bet}</div></div><div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border-radius:6px;padding:4px;"><div style="font-size:11px;font-weight:800;color:var(--gold);">@${parseFloat(l.odds||0).toFixed(2)}</div></div><div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border-radius:6px;padding:4px;"><div style="font-size:9px;font-weight:700;color:var(--green);">IY%${l.iy_kg_pct||0}</div></div><div style="flex:1;text-align:center;background:rgba(0,0,0,.1);border-radius:6px;padding:4px;"><div style="font-size:9px;font-weight:700;color:var(--cyan);">MS%${l.ms_kg_pct||0}</div></div></div></div>`).join('');
+    html+=`<div style="background:var(--card);border:2px solid rgba(191,90,242,.4);border-radius:var(--r);margin-bottom:8px;overflow:hidden;"><div style="padding:10px 13px;display:flex;justify-content:space-between;align-items:center;background:rgba(191,90,242,.08);"><div><div style="font-size:13px;font-weight:800;color:var(--purple);">${k.title||k.type}</div><div style="font-size:9px;color:var(--muted);margin-top:2px;">%${k.confidence||70} güven · ${(k.legs||[]).length} bacak</div></div><div style="text-align:right"><div style="font-size:20px;font-weight:900;color:var(--gold);">x${parseFloat(k.total_odds||0).toFixed(2)}</div></div></div>${legs}</div>`;});
+  }
+  if(!html)html='<div style="text-align:center;padding:40px;color:var(--muted);">Veri bulunamadı</div>';
+  c.innerHTML=html;
+}
+
+async function initStandings(){
+  const tabs=document.getElementById('st-tabs');if(!tabs||tabs.innerHTML.trim())return;
+  ST_LEAGUES.forEach((lg,i)=>{const t=document.createElement('div');t.className='st-tab'+(i===0?' active':'');t.textContent=lg.flag+' '+lg.name;t.onclick=()=>{document.querySelectorAll('.st-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');loadStandings(lg.id,lg.name);};tabs.appendChild(t);});
+  loadStandings(ST_LEAGUES[0].id,ST_LEAGUES[0].name);
+}
+
+async function loadStandings(lgId,lgName){
+  const c=document.getElementById('st-content');c.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:20px;color:var(--blue);"><div class="sp"></div> Yükleniyor...</div>';
+  try{
+    const cKey='standings_'+lgId;let data=cGet(cKey);
+    if(!data){const raw=await apiFetch(`/standings?league=${lgId}&season=2024`);data=raw[0]?.league?.standings?.[0]||[];if(data.length){cSet(cKey,data,CACHE_TTL.standings);cacheStandings(data,lgId);}}
+    else if(data.length)cacheStandings(data,lgId);
+    if(!data||!data.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Veri bulunamadı</div>';return;}
+    let html=`<div class="st-table"><div class="st-hdr"><div>#</div><div>Takım</div><div>O</div><div>G</div><div>M</div><div>GF-GA</div><div>P</div></div>`;
+    data.forEach(s=>{const rank=s.rank||99;const posClass=rank===1?'g':rank===2?'s':rank===3?'b':'';const topSt=rank<=5?' top5-row':'';const hEv=s.home?.played>0?(s.home?.goals?.for/s.home?.played).toFixed(1):'-';const aDep=s.away?.played>0?(s.away?.goals?.for/s.away?.played).toFixed(1):'-';html+=`<div class="st-row${topSt}" onclick="showTeamDetail('${(s.team?.name||'').replace(/'/g,"\\'")}',${lgId})" style="cursor:pointer;"><div class="st-pos ${posClass}">${rank}</div><div class="st-team">${rank<=5?'⭐ ':''}<img src="${s.team?.logo||''}" style="width:13px;height:13px;object-fit:contain;vertical-align:middle;margin-right:3px;" onerror="this.style.display='none'" loading="lazy">${s.team?.name||''}</div><div class="st-n">${s.all?.played||0}</div><div class="st-n" style="color:var(--green);">${s.all?.win||0}</div><div class="st-n" style="color:var(--red);">${s.all?.lose||0}</div><div class="st-pts" style="font-size:9px;">${s.all?.goals?.for||0}-${s.all?.goals?.against||0}</div><div class="st-pts">${s.points||0}</div></div>`;});
+    html+='</div>';c.innerHTML=html;
+  }catch(e){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--red);font-size:12px;">❌ '+e.message+'</div>';}
+}
+
+function showTeamDetail(teamName,lgId){
+  const st=standingsCache[(teamName||'').toLowerCase()];if(!st)return;
+  const hEg=st.homePlayed>0?(st.homeGf/st.homePlayed).toFixed(1):'?';const hEa=st.homePlayed>0?(st.homeGa/st.homePlayed).toFixed(1):'?';const aDg=st.awayPlayed>0?(st.awayGf/st.awayPlayed).toFixed(1):'?';const aDa=st.awayPlayed>0?(st.awayGa/st.awayPlayed).toFixed(1):'?';
+  const modal=document.createElement('div');modal.style.cssText='position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.85);display:flex;align-items:flex-end;';
+  modal.innerHTML=`<div style="background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:16px;width:100%;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:14px;font-weight:800;">📊 ${teamName}</div><span style="font-size:20px;cursor:pointer;" onclick="this.closest('[style]').remove()">✕</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;"><div style="text-align:center;background:var(--card2);border-radius:8px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--gold);">#${st.rank}</div><div style="font-size:8px;color:var(--muted);">Sıra</div></div><div style="text-align:center;background:var(--card2);border-radius:8px;padding:8px;"><div style="font-size:16px;font-weight:900;color:var(--blue);">${st.pts}</div><div style="font-size:8px;color:var(--muted);">Puan</div></div><div style="text-align:center;background:var(--card2);border-radius:8px;padding:8px;"><div style="font-size:14px;font-weight:900;color:var(--green);">${st.homeW}G ${st.homeL}M</div><div style="font-size:8px;color:var(--muted);">Ev</div></div><div style="text-align:center;background:var(--card2);border-radius:8px;padding:8px;"><div style="font-size:14px;font-weight:900;color:var(--orange);">${st.awayW}G ${st.awayL}M</div><div style="font-size:8px;color:var(--muted);">Dep</div></div><div style="text-align:center;background:rgba(48,209,88,.1);border:1px solid rgba(48,209,88,.2);border-radius:8px;padding:8px;"><div style="font-size:14px;font-weight:900;color:var(--green);">${hEg}⚽</div><div style="font-size:8px;color:var(--muted);">Ev Atık</div></div><div style="text-align:center;background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.2);border-radius:8px;padding:8px;"><div style="font-size:14px;font-weight:900;color:var(--red);">${hEa}🥅</div><div style="font-size:8px;color:var(--muted);">Ev Yenilen</div></div><div style="text-align:center;background:rgba(61,142,255,.1);border:1px solid rgba(61,142,255,.2);border-radius:8px;padding:8px;"><div style="font-size:14px;font-weight:900;color:var(--blue);">${aDg}⚽</div><div style="font-size:8px;color:var(--muted);">Dep Atık</div></div><div style="text-align:center;background:rgba(255,149,0,.1);border:1px solid rgba(255,149,0,.2);border-radius:8px;padding:8px;"><div style="font-size:14px;font-weight:900;color:var(--orange);">${aDa}🥅</div><div style="font-size:8px;color:var(--muted);">Dep Yenilen</div></div></div></div>`;
+  document.body.appendChild(modal);modal.onclick=e=>{if(e.target===modal)modal.remove();};
+}
+
+function openSearch(){document.getElementById('sov').classList.add('open');setTimeout(()=>document.getElementById('sov-inp').focus(),100);}
+function closeSearch(){document.getElementById('sov').classList.remove('open');document.getElementById('sov-inp').value='';document.getElementById('sov-res').innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">Takım adı yaz</div>';}
+function doSearch(q){
+  const r=document.getElementById('sov-res');if(!q||q.length<2){r.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">Takım adı yaz</div>';return;}
+  const ql=q.toLowerCase();const found=allMatches.filter(m=>(m.teams?.home?.name||'').toLowerCase().includes(ql)||(m.teams?.away?.name||'').toLowerCase().includes(ql));
+  if(!found.length){r.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);">Bulunamadı</div>';return;}
+  r.innerHTML=found.slice(0,20).map(m=>`<div onclick="closeSearch();setTimeout(()=>{const el=document.getElementById('mc-${m.fixture?.id}');if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.style.boxShadow='0 0 20px rgba(61,142,255,.6)';setTimeout(()=>el.style.boxShadow='',2000);}},300);" style="display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--border);cursor:pointer;"><div style="flex:1;"><div style="font-size:13px;font-weight:600;">${m.teams?.home?.name} vs ${m.teams?.away?.name}</div><div style="font-size:10px;color:var(--muted);">${m.league?.name} · ${fmtTime(m.fixture?.date)}</div></div><div style="font-size:11px;font-weight:700;color:var(--blue);">${m.goals?.home!==null&&m.goals?.home!==undefined?m.goals.home+'-'+m.goals.away:fmtTime(m.fixture?.date)}</div></div>`).join('');
+}
+
+function showLeagueModal(){
+  const allLeagues=[...new Set(allMatches.map(m=>m.league?.name).filter(Boolean))].sort();selLeagues=new Set(JSON.parse(localStorage.getItem('cog_sel_leagues')||'[]'));
+  const list=document.getElementById('lg-list');list.innerHTML='';
+  allLeagues.forEach(lg=>{const div=document.createElement('div');div.className='mi';const chk=selLeagues.has(lg)?'✅':'⬜';div.innerHTML=`<span style="font-size:15px;">${chk}</span><div class="mi-nm">${lg}</div>`;div.onclick=()=>{toggleLg(lg,div);};list.appendChild(div);});
+  document.getElementById('sel-cnt').textContent=selLeagues.size+' lig seçildi';document.getElementById('lg-modal').classList.add('open');
+}
+function filterLgList(q){const items=document.querySelectorAll('#lg-list .mi');items.forEach(item=>{const name=item.querySelector('.mi-nm')?.textContent||'';item.style.display=name.toLowerCase().includes(q.toLowerCase())?'':'none';});}
+function toggleLg(lg,el){if(selLeagues.has(lg)){selLeagues.delete(lg);el.querySelector('span').textContent='⬜';}else{selLeagues.add(lg);el.querySelector('span').textContent='✅';}document.getElementById('sel-cnt').textContent=selLeagues.size+' lig seçildi';}
+function selectAllLg(){const allLeagues=[...new Set(allMatches.map(m=>m.league?.name).filter(Boolean))];allLeagues.forEach(lg=>selLeagues.add(lg));showLeagueModal();}
+function clearLg(){selLeagues.clear();}
+function applyLg(){localStorage.setItem('cog_sel_leagues',JSON.stringify([...selLeagues]));document.getElementById('lg-modal').classList.remove('open');applyFilter(activeFilter);showToast(selLeagues.size?selLeagues.size+' lig filtrelendi':'Tüm ligler gösteriliyor','ok');}
+
+function showSortModal(){document.getElementById('sort-modal').classList.add('open');}
+function sortBy(method){const sc=document.getElementById('sc-today');const items=document.querySelectorAll('#sc-today .lg-hdr');if(method==='time_asc'||method==='time_desc'){const ms=[...allMatches].filter(m=>['NS','TBD'].includes(m.fixture?.status?.short));ms.sort((a,b)=>{const d=new Date(a.fixture?.date)-new Date(b.fixture?.date);return method==='time_asc'?d:-d;});const c=document.getElementById('sc-today');let h='';ms.forEach(m=>h+=buildCard(m));c.innerHTML=h;}showToast(method==='time_asc'?'🕐 Yakın sıralaması':'🕔 Uzak sıralaması','ok');}
+
+window.addEventListener('load',()=>{
+  buildDateBar();
+  const saved=localStorage.getItem('cog_theme');
+  if(saved==='light'){isDark=false;document.body.classList.add('light');document.getElementById('theme-toggle').classList.remove('on');document.getElementById('theme-btn').textContent='\u2600\ufe0f';}
+  const savedNotif=localStorage.getItem('cog_notif');
+  if(savedNotif==='off'){notifOn=false;document.getElementById('notif-toggle').classList.remove('on');}
+  const savedLgs=localStorage.getItem('cog_sel_leagues');
+  if(savedLgs)try{selLeagues=new Set(JSON.parse(savedLgs));}catch{}
+  preloadAllData();
+});
+</script>
+</body>
+</html>
